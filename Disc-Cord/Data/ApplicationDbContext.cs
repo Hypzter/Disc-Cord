@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Disc_Cord.Models;
 
 namespace Disc_Cord.Data
 {
@@ -9,5 +10,7 @@ namespace Disc_Cord.Data
             : base(options)
         {
         }
+        public DbSet<Disc_Cord.Models.Forum> Forum { get; set; } = default!;
+        public DbSet<Disc_Cord.Models.Subforum> Subforum { get; set; } = default!;
     }
 }
