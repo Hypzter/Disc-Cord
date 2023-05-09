@@ -6,7 +6,7 @@
         public string Name { get; set; }
         public virtual Forum? Forum { get; set; }
         public int ForumId { get; set; }
-        public List<Models.NewPost> NewPosts { get; set; }
+        public List<Models.NewPost>? NewPosts { get; set; }
         public DateTime Date { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 using Disc_Cord.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace Disc_Cord.Pages
 {
@@ -13,11 +14,12 @@ namespace Disc_Cord.Pages
         {
             _context = context;
         }
+        public List<Models.Forum> Forums { get; set; }
 
 
-        public async Task<IActionResult> OnGetAsync()
+        public async Task OnGetAsync()
         {
-            return Page();
+            Forums = await _context.Forum.Include(x => x.SubForums).ThenInclude(x => x.NewPosts).ThenInclude(x => x.Comments).ToListAsync();
         }
     }
 }

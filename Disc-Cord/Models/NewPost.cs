@@ -10,7 +10,7 @@
         public string UserId { get; set; }
         public bool Reported { get; set; }
         public int? LikeCounter { get; set; }
-        public List<Models.Comment> Comments { get; set; }
+        public List<Models.Comment>? Comments { get; set; }
         public DateTime Date { get; set; }
     }
 }

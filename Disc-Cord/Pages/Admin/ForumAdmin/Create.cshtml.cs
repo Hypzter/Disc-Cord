@@ -35,7 +35,7 @@ namespace Disc_Cord.Pages.Admin.ForumAdmin
             {
                 return Page();
             }
-
+          
             _context.Forum.Add(Forum);
             await _context.SaveChangesAsync();
 

@@ -1,1 +1,32 @@
-﻿
+﻿@page
+@model ForumModel
+@{
+    ViewData["Title"] = "Startsida";
+}
+
+@{
+    foreach (var f in Model.Forums)
+    {
+        <p>@f.Name</p>
+        <p>Created @f.Date</p>
+        <ul>
+        @foreach (var s in f.SubForums)
+        {
+                <li class="list-unstyled"><a href="#">@s.Name</a></li>
+                @foreach (var np in s.NewPosts)
+                {
+                    <p>@np.Header</p>
+                    <p>@np.Text</p>
+                    @foreach (var c in np.Comments)
+                    {
+                        <p><strong>@c.Text</strong></p>
+
+                    }
+
+                }
+            }
+        </ul>
+
+    }
+
+}
