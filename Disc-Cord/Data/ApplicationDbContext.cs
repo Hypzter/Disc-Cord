@@ -12,5 +12,7 @@ namespace Disc_Cord.Data
         }
         public DbSet<Disc_Cord.Models.Forum> Forum { get; set; } = default!;
         public DbSet<Disc_Cord.Models.Subforum> Subforum { get; set; } = default!;
+        public DbSet<Disc_Cord.Models.NewPost> NewPost { get; set; } = default!;
+        public DbSet<Disc_Cord.Models.Comment> Comment { get; set; } = default!;
     }
 }

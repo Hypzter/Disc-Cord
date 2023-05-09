@@ -19,6 +19,5 @@ namespace Disc_Cord.DataManager
 
             return Forums;
         }
-
     }
 }

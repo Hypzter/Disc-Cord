@@ -1,0 +1,22 @@
+﻿@page
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@{
+    var user = await UserManager.GetUserAsync(User);
+    var datenow = DateTime.Now;
+}
+
+@model Disc_Cord.Pages.PostCommentModel
+@{
+}
+
+<h3>@Model.Post.Header</h3>
+<p>@Model.Post.Text</p>
+@if (Model.Post.Text != null)
+{
+    @foreach (var post in Model.Post.Comments)
+    {
+        <p>@post.Text</p>
+
+    }
+}

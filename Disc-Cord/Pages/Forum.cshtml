@@ -13,12 +13,11 @@
 		<ul>
 			@foreach (var s in f.SubForums)
 			{
-				<li><a href="#">@s.Name</a></li>
+				<li><a asp-page="./ForumPost" asp-route-id="@s.Id">@s.Name</a></li>
 				<ul>
 					@foreach (var np in s.NewPosts)
 					{
-						<li>@np.Header</li>
-						<li>@np.Text</li>
+						<li>@np.Header</li>					
 						<ul>
 							@foreach (var c in np.Comments)
 							{
