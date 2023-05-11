@@ -1,4 +1,5 @@
 using Disc_Cord.Data;
+using Disc_Cord.Helper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -19,15 +20,32 @@ namespace Disc_Cord.Pages
 
         [BindProperty]
         public Models.NewPost NewPost { get; set; }
-        public async Task OnGetAsync(int id)
+		[BindProperty]
+		public IFormFile UploadedImage { get; set; }
+
+		public async Task OnGetAsync(int id)
         {
             Subforum = await _context.Subforum.Include(x => x.NewPosts).FirstOrDefaultAsync(x => x.Id == id);
         }
         public async Task<IActionResult> OnPostAsync()
         {
-            _context.Add(NewPost);
+			string fileName = string.Empty;
+
+
+			if (UploadedImage != null)
+			{
+				fileName = HelperMethods.RandomString(6) + UploadedImage.FileName;
+				var file = "./wwwroot/img/" + fileName;
+				using (var fileStream = new FileStream(file, FileMode.Create))
+				{
+					await UploadedImage.CopyToAsync(fileStream);
+				}
+			}
+			NewPost.Image = fileName;
+
+			_context.Add(NewPost);
             int id = await _context.NewPost.MaxAsync(p => p.Id) + 1;
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
 
             string url = "./PostComment?id=" + id.ToString();
 

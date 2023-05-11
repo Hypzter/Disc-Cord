@@ -2,21 +2,54 @@
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 @{
-    var user = await UserManager.GetUserAsync(User);
-    var datenow = DateTime.Now;
+	var user = await UserManager.GetUserAsync(User);
+	var datenow = DateTime.Now;
 }
 
 @model Disc_Cord.Pages.PostCommentModel
 @{
 }
 
-<h3>@Model.Post.Header</h3>
+<h3>@Model.Post.Header @Model.Post.Date.ToString()</h3>
 <p>@Model.Post.Text</p>
+@if (@Model.Post.Image != null)
+{
+	<img src="~/img/@Model.Post.Image" width="100">
+
+}
 @if (Model.Post.Text != null)
 {
-    @foreach (var post in Model.Post.Comments)
-    {
-        <p>@post.Text</p>
+	@foreach (var comment in Model.Post.Comments)
+	{
+		<p>@comment.Text</p>
+		<p>@comment.Date.ToString()</p>
+		if (comment.Image != null)
+		{
+			<img src="~/img/@comment.Image" width="100">
 
-    }
+		}
+
+
+
+	}
+}
+
+@if (SignInManager.IsSignedIn(User))
+{
+	<form method="post" enctype="multipart/form-data">
+		<input asp-for="NewComment.UserId" type="hidden" value="@user.Id" />
+		<input asp-for="NewComment.Date" type="hidden" value="@datenow" />
+		<input asp-for="NewComment.NewPostId" type="hidden" value="@Model.Post.Id" />
+
+
+		<label asp-for="NewComment.Text" class="form-label"></label>
+		<textarea asp-for="NewComment.Text" class="form-control" cols="40" rows="5"></textarea>
+
+		<label asp-for="NewComment.Image" class="form-label"></label>
+		<input type="file" class="form-control" name="UploadedImage" />
+
+		<input type="submit" class="btn btn-success mt-1" value="Lägg till kommentar" />
+
+	</form>
+
 }
