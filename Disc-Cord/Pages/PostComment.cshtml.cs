@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Disc_Cord.Helper;
+using System.ComponentModel.DataAnnotations;
 
 namespace Disc_Cord.Pages
 {
@@ -17,11 +18,17 @@ namespace Disc_Cord.Pages
         }
 
         public Models.NewPost Post { get; set; }
+
+
         [BindProperty]
         public IFormFile UploadedImage { get; set; }
 
+
+        [Display(Name = "Kurt")]
         [BindProperty]
         public Models.Comment NewComment { get; set; }
+
+
         private static int _id;
         public async Task OnGetAsync(int id)
         {

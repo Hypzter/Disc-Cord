@@ -10,29 +10,74 @@
 @{
 }
 
-<h3>@Model.Post.Header @Model.Post.Date.ToString()</h3>
-<p>@Model.Post.Text</p>
-@if (@Model.Post.Image != null)
-{
-	<img src="~/img/@Model.Post.Image" width="100">
 
-}
-@if (Model.Post.Text != null)
+<div class="card border-2">
+  <div class="card-header bg-warning p-0">
+		<p class="m-1">@Model.Post.Date.ToString()<i class="bi bi-disc ms-auto"></i></p>
+  </div>
+	<div class="card-body row m-1">
+		<div class="card col-md-3 bg-light h-25">
+			<div class="card-body text-center">
+				<img src="~/img/logoheader.png" width="50" />
+				<p>@user.Id</p>
+				<p>@user.Email</p>
+			</div>
+		</div>
+
+		<div class="card col-8 ms-3 border-0">
+			<div class="card-body pt-0">
+				<h4 class="mt-0">@Model.Post.Header</h4>
+				<p class="card-text">@Model.Post.Text</p>
+				@if (@Model.Post.Image != null && @Model.Post.Image != "")
+				{
+					<img src="~/img/@Model.Post.Image" width="100">
+				}
+			</div>
+		</div>
+  </div>
+</div>
+
+@if (Model.Post.Text != null )
 {
 	@foreach (var comment in Model.Post.Comments)
 	{
-		<p>@comment.Text</p>
+		<div class="card mt-4 border-2">
+			<div class="card-header bg-light p-0">
+				<p class="m-1">@comment.Date.ToString()</p>
+			</div>
+			<div class="card-body row m-1">
+				<div class="card col-3 bg-light h-25">
+					<div class="card-body text-center">
+						<img src="~/img/logoheader.png" width="50" />
+						<p>@comment.UserId</p>
+					</div>
+				</div>
+
+				<div class="card col-8 ms-3 border-0">
+					<div class="card-body pt-0">
+						<p class="card-text">@comment.Text</p>
+						@if (@comment.Image != null && @comment.Image != "")
+						{
+							<img src="~/img/@comment.Image" width="100">
+						}
+					</div>
+				</div>
+			</div>
+		</div>
+
+@*		<p>@comment.Text</p>
 		<p>@comment.Date.ToString()</p>
-		if (comment.Image != null)
+		if (comment.Image != null && comment.Image != "")
 		{
 			<img src="~/img/@comment.Image" width="100">
-
 		}
 
-
+*@
 
 	}
 }
+
+<br />
 
 @if (SignInManager.IsSignedIn(User))
 {
@@ -42,10 +87,10 @@
 		<input asp-for="NewComment.NewPostId" type="hidden" value="@Model.Post.Id" />
 
 
-		<label asp-for="NewComment.Text" class="form-label"></label>
+		<label asp-for="NewComment.Text" class="form-label">Din kommentar:</label>
 		<textarea asp-for="NewComment.Text" class="form-control" cols="40" rows="5"></textarea>
 
-		<label asp-for="NewComment.Image" class="form-label"></label>
+		<label asp-for="NewComment.Image" class="form-label mt-1">Lägg till bild</label>
 		<input type="file" class="form-control" name="UploadedImage" />
 
 		<input type="submit" class="btn btn-success mt-1" value="Lägg till kommentar" />
