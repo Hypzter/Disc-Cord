@@ -9,6 +9,7 @@
         public string UserId { get; set; }
         public bool Reported { get; set; }
         public int? LikeCounter { get; set; }
+        public string? Image { get; set; }
         public DateTime Date { get; set; }
 
     }

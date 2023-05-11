@@ -25,13 +25,14 @@ namespace Disc_Cord.Pages
         }
         public async Task<IActionResult> OnPostAsync()
         {
-            
             _context.Add(NewPost);
-            string postCommentId = "./PostComment?id=" + NewPost.Id;
+            int id = await _context.NewPost.MaxAsync(p => p.Id) + 1;
             await _context.SaveChangesAsync();
 
-            // Fixa så rätt ID kommer med
-            return RedirectToPage(postCommentId);
+            string url = "./PostComment?id=" + id.ToString();
+
+            return Redirect(url);
+
         }
     }
 }
