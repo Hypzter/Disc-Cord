@@ -14,15 +14,28 @@
 <div class="card border-2">
     <div class="card-header bg-warning py-1 pe-0 text-black">
         <div class="m-1 text-start">
-            @Model.Post.Date.ToString()<span class="float-end me-2"><a asp-route-userid="@user.Id"><i class="bi bi-disc text-black text-end me-2"></i></a>@Model.Post.LikeCounter</span>
+            @Model.Post.Date.ToString()<span class="float-end me-2">
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <a asp-route-userid="@user.Id"><i class="bi bi-disc text-black text-end me-2"></i></a>
+
+                    @Model.Post.LikeCounter
+                }
+                else
+                {
+                    <i class="bi bi-disc text-black text-end me-2"></i>
+
+                    @Model.Post.LikeCounter
+                }
+            </span>
         </div>
     </div>
     <div class="card-body row m-1">
         <div class="card col-md-3 bg-light h-25">
             <div class="card-body text-center">
                 <img src="~/img/logoheader.png" width="50" />
-                <p>@user.Id</p>
-                <p>@user.Email</p>
+                <p>Namn</p>
+                <p>Email</p>
             </div>
         </div>
 

@@ -3,61 +3,79 @@
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 @{
-	var user = await UserManager.GetUserAsync(User);
-	var datenow = DateTime.Now;
+    var user = await UserManager.GetUserAsync(User);
+    var datenow = DateTime.Now;
 }
 
-@foreach (var posts in Model.Subforum.NewPosts)
-{
-	<p><a asp-route-id="@posts.Id" asp-page="./PostComment">@posts.Header</a></p>
-}
-
+<div class="card border-2">
+    <div class="card-header bg-warning text-black">
+        Trådar
+    </div>
+    <div class="card-header bg-black text-white row p-1 m-0">
+        <div class="text-start col-6"> Ämne</div>
+        <div class="text-end col-6"> Skapare</div>
+    </div>
+    <div class="m-0 p-0 text-start">
+        <table class="table table-striped">
+            <tbody>
+                @foreach (var posts in Model.Subforum.NewPosts)
+                {
+                    <tr>
+                        <td>
+                            <a class="text-black text-decoration-none" asp-route-id="@posts.Id" asp-page="./PostComment">@posts.Header</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
 <br />
 
 @if (SignInManager.IsSignedIn(User))
 {
-	<button name="newpost" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newpost">Skapa ny post</button>
+    <button name="newpost" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newpost">Skapa ny post</button>
 
-	<!-- Modal -->
-	<div class="modal fade" id="newpost" tabindex="-1" aria-labelledby="newpostLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h1 class="modal-title fs-5" id="newpostLabel">Modal title</h1>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				</div>
-				<div class="modal-body">
-					<p class="lead">Ny trÃ¥d</p>
-					<form method="post" enctype="multipart/form-data">
-						<input asp-for="NewPost.UserId" type="hidden" value="@user.Id" />
-						<input asp-for="NewPost.Date" type="hidden" value="@datenow" />
-						<input asp-for="NewPost.SubForumId" type="hidden" value="@Model.Subforum.Id" />
-						@*<input asp-for="UploadedImage" type="hidden" value="bild" />*@
+    <!-- Modal -->
+    <div class="modal fade" id="newpost" tabindex="-1" aria-labelledby="newpostLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="newpostLabel">Modal title</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="lead">Ny tråd</p>
+                    <form method="post" enctype="multipart/form-data">
+                        <input asp-for="NewPost.UserId" type="hidden" value="@user.Id" />
+                        <input asp-for="NewPost.Date" type="hidden" value="@datenow" />
+                        <input asp-for="NewPost.SubForumId" type="hidden" value="@Model.Subforum.Id" />
+                        @*<input asp-for="UploadedImage" type="hidden" value="bild" />*@
 
-						<div class="mb-3">
-							<label for="header" class="col-form-label">
-								Rubrik:
-							</label>
-							<input class="form-control" id="header" asp-for="NewPost.Header" />
-						</div>
+                        <div class="mb-3">
+                            <label for="header" class="col-form-label">
+                                Rubrik:
+                            </label>
+                            <input class="form-control" id="header" asp-for="NewPost.Header" />
+                        </div>
 
-						<div class="mb-3">
-							<label for="text" class="col-form-label">
-								Text:
-							</label>
-							<textarea asp-for="NewPost.Text" class="form-control" cols="40" rows="10" id="text"></textarea>
-						</div>
-						<div class="mb-3">
-							<label asp-for="NewPost.Image" class="form-label"></label>
-							<input type="file" class="form-control" name="UploadedImage" />
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-							<button type="submit" class="btn btn-primary">Skapa post</button>
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
+                        <div class="mb-3">
+                            <label for="text" class="col-form-label">
+                                Text:
+                            </label>
+                            <textarea asp-for="NewPost.Text" class="form-control" cols="40" rows="10" id="text"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="NewPost.Image" class="form-label"></label>
+                            <input type="file" class="form-control" name="UploadedImage" />
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Skapa post</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 }
