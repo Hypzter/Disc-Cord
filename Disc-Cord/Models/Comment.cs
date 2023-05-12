@@ -12,5 +12,7 @@
         public string? Image { get; set; }
         public DateTime Date { get; set; }
         public List<Models.Like>? Likes { get; set; }
+
+        public List<Models.CommentLike>? CommentLikes { get; set; }
     }
 }
