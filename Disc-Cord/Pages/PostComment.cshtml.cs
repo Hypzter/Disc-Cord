@@ -108,6 +108,7 @@ namespace Disc_Cord.Pages
                 }
             }
             NewComment.Image = fileName;
+            NewComment.Text = Helper.HelperMethods.CensorText(NewComment.Text);
             _context.Add(NewComment);
             string url = "./PostComment?id=" + _id.ToString();
             await _context.SaveChangesAsync();

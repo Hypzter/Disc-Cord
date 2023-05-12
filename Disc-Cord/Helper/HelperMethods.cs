@@ -1,4 +1,6 @@
-﻿namespace Disc_Cord.Helper
+﻿using System.Text.RegularExpressions;
+
+namespace Disc_Cord.Helper
 {
     public class HelperMethods
     {
@@ -8,6 +10,20 @@
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             return new string(Enumerable.Repeat(chars, length)
                 .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
+
+        public static string CensorText(string text)
+        {
+            string[] badWords = new string[] { "fan", "jävla", "skit" };
+
+            string censoredText = text;
+            foreach (string word in badWords)
+            {
+                string pattern = $"({word})";
+                censoredText = Regex.Replace(censoredText, pattern, "****", RegexOptions.IgnoreCase);
+            }
+            return censoredText;
         }
     }
 }
