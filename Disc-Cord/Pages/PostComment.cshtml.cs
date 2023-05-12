@@ -24,16 +24,45 @@ namespace Disc_Cord.Pages
         public IFormFile UploadedImage { get; set; }
 
 
-        [Display(Name = "Kurt")]
         [BindProperty]
         public Models.Comment NewComment { get; set; }
 
 
+        [BindProperty]
+        public List<Models.Like>? Likes { get; set; }
+
+
         private static int _id;
-        public async Task OnGetAsync(int id)
+        public async Task OnGetAsync(int id, string userid, int postid)
         {
-            _id = id;
-            Post = await _context.NewPost.Include(x => x.Comments).FirstOrDefaultAsync(x => x.Id == id);
+            if (_id == 0)
+            {
+                _id = id;
+            }
+            Post = await _context.NewPost.Include(x => x.Comments).ThenInclude(x => x.Likes).FirstOrDefaultAsync(x => x.Id == _id);
+
+            if (postid != 0)
+            {
+                if (Post.Likes == null)
+                {
+                    Post.Likes = new List<Models.Like>();
+                    Post.Likes.Add(new Models.Like { UserId = userid });
+                    Post.LikeCounter++;
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    foreach (var like in Post.Likes)
+                    {
+                        if (like.UserId != userid)
+                        {
+                            Post.Likes.Add(new Models.Like { UserId = userid });
+                            Post.LikeCounter++;
+                            await _context.SaveChangesAsync();
+                        }
+                    }
+                }
+            }
         }
 
         public async Task<IActionResult> OnPostAsync()

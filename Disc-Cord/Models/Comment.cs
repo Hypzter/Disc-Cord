@@ -11,6 +11,6 @@
         public int? LikeCounter { get; set; }
         public string? Image { get; set; }
         public DateTime Date { get; set; }
-
+        public List<Models.Like>? Likes { get; set; }
     }
 }

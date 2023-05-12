@@ -17,9 +17,10 @@
             @Model.Post.Date.ToString()<span class="float-end me-2">
                 @if (SignInManager.IsSignedIn(User))
                 {
-                    <a asp-route-userid="@user.Id"><i class="bi bi-disc text-black text-end me-2"></i></a>
+                    <a asp-route-userid="@user.Id" asp-route-postid="@Model.Post.Id"><i class="bi bi-disc text-black text-end me-2"></i></a>
 
                     @Model.Post.LikeCounter
+
                 }
                 else
                 {
