@@ -14,7 +14,6 @@ namespace Disc_Cord.Data
         public DbSet<Disc_Cord.Models.Subforum> Subforum { get; set; } = default!;
         public DbSet<Disc_Cord.Models.NewPost> NewPost { get; set; } = default!;
         public DbSet<Disc_Cord.Models.Comment> Comment { get; set; } = default!;
-        public DbSet<Disc_Cord.Models.Like> Like { get; set; } = default!;
         public DbSet<Disc_Cord.Models.NewPostLike> NewPostLike { get; set; } = default!;
         public DbSet<Disc_Cord.Models.CommentLike> CommentLike { get; set; } = default!;
 

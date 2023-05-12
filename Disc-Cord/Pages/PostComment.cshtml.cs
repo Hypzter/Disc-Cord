@@ -41,7 +41,7 @@ namespace Disc_Cord.Pages
                 _id = id;
             }
 
-            Post = await _context.NewPost.Include(x => x.Comments).ThenInclude(x => x.Likes).FirstOrDefaultAsync(x => x.Id == _id);
+            Post = await _context.NewPost.Include(x => x.Comments).FirstOrDefaultAsync(x => x.Id == _id);
             NewPostLike = await _context.NewPostLike.Where(u => u.UserId == userid && u.NewPostId == postid).SingleOrDefaultAsync();
             if (postid != 0)
             {
