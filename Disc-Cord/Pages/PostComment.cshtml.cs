@@ -29,39 +29,44 @@ namespace Disc_Cord.Pages
 
 
         [BindProperty]
-        public List<Models.Like>? Likes { get; set; }
+        public Models.Like Likes { get; set; }
 
 
         private static int _id;
         public async Task OnGetAsync(int id, string userid, int postid)
         {
-            if (_id == 0)
-            {
+
                 _id = id;
-            }
-            Post = await _context.NewPost.Include(x => x.Comments).ThenInclude(x => x.Likes).FirstOrDefaultAsync(x => x.Id == _id);
+            
+            Post = await _context.NewPost.Include(x => x.Comments).ThenInclude(x => x.Likes).FirstOrDefaultAsync(x => x.Id == id);
+            Likes =  await _context.Like.Where(u => u.UserId == userid && u.NewPostId == postid).SingleOrDefaultAsync();
 
             if (postid != 0)
             {
-                if (Post.Likes == null)
+                if (Likes == null)
                 {
-                    Post.Likes = new List<Models.Like>();
-                    Post.Likes.Add(new Models.Like { UserId = userid });
-                    Post.LikeCounter++;
+                    Likes = new Models.Like
+                    {
+                        NewPostId = postid,
+                        UserId = userid
+                    };
+
+                    //Post.LikeCounter++;
+                    _context.Add(Likes);
                     await _context.SaveChangesAsync();
                 }
-                else
-                {
-                    foreach (var like in Post.Likes)
-                    {
-                        if (like.UserId != userid)
-                        {
-                            Post.Likes.Add(new Models.Like { UserId = userid });
-                            Post.LikeCounter++;
-                            await _context.SaveChangesAsync();
-                        }
-                    }
-                }
+                //else
+                //{
+                //    foreach (var like in Post.Likes)
+                //    {
+                //        if (like.UserId != userid)
+                //        {
+                //            Post.Likes.Add(new Models.Like { UserId = userid });
+                //            Post.LikeCounter++;
+                //            await _context.SaveChangesAsync();
+                //        }
+                //    }
+                //}
             }
         }
 
