@@ -63,7 +63,23 @@
     {
         <div class="card mt-4 border-2">
             <div class="card-header bg-secondary pe-0 py-1 text-light">
-                <div class="m-1">@comment.Date.ToString()<span class="float-end me-2"><a href="#"><i class="bi bi-disc text-black text-end me-2"></i></a>@comment.LikeCounter</span></div>
+                <div class="m-1">
+                    @comment.Date.ToString()<span class="float-end me-2">
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <a asp-route-userid="@user.Id" asp-route-commentid="@comment.Id"><i class="bi bi-disc text-black text-end me-2"></i></a>
+
+                            @comment.LikeCounter
+
+                        }
+                        else
+                        {
+                            <i class="bi bi-disc text-black text-end me-2"></i>
+
+                            @comment.LikeCounter
+                        }
+                    </span>
+                </div>
             </div>
             <div class="card-body row m-1">
                 <div class="card col-3 bg-light h-25">
