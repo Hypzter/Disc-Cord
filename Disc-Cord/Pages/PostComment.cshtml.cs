@@ -38,7 +38,7 @@ namespace Disc_Cord.Pages
 
 
         private static int _id;
-        public async Task<IActionResult> OnGetAsync(int id, string userid, int postid, int commentid)
+        public async Task<IActionResult> OnGetAsync(int id, string userid, int postid, int commentid, int deletepostid, int deletecommentid)
         {
             if (id != 0)
             {
@@ -90,7 +90,32 @@ namespace Disc_Cord.Pages
                 await _context.SaveChangesAsync();
 
             }
-            return Page();
+            if (deletepostid != 0)
+            {
+                Models.NewPost deletePost = await _context.NewPost.FindAsync(deletepostid);
+
+
+				if (deletePost != null)
+                {
+                    _context.NewPost.Remove(deletePost);
+                    await _context.SaveChangesAsync();
+                    return RedirectToPage("./Forum");
+                }
+            }
+
+			if (deletecommentid != 0)
+			{
+				Models.Comment deleteComment = await _context.Comment.FindAsync(deletecommentid);
+
+
+				if (deleteComment != null)
+				{
+					_context.Comment.Remove(deleteComment);
+					await _context.SaveChangesAsync();
+					//return Page();
+				}
+			}
+			return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()

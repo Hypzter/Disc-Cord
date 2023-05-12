@@ -2,8 +2,8 @@
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 @{
-    var user = await UserManager.GetUserAsync(User);
-    var datenow = DateTime.Now;
+	var user = await UserManager.GetUserAsync(User);
+	var datenow = DateTime.Now;
 }
 
 @model Disc_Cord.Pages.PostCommentModel
@@ -12,99 +12,107 @@
 
 
 <div class="card border-2">
-    <div class="card-header bg-warning py-1 pe-0 text-black">
-        <div class="m-1 text-start">
-            @Model.Post.Date.ToString()<span class="float-end me-2">
-                @if (SignInManager.IsSignedIn(User))
-                {
-                    <a asp-route-userid="@user.Id" asp-route-postid="@Model.Post.Id"><i class="bi bi-disc text-black text-end me-2"></i></a>
+	<div class="card-header bg-warning py-1 pe-0 text-black">
+		<div class="m-1 text-start">
+			@Model.Post.Date.ToString()<span class="float-end me-2">
+				@if (SignInManager.IsSignedIn(User))
+				{
+					<a asp-route-userid="@user.Id" asp-route-postid="@Model.Post.Id"><i class="bi bi-disc text-black text-end me-2"></i></a>
 
-                    @Model.Post.LikeCounter
+					@Model.Post.LikeCounter
 
-                }
-                else
-                {
-                    <i class="bi bi-disc text-black text-end me-2"></i>
+				}
+				else
+				{
+					<i class="bi bi-disc text-black text-end me-2"></i>
 
-                    @Model.Post.LikeCounter
-                }
-            </span>
-        </div>
-    </div>
-    <div class="card-body row m-1">
-        <div class="card col-md-3 bg-light h-25">
-            <div class="card-body text-center">
-                <img src="~/img/logoheader.png" width="50" />
-                <p>Namn</p>
-                <p>Email</p>
-            </div>
-        </div>
+					@Model.Post.LikeCounter
+				}
+			</span>
+		</div>
+	</div>
+	<div class="card-body row m-1">
+		<div class="card col-md-3 bg-light h-25">
+			<div class="card-body text-center">
+				<img src="~/img/logoheader.png" width="50" />
+				<p>@Model.Post.UserId</p>
+				<p>Email</p>
+			</div>
+		</div>
 
-        <div class="card col-8 ms-3 border-0">
-            <div class="card-body pt-0">
-                <h4 class="mt-0">@Model.Post.Header</h4>
-                <p class="card-text">@Model.Post.Text</p>
+		<div class="card col-8 ms-3 border-0">
+			<div class="card-body pt-0">
+				<h4 class="mt-0">@Model.Post.Header</h4>
+				<p class="card-text">@Model.Post.Text</p>
 
-                @if (@Model.Post.Image != null && @Model.Post.Image != "")
-                {
-                    <img src="~/img/@Model.Post.Image" width="100">
-                }
-            </div>
-        </div>
-    </div>
-    <div class="card-footer bg-light text-end p-1">
-        <a href="#"><i class="bi bi-flag-fill text-warning me-2"></i></a>
-    </div>
+				@if (@Model.Post.Image != null && @Model.Post.Image != "")
+				{
+					<img src="~/img/@Model.Post.Image" width="100">
+				}
+				@if (user != null && user.Id == Model.Post.UserId)
+				{
+					<a asp-route-deletepostid="@Model.Post.Id" class="btn btn-primary">Ta bort</a>
+				}
+			</div>
+		</div>
+	</div>
+	<div class="card-footer bg-light text-end p-1">
+		<a href="#"><i class="bi bi-flag-fill text-warning me-2"></i></a>
+	</div>
 </div>
 
 @if (Model.Post.Text != null)
 {
-    @foreach (var comment in Model.Post.Comments)
-    {
-        <div class="card mt-4 border-2">
-            <div class="card-header bg-secondary pe-0 py-1 text-light">
-                <div class="m-1">
-                    @comment.Date.ToString()<span class="float-end me-2">
-                        @if (SignInManager.IsSignedIn(User))
-                        {
-                            <a asp-route-userid="@user.Id" asp-route-commentid="@comment.Id"><i class="bi bi-disc text-black text-end me-2"></i></a>
+	@foreach (var comment in Model.Post.Comments)
+	{
+		<div class="card mt-4 border-2">
+			<div class="card-header bg-secondary pe-0 py-1 text-light">
+				<div class="m-1">
+					@comment.Date.ToString()<span class="float-end me-2">
+						@if (SignInManager.IsSignedIn(User))
+						{
+							<a asp-route-userid="@user.Id" asp-route-commentid="@comment.Id"><i class="bi bi-disc text-black text-end me-2"></i></a>
 
-                            @comment.LikeCounter
+							@comment.LikeCounter
 
-                        }
-                        else
-                        {
-                            <i class="bi bi-disc text-black text-end me-2"></i>
+						}
+						else
+						{
+							<i class="bi bi-disc text-black text-end me-2"></i>
 
-                            @comment.LikeCounter
-                        }
-                    </span>
-                </div>
-            </div>
-            <div class="card-body row m-1">
-                <div class="card col-3 bg-light h-25">
-                    <div class="card-body text-center">
-                        <img src="~/img/logoheader.png" width="50" />
-                        <p>@comment.UserId</p>
-                    </div>
-                </div>
+							@comment.LikeCounter
+						}
+					</span>
+				</div>
+			</div>
+			<div class="card-body row m-1">
+				<div class="card col-3 bg-light h-25">
+					<div class="card-body text-center">
+						<img src="~/img/logoheader.png" width="50" />
+						<p>@comment.UserId</p>
+					</div>
+				</div>
 
-                <div class="card col-8 ms-3 border-0">
-                    <div class="card-body pt-0">
-                        <p class="card-text">@comment.Text</p>
-                        @if (@comment.Image != null && @comment.Image != "")
-                        {
-                            <img src="~/img/@comment.Image" width="100">
-                        }
-                    </div>
-                </div>
-            </div>
-            <div class="card-footer bg-light text-end p-1">
-                <a href="#"><i class="bi bi-flag-fill text-warning me-2"></i></a>
-            </div>
-        </div>
+				<div class="card col-8 ms-3 border-0">
+					<div class="card-body pt-0">
+						<p class="card-text">@comment.Text</p>
+						@if (@comment.Image != null && @comment.Image != "")
+						{
+							<img src="~/img/@comment.Image" width="100">
+						}
+						@if (user != null && user.Id == comment.UserId)
+						{
+							<a asp-route-deletecommentid="@comment.Id" class="btn btn-primary">Ta bort</a>
+						}
+					</div>
+				</div>
+			</div>
+			<div class="card-footer bg-light text-end p-1">
+				<a href="#"><i class="bi bi-flag-fill text-warning me-2"></i></a>
+			</div>
+		</div>
 
-        @*		<p>@comment.Text</p>
+		@*		<p>@comment.Text</p>
 		<p>@comment.Date.ToString()</p>
 		if (comment.Image != null && comment.Image != "")
 		{
@@ -113,27 +121,27 @@
 
 *@
 
-    }
+	}
 }
 
 <br />
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <form method="post" enctype="multipart/form-data">
-        <input asp-for="NewComment.UserId" type="hidden" value="@user.Id" />
-        <input asp-for="NewComment.Date" type="hidden" value="@datenow" />
-        <input asp-for="NewComment.NewPostId" type="hidden" value="@Model.Post.Id" />
+	<form method="post" enctype="multipart/form-data">
+		<input asp-for="NewComment.UserId" type="hidden" value="@user.Id" />
+		<input asp-for="NewComment.Date" type="hidden" value="@datenow" />
+		<input asp-for="NewComment.NewPostId" type="hidden" value="@Model.Post.Id" />
 
 
-        <label asp-for="NewComment.Text" class="form-label">Din kommentar:</label>
-        <textarea asp-for="NewComment.Text" class="form-control" cols="40" rows="5"></textarea>
+		<label asp-for="NewComment.Text" class="form-label">Din kommentar:</label>
+		<textarea asp-for="NewComment.Text" class="form-control" cols="40" rows="5"></textarea>
 
-        <label asp-for="NewComment.Image" class="form-label mt-1">Lägg till bild</label>
-        <input type="file" class="form-control" name="UploadedImage" />
+		<label asp-for="NewComment.Image" class="form-label mt-1">Lägg till bild</label>
+		<input type="file" class="form-control" name="UploadedImage" />
 
-        <input type="submit" class="btn btn-success mt-1" value="Lägg till kommentar" />
+		<input type="submit" class="btn btn-success mt-1" value="Lägg till kommentar" />
 
-    </form>
+	</form>
 
 }
