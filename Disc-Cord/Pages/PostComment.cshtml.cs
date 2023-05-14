@@ -116,7 +116,6 @@ namespace Disc_Cord.Pages
 				{
 					_context.Comment.Remove(deleteComment);
 					await _context.SaveChangesAsync();
-					//return Page();
 				}
                 deletebool = false;
 			}

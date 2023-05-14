@@ -44,8 +44,8 @@ namespace Disc_Cord.Pages
 			NewPost.Image = fileName;
 
 			_context.Add(NewPost);
-            int id = await _context.NewPost.MaxAsync(p => p.Id) + 1;
             _context.SaveChanges();
+            int id = await _context.NewPost.MaxAsync(p => p.Id);
 
             string url = "./PostComment?id=" + id.ToString();
 
