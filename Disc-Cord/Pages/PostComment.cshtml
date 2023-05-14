@@ -49,14 +49,38 @@
 				{
 					<img src="~/img/@Model.Post.Image" width="100">
 				}
-				@if (user != null && user.Id == Model.Post.UserId)
-				{
-					<a asp-route-deletepostid="@Model.Post.Id" class="btn btn-primary">Ta bort</a>
-				}
 			</div>
 		</div>
 	</div>
 	<div class="card-footer bg-light text-end p-1">
+		@if (user != null && user.Id == Model.Post.UserId)
+		{
+			<button name="deletePost" class="btn btn-outline-danger p-1 me-2" data-bs-toggle="modal" data-bs-target="#deletePost">Ta bort post</button>
+
+			<!-- Modal -->
+			<div class="modal fade" id="deletePost" tabindex="-1" aria-labelledby="deletePostLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h1 class="modal-title fs-5" id="deletePostLabel">Ta bort post</h1>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+						<div class="modal-body">
+							<p class="lead">Är du säker på att du vill ta bort posten? Alla eventuella kommentarer kommer att raderas.</p>
+
+							<form method="post">
+								<div class="modal-footer">
+									<a type="submit" class="btn btn-danger" asp-route-deletebool="true" asp-route-deletepostid="@Model.Post.Id">Ta bort</a>
+									<input type="button" class="btn btn-secondary" data-bs-dismiss="modal" value="Avbryt" />
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+		}
 		<a href="#"><i class="bi bi-flag-fill text-warning me-2"></i></a>
 	</div>
 </div>
@@ -100,14 +124,40 @@
 						{
 							<img src="~/img/@comment.Image" width="100">
 						}
-						@if (user != null && user.Id == comment.UserId)
-						{
-							<a asp-route-deletecommentid="@comment.Id" class="btn btn-primary">Ta bort</a>
-						}
+
 					</div>
 				</div>
 			</div>
 			<div class="card-footer bg-light text-end p-1">
+				@if (user != null && user.Id == comment.UserId)
+				{
+					@*<a asp-route-deletecommentid="@comment.Id" class="btn btn-secondary text-light p-1 me-2">Ta bort kommentar</a>*@
+					<button name="delete" class="btn btn-outline-danger p-1 me-2" data-bs-toggle="modal" data-bs-target="#delete">Ta bort kommentar</button>
+
+					<!-- Modal -->
+					<div class="modal fade" id="delete" tabindex="-1" aria-labelledby="deleteLabel" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h1 class="modal-title fs-5" id="newpostLabel">Ta bort kommentar</h1>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+								</div>
+								<div class="modal-body">
+									<p class="lead">Är du säker på att du vill ta bort kommentaren?</p>
+
+									<form method="post">
+										<div class="modal-footer">
+											<a type="submit" class="btn btn-danger" asp-route-deletecomment="true" asp-route-deletecommentid="@comment.Id">Ta bort</a>
+											<input type="button" class="btn btn-secondary" data-bs-dismiss="modal" value="Avbryt" />
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+				}
 				<a href="#"><i class="bi bi-flag-fill text-warning me-2"></i></a>
 			</div>
 		</div>
