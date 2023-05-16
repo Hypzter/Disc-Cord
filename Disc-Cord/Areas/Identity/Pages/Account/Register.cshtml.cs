@@ -101,6 +101,10 @@ namespace Disc_Cord.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
 
             public string FirstName { get; set; }
+            public string LastName { get; set; }
+            public string Alias { get; set; }
+
+            public string ImageUrl { get; set; }
         }
 
 
@@ -122,7 +126,8 @@ namespace Disc_Cord.Areas.Identity.Pages.Account
                 {
                     UserName = Input.Email,
                     Email = Input.Email,
-                    FirstName = Input.FirstName
+                    FirstName = Input.FirstName,
+                    ImageUrl = "img/logoown.png"
                 };
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
