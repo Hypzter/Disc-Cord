@@ -36,9 +36,18 @@
     <div class="card-body row m-1">
         <div class="card col-md-3 bg-light h-25">
             <div class="card-body text-center">
-                <img src="@Model.UserPostImage" width="60" />
-                <p>@Model.Post.UserId</p>
-                <p>Email</p>
+                <img src="@Model.MyUser.ImageUrl" width="60" />
+                @if (Model.MyUser.Alias == null)
+                {
+                    <p>@Model.Post.UserId</p>
+
+                }
+                else
+                {
+                    <p>@Model.MyUser.Alias</p>
+
+                }
+                <p>@Model.MyUser.Email</p>
             </div>
         </div>
 
@@ -142,11 +151,21 @@
                 <div class="card col-3 bg-light h-25">
                     <div class="card-body text-center">
                         @{
-                            var commentator = @Model.AllCommentUsers.Where(x => x.Id == comment.UserId).SingleOrDefault();
+                            var commentator = @Model.AllUsers.Where(x => x.Id == comment.UserId).SingleOrDefault();
                             var image = commentator.ImageUrl;
                         }
                         <img src="@image" width="60" />
-                        <p>@comment.UserId</p>
+                        @if (commentator.Alias == null)
+                        {
+                            <p>@comment.UserId</p>
+
+                        }
+                        else
+                        {
+                            <p>@commentator.Alias</p>
+
+                        }
+                        <p>@commentator.Email</p>
                     </div>
                 </div>
 

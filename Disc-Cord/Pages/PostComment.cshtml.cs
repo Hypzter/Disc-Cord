@@ -36,11 +36,9 @@ namespace Disc_Cord.Pages
         [BindProperty]
         public Models.CommentLike NewCommentLike { get; set; }
 
-        public string UserPostImage { get; set; }
-        public string UserCommentImage { get; set; }
 
-        public List<ApplicationUser> AllCommentUsers { get; set; }
-
+        public List<ApplicationUser> AllUsers { get; set; }
+        public ApplicationUser MyUser { get; set; }
 
         [BindProperty]
         public string EditText { get; set; }
@@ -55,12 +53,8 @@ namespace Disc_Cord.Pages
             }
 
             Post = await _context.NewPost.Include(x => x.Comments).FirstOrDefaultAsync(x => x.Id == _id);
-
-            var users = await _context.ApplicationUsers.ToListAsync();
-            AllCommentUsers = users;
-            var user = users.Where(x => x.Id == Post.UserId).SingleOrDefault();
-            UserPostImage = user.ImageUrl;
-
+			AllUsers = await _context.ApplicationUsers.ToListAsync();
+            MyUser = AllUsers.Where(x => x.Id == Post.UserId).SingleOrDefault();
             NewPostLike = await _context.NewPostLike.Where(u => u.UserId == userid && u.NewPostId == postid).SingleOrDefaultAsync();
             NewComment = await _context.Comment.Where(c => c.Id == commentid).FirstOrDefaultAsync();
             NewCommentLike = await _context.CommentLike.Where(u => u.UserId == userid && u.CommentId == commentid).SingleOrDefaultAsync();
