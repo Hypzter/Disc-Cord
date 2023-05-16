@@ -36,7 +36,7 @@
     <div class="card-body row m-1">
         <div class="card col-md-3 bg-light h-25">
             <div class="card-body text-center">
-                <img src="@Model.MyUser.ImageUrl" width="60" />
+                <img src="~/img/@Model.MyUser.ImageUrl" width="60" />
                 @if (Model.MyUser.Alias == null)
                 {
                     <p>@Model.Post.UserId</p>
@@ -154,7 +154,7 @@
                             var commentator = @Model.AllUsers.Where(x => x.Id == comment.UserId).SingleOrDefault();
                             var image = commentator.ImageUrl;
                         }
-                        <img src="@image" width="60" />
+                        <img src="~/img/@image" width="60" />
                         @if (commentator.Alias == null)
                         {
                             <p>@comment.UserId</p>

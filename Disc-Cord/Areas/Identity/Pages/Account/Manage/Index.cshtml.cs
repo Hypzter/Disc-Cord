@@ -6,9 +6,12 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Disc_Cord.Data;
+using Disc_Cord.Helper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace Disc_Cord.Areas.Identity.Pages.Account.Manage
 {
@@ -16,13 +19,16 @@ namespace Disc_Cord.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly ApplicationDbContext _context;
 
         public IndexModel(
             UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager)
+            SignInManager<IdentityUser> signInManager,
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _context = context;
         }
 
         /// <summary>
@@ -58,6 +64,9 @@ namespace Disc_Cord.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+
+            [Display(Name = "Add image")]
+            public IFormFile ImageUrl { get; set; }
         }
 
         private async Task LoadAsync(IdentityUser user)
@@ -109,6 +118,21 @@ namespace Disc_Cord.Areas.Identity.Pages.Account.Manage
                     return RedirectToPage();
                 }
             }
+
+            string fileName = string.Empty;
+            if (Input.ImageUrl != null)
+            {
+                fileName = HelperMethods.RandomString(6) + Input.ImageUrl.FileName;
+                var file = "./wwwroot/img/" + fileName;
+                using (var fileStream = new FileStream(file, FileMode.Create))
+                {
+                    await Input.ImageUrl.CopyToAsync(fileStream);
+                }
+            }
+            var userImage = await _context.ApplicationUsers.FirstOrDefaultAsync(x => x.Id == user.Id);
+            userImage.ImageUrl = fileName;
+
+            _context.SaveChanges();
 
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";
