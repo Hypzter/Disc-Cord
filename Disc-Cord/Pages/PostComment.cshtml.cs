@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Disc_Cord.Helper;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 
 namespace Disc_Cord.Pages
 {
@@ -35,11 +36,12 @@ namespace Disc_Cord.Pages
         [BindProperty]
         public Models.CommentLike NewCommentLike { get; set; }
 
+        public string UserPostImage { get; set; }
+        public string UserCommentImage { get; set; }
 
+        public List<ApplicationUser> AllCommentUsers { get; set; }
 
-
-
-		private static int _id;
+        private static int _id;
         public async Task<IActionResult> OnGetAsync(int id, string userid, int postid, int commentid, int deletepostid, int deletecommentid, bool deletebool)
         {
             if (id != 0)
@@ -48,6 +50,12 @@ namespace Disc_Cord.Pages
             }
 
             Post = await _context.NewPost.Include(x => x.Comments).FirstOrDefaultAsync(x => x.Id == _id);
+
+            var users = await _context.ApplicationUsers.ToListAsync();
+            AllCommentUsers = users;
+            var user = users.Where(x => x.Id == Post.UserId).SingleOrDefault();
+            UserPostImage = user.ImageUrl;
+
             NewPostLike = await _context.NewPostLike.Where(u => u.UserId == userid && u.NewPostId == postid).SingleOrDefaultAsync();
             NewComment = await _context.Comment.Where(c => c.Id == commentid).FirstOrDefaultAsync();
             NewCommentLike = await _context.CommentLike.Where(u => u.UserId == userid && u.CommentId == commentid).SingleOrDefaultAsync();

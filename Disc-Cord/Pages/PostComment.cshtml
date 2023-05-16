@@ -4,6 +4,8 @@
 @{
 	var user = await UserManager.GetUserAsync(User);
 	var datenow = DateTime.Now;
+
+
 }
 
 @model Disc_Cord.Pages.PostCommentModel
@@ -34,7 +36,7 @@
 	<div class="card-body row m-1">
 		<div class="card col-md-3 bg-light h-25">
 			<div class="card-body text-center">
-				<img src="~/img/logoheader.png" width="50" />
+				<img src="@Model.UserPostImage" width="60" />
 				<p>@Model.Post.UserId</p>
 				<p>Email</p>
 			</div>
@@ -113,7 +115,11 @@
 			<div class="card-body row m-1">
 				<div class="card col-3 bg-light h-25">
 					<div class="card-body text-center">
-						<img src="~/img/logoheader.png" width="50" />
+						@{
+							var commentator = @Model.AllCommentUsers.Where(x => x.Id == comment.UserId).SingleOrDefault();
+							var image = commentator.ImageUrl;
+						}
+						<img src="@image" width="60" />
 						<p>@comment.UserId</p>
 					</div>
 				</div>
