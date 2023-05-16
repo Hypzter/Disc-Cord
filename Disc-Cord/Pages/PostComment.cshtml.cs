@@ -41,6 +41,11 @@ namespace Disc_Cord.Pages
 
         public List<ApplicationUser> AllCommentUsers { get; set; }
 
+
+        [BindProperty]
+        public string EditText { get; set; }
+
+
         private static int _id;
         public async Task<IActionResult> OnGetAsync(int id, string userid, int postid, int commentid, int deletepostid, int deletecommentid, bool deletebool)
         {
@@ -71,7 +76,7 @@ namespace Disc_Cord.Pages
                         NewPostId = postid,
                         UserId = userid
                     };
-                    _context.Add(NewPostLike); 
+                    _context.Add(NewPostLike);
                     await _context.SaveChangesAsync();
                 }
                 var numberOfLikes = _context.NewPostLike.Where(p => p.NewPostId == postid).ToList();
@@ -105,7 +110,7 @@ namespace Disc_Cord.Pages
                 Models.NewPost deletePost = await _context.NewPost.FindAsync(deletepostid);
 
 
-				if (deletePost != null)
+                if (deletePost != null)
                 {
                     _context.NewPost.Remove(deletePost);
                     await _context.SaveChangesAsync();
@@ -113,45 +118,84 @@ namespace Disc_Cord.Pages
                 }
                 deletebool = false;
 
-			}
+            }
 
-			if (deletecommentid != 0 && deletebool == true)
-			{
-				Models.Comment deleteComment = await _context.Comment.FindAsync(deletecommentid);
+            if (deletecommentid != 0 && deletebool == true)
+            {
+                Models.Comment deleteComment = await _context.Comment.FindAsync(deletecommentid);
 
 
-				if (deleteComment != null)
-				{
-					_context.Comment.Remove(deleteComment);
-					await _context.SaveChangesAsync();
-				}
+                if (deleteComment != null)
+                {
+                    _context.Comment.Remove(deleteComment);
+                    await _context.SaveChangesAsync();
+                }
                 deletebool = false;
-			}
-			return Page();
+            }
+
+
+
+
+
+            return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(int editpostid, int editcommentid, bool editbool, bool newcommentbool)
         {
-            string fileName = string.Empty;
 
 
-            if (UploadedImage != null)
+            if (editcommentid != 0 && editbool == true)
             {
-                fileName = HelperMethods.RandomString(6) + UploadedImage.FileName;
-                var file = "./wwwroot/img/" + fileName;
-                using (var fileStream = new FileStream(file, FileMode.Create))
+                Models.Comment editComment = await _context.Comment.FindAsync(editcommentid);
+
+
+                if (editComment != null)
                 {
-                    await UploadedImage.CopyToAsync(fileStream);
+                    editComment.Text = EditText;
+                    await _context.SaveChangesAsync();
                 }
+                editbool = false;
+
             }
-            NewComment.Image = fileName;
-            NewComment.Text = Helper.HelperMethods.CensorText(NewComment.Text);
-            _context.Add(NewComment);
-            string url = "./PostComment?id=" + _id.ToString();
-            await _context.SaveChangesAsync();
 
-            return Redirect(url);
+            if (editpostid != 0 && editbool == true)
+            {
+                Models.NewPost editPost = await _context.NewPost.FindAsync(editpostid);
 
+
+                if (editPost != null && EditText != null)
+                {
+                    editPost.Text = EditText;
+                    await _context.SaveChangesAsync();
+                }
+                editbool = false;
+            }
+
+
+
+            if (newcommentbool == true)
+            {
+
+                string fileName = string.Empty;
+                if (UploadedImage != null)
+                {
+                    fileName = HelperMethods.RandomString(6) + UploadedImage.FileName;
+                    var file = "./wwwroot/img/" + fileName;
+                    using (var fileStream = new FileStream(file, FileMode.Create))
+                    {
+                        await UploadedImage.CopyToAsync(fileStream);
+                    }
+                }
+                NewComment.Image = fileName;
+                NewComment.Text = Helper.HelperMethods.CensorText(NewComment.Text);
+                _context.Add(NewComment);
+                await _context.SaveChangesAsync();
+
+                newcommentbool = false;
+            }
+
+                string url = "./PostComment?id=" + _id.ToString();
+                return Redirect(url);
         }
     }
 }
