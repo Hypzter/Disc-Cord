@@ -208,8 +208,8 @@
                 {
 
                     <button name="editComment-@comment.Id" class="btn btn-outline-primary p-1 me-2" data-bs-toggle="modal" data-bs-target="#editComment-@comment.Id">Ändra</button>
-
                     <!-- Detta är för att ändra i kommentarens text -->
+                                     Model.EditText = comment.Text;
 
                     <div class="modal fade" id="editComment-@comment.Id" tabindex="-1" aria-labelledby="editCommentLabel-@comment.Id" aria-hidden="true">
                         <div class="modal-dialog">
@@ -220,6 +220,23 @@
                                 </div>
                                 <div class="modal-body text-start">
                                     <form method="post">
+                                        <script>
+                                            var textarea = document.getElementById("EditText");
+                                            var originalText = textarea.value;
+
+                                            textarea.addEventListener("focus", function () {
+                                                if (textarea.value === originalText) {
+                                                    textarea.value = "";
+                                                }
+                                            });
+
+                                            textarea.addEventListener("blur", function () {
+                                                if (textarea.value === "") {
+                                                    textarea.value = originalText;
+                                                }
+                                            });
+                                        </script>
+
                                         <label asp-for="@Model.EditText" class="form-label">Din kommentar:</label>
                                         <textarea asp-for="@Model.EditText" class="form-control" cols="40" rows="5" placeholder="@comment.Text"></textarea>
                                         <div class="modal-footer">
