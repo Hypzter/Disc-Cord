@@ -43,7 +43,8 @@ namespace Disc_Cord.Pages
         [BindProperty]
         public string EditText { get; set; }
 
-
+        [BindProperty]
+        public string EditPostText { get; set; }
 
 
         private static int _id;
@@ -159,9 +160,9 @@ namespace Disc_Cord.Pages
                 Models.NewPost editPost = await _context.NewPost.FindAsync(editpostid);
 
 
-                if (editPost != null && EditText != null)
+                if (editPost != null && EditPostText != null)
                 {
-                    editPost.Text = EditText;
+                    editPost.Text = EditPostText;
                     await _context.SaveChangesAsync();
                 }
                 editbool = false;

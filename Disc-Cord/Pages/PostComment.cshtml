@@ -66,6 +66,11 @@
     <div class="card-footer bg-light text-end p-1">
         @if (user != null && user.Id == Model.Post.UserId)
         {
+            Model.EditPostText = Model.Post.Text;
+
+            @*           <textarea id="myTextarea" name="myTextarea" placeholder="Enter text here"></textarea>*@
+
+
 
             <button name="editPost" class="btn btn-outline-primary p-1 me-2" data-bs-toggle="modal" data-bs-target="#editPost">Ändra</button>
 
@@ -79,8 +84,8 @@
                         </div>
                         <div class="modal-body text-start">
                             <form method="post">
-@*                                <script>
-                                    var textarea = document.getElementById("myTextarea");
+                                <script>
+                                    var textarea = document.getElementById("EditPostText");
                                     var originalText = textarea.value;
 
                                     textarea.addEventListener("focus", function () {
@@ -94,9 +99,9 @@
                                             textarea.value = originalText;
                                         }
                                     });
-                            </script>    id="myTextarea" name="myTextarea"  *@
-                                <label asp-for="@Model.EditText" class="form-label">Din kommentar:</label>
-                                <textarea asp-for="@Model.EditText" class="form-control" cols="40" rows="5" placeholder="@Model.Post.Text"></textarea>
+                                </script>
+                                <label asp-for="@Model.EditPostText" class="form-label">Din kommentar:</label>
+                                <textarea asp-for="@Model.EditPostText" id="myTextarea" name="EditPostText" class="form-control" cols="40" rows="5" placeholder="@Model.Post.Text"></textarea>
 
                                 <div class="modal-footer">
                                     <input type="submit" asp-route-editbool="true" asp-route-editpostid="@Model.Post.Id" class="btn btn-success" data-bs-dismiss="modal" value="Ändra" />
@@ -108,7 +113,6 @@
                     </div>
                 </div>
             </div>
-
 
 
 
