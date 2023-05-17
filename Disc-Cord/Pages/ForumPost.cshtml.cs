@@ -42,7 +42,14 @@ namespace Disc_Cord.Pages
 				}
 			}
 			NewPost.Image = fileName;
-
+            if(NewPost.Text == null)
+            {
+                NewPost.Text = "";
+            }
+            if(NewPost.Header == null)
+            {
+                NewPost.Header = "Ny tråd";
+            }
 			_context.Add(NewPost);
             _context.SaveChanges();
             int id = await _context.NewPost.MaxAsync(p => p.Id);

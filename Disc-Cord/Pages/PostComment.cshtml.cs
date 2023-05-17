@@ -59,7 +59,7 @@ namespace Disc_Cord.Pages
             }
 
             Post = await _context.NewPost.Include(x => x.Comments).FirstOrDefaultAsync(x => x.Id == _id);
-			AllUsers = await _context.ApplicationUsers.ToListAsync();
+            AllUsers = await _context.ApplicationUsers.ToListAsync();
             MyUser = AllUsers.Where(x => x.Id == Post.UserId).SingleOrDefault();
             NewPostLike = await _context.NewPostLike.Where(u => u.UserId == userid && u.NewPostId == postid).SingleOrDefaultAsync();
             NewComment = await _context.Comment.Where(c => c.Id == commentid).FirstOrDefaultAsync();
@@ -108,11 +108,27 @@ namespace Disc_Cord.Pages
             if (deletepostid != 0 && deletebool == true)
             {
                 Models.NewPost deletePost = await _context.NewPost.FindAsync(deletepostid);
+                List<Models.Report> deletePostReport = await _context.Reports.Where(x => x.PostId == deletepostid).ToListAsync();
+                List<Models.Comment> reportedComments = await _context.Comment.Where(x => x.NewPostId == deletepostid && x.Reported == true).ToListAsync();
+                List<Models.Report> deleteCommentReport = new();
+                foreach (var report in reportedComments)
+                {
+                    deleteCommentReport.AddRange(_context.Reports.Where(x => x.CommentId == report.Id).ToList());
+                }
+
 
 
                 if (deletePost != null)
                 {
                     _context.NewPost.Remove(deletePost);
+                    if (deletePostReport != null)
+                    {
+                        _context.Reports.RemoveRange(deletePostReport);
+                        if (deleteCommentReport != null)
+                        {
+                            _context.Reports.RemoveRange(deleteCommentReport);
+                        }
+                    }
                     await _context.SaveChangesAsync();
                     return RedirectToPage("./Forum");
                 }
@@ -123,11 +139,17 @@ namespace Disc_Cord.Pages
             if (deletecommentid != 0 && deletebool == true)
             {
                 Models.Comment deleteComment = await _context.Comment.FindAsync(deletecommentid);
+                List<Models.Report> deleteReport = await _context.Reports.Where(x => x.CommentId == deletecommentid).ToListAsync();
 
 
                 if (deleteComment != null)
                 {
                     _context.Comment.Remove(deleteComment);
+                    if (deleteReport != null)
+                    {
+                        _context.Reports.RemoveRange(deleteReport);
+
+                    }
                     await _context.SaveChangesAsync();
                 }
                 deletebool = false;
@@ -145,12 +167,14 @@ namespace Disc_Cord.Pages
             if (reportpostid != 0)
             {
                 Report.PostId = reportpostid;
+                _context.NewPost.FirstOrDefault(x => x.Id == reportpostid).Reported = true;
                 _context.Reports.Add(Report);
                 await _context.SaveChangesAsync();
             }
             if (reportcommentid != 0)
             {
                 Report.CommentId = reportcommentid;
+                _context.Comment.FirstOrDefault(x => x.Id == reportcommentid).Reported = true;
                 _context.Reports.Add(Report);
                 await _context.SaveChangesAsync();
             }
@@ -198,6 +222,10 @@ namespace Disc_Cord.Pages
                     }
                 }
                 NewComment.Image = fileName;
+                if(NewComment.Text == null)
+                {
+                    NewComment.Text = "Kommentar utan innehåll";
+                }
                 NewComment.Text = Helper.HelperMethods.CensorText(NewComment.Text);
                 _context.Add(NewComment);
                 await _context.SaveChangesAsync();
@@ -205,8 +233,8 @@ namespace Disc_Cord.Pages
                 newcommentbool = false;
             }
 
-                string url = "./PostComment?id=" + _id.ToString();
-                return Redirect(url);
+            string url = "./PostComment?id=" + _id.ToString();
+            return Redirect(url);
         }
     }
 }
