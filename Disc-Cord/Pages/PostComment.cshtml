@@ -203,14 +203,15 @@
                 @if (user != null && user.Id == comment.UserId)
                 {
 
-                    <button name="editComment" class="btn btn-outline-primary p-1 me-2" data-bs-toggle="modal" data-bs-target="#editComment">Ändra</button>
+                    <button name="editComment-@comment.Id" class="btn btn-outline-primary p-1 me-2" data-bs-toggle="modal" data-bs-target="#editComment-@comment.Id">Ändra</button>
 
                     <!-- Detta är för att ändra i kommentarens text -->
-                    <div class="modal fade" id="editComment" tabindex="-1" aria-labelledby="editCommentLabel" aria-hidden="true">
+
+                    <div class="modal fade" id="editComment-@comment.Id" tabindex="-1" aria-labelledby="editCommentLabel-@comment.Id" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="editCommentLabel">Ändra post</h1>
+                                    <h1 class="modal-title fs-5" id="editCommentLabel-@comment.Id">Ändra post</h1>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body text-start">
@@ -228,10 +229,10 @@
                     </div>
 
 
-                    <button name="delete" class="btn btn-outline-danger p-1 me-2" data-bs-toggle="modal" data-bs-target="#delete">Ta bort kommentar</button>
+                    <button name="delete-@comment.Id" class="btn btn-outline-danger p-1 me-2" data-bs-toggle="modal" data-bs-target="#delete-@comment.Id">Ta bort kommentar</button>
 
                     <!-- Modal -->
-                    <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="deleteLabel" aria-hidden="true">
+                    <div class="modal fade" id="delete-@comment.Id" tabindex="-1" aria-labelledby="deleteLabel-@comment.Id" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
