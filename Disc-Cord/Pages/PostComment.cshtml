@@ -142,7 +142,36 @@
 
 
         }
-        <a href="#"><i class="bi bi-flag-fill text-warning me-2"></i></a>
+        <a asp-route-id="@Model.Post.Id" data-bs-toggle="modal" data-bs-target="#report" name="report"><i class="bi bi-flag-fill text-warning me-2"></i></a>
+
+        <div class="modal fade" id="report" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="newpostLabel">Rapportera post</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-start">
+                        <form method="post">
+                            <label asp-for="@Model.Report.Category" class="control-label">Kategori</label>
+                            <select asp-for="@Model.Report.Category" class="control-label">
+                                <option value="Sexuellt innehåll">Sexuellt innehåll</option>
+                                <option value="Våldsamt innehåll">Våldsamt innehåll</option>
+                                <option value="Kränkande innehåll">Kränkande innehåll</option>
+                                <option value="Spam">Spam</option>
+                                <option value="Annat">Annat</option>
+                            </select>
+                            <textarea asp-for="@Model.Report.Text" class="form-control" cols="40" rows="5"></textarea>
+                            <div class="modal-footer">
+                                <input type="submit" class="btn btn-danger" asp-route-reportpostid="@Model.Post.Id" />
+                                <input type="button" class="btn btn-secondary" data-bs-dismiss="modal" value="Avbryt" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 
@@ -209,13 +238,13 @@
 
                     <button name="editComment-@comment.Id" class="btn btn-outline-primary p-1 me-2" data-bs-toggle="modal" data-bs-target="#editComment-@comment.Id">Ändra</button>
                     <!-- Detta är för att ändra i kommentarens text -->
-                                     Model.EditText = comment.Text;
+                    Model.EditText = comment.Text;
 
                     <div class="modal fade" id="editComment-@comment.Id" tabindex="-1" aria-labelledby="editCommentLabel-@comment.Id" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="editCommentLabel-@comment.Id">Ändra post</h1>
+                                    <h1 class="modal-title fs-5" id="editCommentLabel-@comment.Id">Ändra kommentar</h1>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body text-start">
@@ -276,7 +305,34 @@
 
 
                 }
-                <a href="#"><i class="bi bi-flag-fill text-warning me-2"></i></a>
+                <a asp-route-id="comment-@comment.Id" data-bs-toggle="modal" data-bs-target="#reportcomment-@comment.Id" name="reportcomment"><i class="bi bi-flag-fill text-warning me-2"></i></a>
+                <div class="modal fade" id="reportcomment-@comment.Id" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="newpostLabel">Rapportera kommentar</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body text-start">
+                                <form method="post">
+                                    <label asp-for="@Model.Report.Category" class="control-label">Kategori</label>
+                                    <select asp-for="@Model.Report.Category" class="control-label">
+                                        <option value="Sexuellt innehåll">Sexuellt innehåll</option>
+                                        <option value="Våldsamt innehåll">Våldsamt innehåll</option>
+                                        <option value="Kränkande innehåll">Kränkande innehåll</option>
+                                        <option value="Spam">Spam</option>
+                                        <option value="Annat">Annat</option>
+                                    </select>
+                                    <textarea asp-for="@Model.Report.Text" class="form-control" cols="40" rows="5"></textarea>
+                                    <div class="modal-footer">
+                                        <input type="submit" class="btn btn-danger" asp-route-reportcommentid="@comment.Id" />
+                                        <input type="button" class="btn btn-secondary" data-bs-dismiss="modal" value="Avbryt" />
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     }

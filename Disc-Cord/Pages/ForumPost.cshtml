@@ -41,11 +41,10 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="newpostLabel">Modal title</h1>
+                    <h1 class="modal-title fs-5" id="newpostLabel">Ny tråd</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p class="lead">Ny tråd</p>
                     <form method="post" enctype="multipart/form-data">
                         <input asp-for="NewPost.UserId" type="hidden" value="@user.Id" />
                         <input asp-for="NewPost.Date" type="hidden" value="@datenow" />

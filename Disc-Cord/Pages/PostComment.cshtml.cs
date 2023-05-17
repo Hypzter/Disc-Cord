@@ -22,6 +22,9 @@ namespace Disc_Cord.Pages
 
 
         [BindProperty]
+        public Models.Report Report { get; set; }
+
+        [BindProperty]
         public IFormFile UploadedImage { get; set; }
 
 
@@ -137,9 +140,20 @@ namespace Disc_Cord.Pages
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(int editpostid, int editcommentid, bool editbool, bool newcommentbool)
+        public async Task<IActionResult> OnPostAsync(int editpostid, int editcommentid, bool editbool, bool newcommentbool, int reportpostid, int reportcommentid)
         {
-
+            if (reportpostid != 0)
+            {
+                Report.PostId = reportpostid;
+                _context.Reports.Add(Report);
+                await _context.SaveChangesAsync();
+            }
+            if (reportcommentid != 0)
+            {
+                Report.CommentId = reportcommentid;
+                _context.Reports.Add(Report);
+                await _context.SaveChangesAsync();
+            }
 
             if (editcommentid != 0 && editbool == true)
             {

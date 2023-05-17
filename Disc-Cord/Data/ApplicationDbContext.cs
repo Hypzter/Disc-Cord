@@ -18,7 +18,8 @@ namespace Disc_Cord.Data
         public DbSet<Disc_Cord.Models.CommentLike> CommentLike { get; set; } = default!;
 		public DbSet<Disc_Cord.Models.Message> Messages { get; set; } = default!;
         public DbSet<Disc_Cord.Models.ApplicationUser> ApplicationUsers { get; set; }
-
+        public DbSet<Disc_Cord.Models.Report> Reports { get; set; }
+    
 
 
 
