@@ -221,24 +221,27 @@
                                 <div class="modal-body text-start">
                                     <form method="post">
                                         <script>
-                                            var textarea = document.getElementById("EditText");
-                                            var originalText = textarea.value;
+                                            var textareas = document.querySelectorAll("[id^='EditText-']");
 
-                                            textarea.addEventListener("focus", function () {
-                                                if (textarea.value === originalText) {
-                                                    textarea.value = "";
-                                                }
-                                            });
+                                            textareas.forEach(function (textarea) {
+                                                var originalText = textarea.getAttribute("placeholder");
 
-                                            textarea.addEventListener("blur", function () {
-                                                if (textarea.value === "") {
-                                                    textarea.value = originalText;
-                                                }
+                                                textarea.addEventListener("focus", function () {
+                                                    if (textarea.value === originalText) {
+                                                        textarea.value = "";
+                                                    }
+                                                });
+
+                                                textarea.addEventListener("blur", function () {
+                                                    if (textarea.value === "") {
+                                                        textarea.value = originalText;
+                                                    }
+                                                });
                                             });
                                         </script>
 
                                         <label asp-for="@Model.EditText" class="form-label">Din kommentar:</label>
-                                        <textarea asp-for="@Model.EditText" class="form-control" cols="40" rows="5" placeholder="@comment.Text"></textarea>
+                                        <textarea asp-for="@Model.EditText" id="EditText-@comment.Id" class="form-control" cols="40" rows="5" placeholder="@comment.Text"></textarea>
                                         <div class="modal-footer">
                                             <input type="submit" asp-route-editbool="true" asp-route-editcommentid="@comment.Id" class="btn btn-success" data-bs-dismiss="modal" value="Ändra" />
                                             <input type="button" class="btn btn-secondary" data-bs-dismiss="modal" value="Avbryt" />
