@@ -79,17 +79,38 @@
                         </div>
                         <div class="modal-body text-start">
                             <form method="post">
+@*                                <script>
+                                    var textarea = document.getElementById("myTextarea");
+                                    var originalText = textarea.value;
+
+                                    textarea.addEventListener("focus", function () {
+                                        if (textarea.value === originalText) {
+                                            textarea.value = "";
+                                        }
+                                    });
+
+                                    textarea.addEventListener("blur", function () {
+                                        if (textarea.value === "") {
+                                            textarea.value = originalText;
+                                        }
+                                    });
+                            </script>    id="myTextarea" name="myTextarea"  *@
                                 <label asp-for="@Model.EditText" class="form-label">Din kommentar:</label>
                                 <textarea asp-for="@Model.EditText" class="form-control" cols="40" rows="5" placeholder="@Model.Post.Text"></textarea>
+
                                 <div class="modal-footer">
-                                    @*<a type="submit" class="btn btn-danger" asp-route-editbool="true" asp-route-editpostid="@Model.Post.Id">Ändra</a>*@
                                     <input type="submit" asp-route-editbool="true" asp-route-editpostid="@Model.Post.Id" class="btn btn-success" data-bs-dismiss="modal" value="Ändra" />
+                                    <input type="button" class="btn btn-secondary" data-bs-dismiss="modal" value="Avbryt" />
+
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
+
+
+
 
 
             <button name="deletePost" class="btn btn-outline-danger p-1 me-2" data-bs-toggle="modal" data-bs-target="#deletePost">Ta bort post</button>
@@ -106,12 +127,10 @@
                             <p class="lead">Är du säker på att du vill ta bort posten?</p>
                             <p class="lead"><strong>Alla eventuella kommentarer kommer att raderas.</strong></p>
 
-                            @*                       <form method="post">*@
                             <div class="modal-footer">
                                 <a type="submit" class="btn btn-danger" asp-route-deletebool="true" asp-route-deletepostid="@Model.Post.Id">Ta bort</a>
                                 <input type="button" class="btn btn-secondary" data-bs-dismiss="modal" value="Avbryt" />
                             </div>
-                            @*</form>*@
                         </div>
                     </div>
                 </div>
@@ -199,8 +218,8 @@
                                         <label asp-for="@Model.EditText" class="form-label">Din kommentar:</label>
                                         <textarea asp-for="@Model.EditText" class="form-control" cols="40" rows="5" placeholder="@comment.Text"></textarea>
                                         <div class="modal-footer">
-                                            @*<a type="submit" class="btn btn-danger" asp-route-editbool="true" asp-route-editpostid="@Model.Post.Id">Ändra</a>*@
                                             <input type="submit" asp-route-editbool="true" asp-route-editcommentid="@comment.Id" class="btn btn-success" data-bs-dismiss="modal" value="Ändra" />
+                                            <input type="button" class="btn btn-secondary" data-bs-dismiss="modal" value="Avbryt" />
                                         </div>
                                     </form>
                                 </div>
@@ -221,13 +240,10 @@
                                 </div>
                                 <div class="modal-body text-start">
                                     <p class="lead">Är du säker på att du vill ta bort kommentaren?</p>
-
-                                    @*<form method="post">*@
                                     <div class="modal-footer">
                                         <a type="submit" class="btn btn-danger" asp-route-deletebool="true" asp-route-deletecommentid="@comment.Id">Ta bort</a>
                                         <input type="button" class="btn btn-secondary" data-bs-dismiss="modal" value="Avbryt" />
                                     </div>
-                                    @*</form>*@
                                 </div>
                             </div>
                         </div>
@@ -238,16 +254,6 @@
                 <a href="#"><i class="bi bi-flag-fill text-warning me-2"></i></a>
             </div>
         </div>
-
-        @*		<p>@comment.Text</p>
-		<p>@comment.Date.ToString()</p>
-		if (comment.Image != null && comment.Image != "")
-		{
-			<img src="~/img/@comment.Image" width="100">
-		}
-
-*@
-
     }
 }
 

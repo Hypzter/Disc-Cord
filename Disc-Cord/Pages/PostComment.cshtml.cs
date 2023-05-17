@@ -44,6 +44,8 @@ namespace Disc_Cord.Pages
         public string EditText { get; set; }
 
 
+
+
         private static int _id;
         public async Task<IActionResult> OnGetAsync(int id, string userid, int postid, int commentid, int deletepostid, int deletecommentid, bool deletebool)
         {
