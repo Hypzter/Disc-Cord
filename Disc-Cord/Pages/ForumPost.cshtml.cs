@@ -15,6 +15,7 @@ namespace Disc_Cord.Pages
             _context = context;
         }
 
+        public List<Models.ApplicationUser> Users { get; set; }
 
         public Models.Subforum Subforum { get; set; }
 
@@ -26,6 +27,7 @@ namespace Disc_Cord.Pages
 		public async Task OnGetAsync(int id)
         {
             Subforum = await _context.Subforum.Include(x => x.NewPosts).FirstOrDefaultAsync(x => x.Id == id);
+            Users = await _context.ApplicationUsers.ToListAsync();
         }
         public async Task<IActionResult> OnPostAsync()
         {
