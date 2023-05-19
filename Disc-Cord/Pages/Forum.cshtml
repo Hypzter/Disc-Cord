@@ -1,36 +1,59 @@
 ﻿@page
 @model ForumModel
 @{
-	ViewData["Title"] = "Startsida";
+    ViewData["Title"] = "Startsida";
 }
 
+<form>
+    <p>
+        <select asp-for="@Model.ChooseableTopics" asp-items="@Model.Subforums.Select(s => new SelectListItem { Value = s.Name, Text = s.Name })">
+            <option value="">All</option>
+        </select>
+        Topics: <input type="text" asp-for="@Model.SearchString" />
+        <input type="submit" value="Filter" />
+    </p>
+</form>
 
-@{
-	foreach (var f in Model.Forums)
-	{
-		<p>@f.Name</p>
-		<p>Created @f.Date</p>
-		<ul>
-			@foreach (var s in f.SubForums)
-			{
-				<li><a asp-page="./ForumPost" asp-route-id="@s.Id">@s.Name</a></li>
-				<ul>
-					@foreach (var np in s.NewPosts)
-					{
-						<li>@np.Header</li>					
-						<ul>
-							@foreach (var c in np.Comments)
-							{
-								<li><strong>@c.Text</strong></li>
-
-							}
-						</ul>
-
-					}
-				</ul>
-			}
-		</ul>
-
-	}
-
+@if (Model.SearchString != null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Subforum</th>
+                <th>Header</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Subforums)
+            {
+                @if (string.IsNullOrEmpty(Model.SearchString) || (item.NewPosts != null && item.NewPosts.Any(np => np.Header != null && np.Header.IndexOf(Model.SearchString, StringComparison.OrdinalIgnoreCase) >= 0) && (string.IsNullOrEmpty(Model.ChooseableTopics) || item.Name == Model.ChooseableTopics)))
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                        <td>
+                            @foreach (var post in item.NewPosts.Where(np => np.Header != null && np.Header.IndexOf(Model.SearchString, StringComparison.OrdinalIgnoreCase) >= 0))
+                            {
+                                <div>@Html.DisplayFor(modelPost => post.Header)</div>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
 }
+else
+{
+    foreach (var f in Model.Forums)
+    {
+        <p>@f.Name</p>
+        <p>Created @f.Date</p>
+        <ul>
+            @foreach (var s in f.SubForums)
+            {
+               <li><a asp-page="./ForumPost" asp-route-id="@s.Id">@s.Name</a></li>
+            }
+        </ul>
+    }
+}
+
