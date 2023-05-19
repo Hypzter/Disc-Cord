@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Disc_Cord.Data;
 using Disc_Cord.Models;
+using System.Net;
 
 namespace Disc_Cord.Pages.Admin.ForumAdmin
 {
@@ -26,20 +27,39 @@ namespace Disc_Cord.Pages.Admin.ForumAdmin
 
         [BindProperty]
         public Forum Forum { get; set; } = default!;
-        
 
-        // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
+
         public async Task<IActionResult> OnPostAsync()
         {
-          if (!ModelState.IsValid || _context.Forum == null || Forum == null)
+            if (!ModelState.IsValid || _context.Forum == null || Forum == null)
             {
                 return Page();
             }
-          
+
             _context.Forum.Add(Forum);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
         }
+
+        ////------------------- API CALL ----------------------//
+        //public async Task<IActionResult> OnPostAsync()
+        //{
+        //    if (!ModelState.IsValid || Forum == null)
+        //    {
+        //        return Page();
+        //    }
+
+        //    DataManager.DataManager dataManager = new();
+        //    bool createResult = await dataManager.CreateForum(Forum);
+        //    if (createResult)
+        //    {
+        //        return RedirectToPage("./Index");
+        //    }
+        //    else
+        //    {
+        //        return StatusCode((int)HttpStatusCode.InternalServerError);
+        //    }
+        //}
     }
 }

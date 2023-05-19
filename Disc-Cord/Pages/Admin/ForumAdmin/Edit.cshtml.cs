@@ -8,6 +8,10 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Disc_Cord.Data;
 using Disc_Cord.Models;
+using Microsoft.AspNetCore.Http;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using System.Net;
+using System.Reflection.Metadata;
 
 namespace Disc_Cord.Pages.Admin.ForumAdmin
 {
@@ -30,7 +34,7 @@ namespace Disc_Cord.Pages.Admin.ForumAdmin
                 return NotFound();
             }
 
-            var forum =  await _context.Forum.FirstOrDefaultAsync(m => m.Id == id);
+            var forum = await _context.Forum.FirstOrDefaultAsync(m => m.Id == id);
             if (forum == null)
             {
                 return NotFound();
@@ -39,8 +43,29 @@ namespace Disc_Cord.Pages.Admin.ForumAdmin
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see https://aka.ms/RazorPagesCRUD.
+
+
+        ////------------------- API CALL ----------------------//
+
+        //public async Task<IActionResult> OnGetAsync(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var forum = await DataManager.DataManager.GetForumById(id.Value);
+        //    if (forum == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    Forum = forum;
+        //    return Page();
+        //}
+
+
+
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
@@ -68,6 +93,29 @@ namespace Disc_Cord.Pages.Admin.ForumAdmin
 
             return RedirectToPage("./Index");
         }
+
+
+        ////------------------- API CALL ----------------------//
+
+        //public async Task<IActionResult> OnPostAsync()
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return Page();
+        //    }
+
+        //    DataManager.DataManager dataManager = new();
+        //    bool updateResult = await dataManager.UpdateForum(Forum);
+        //    if (updateResult)
+        //    {
+        //        return RedirectToPage("./Index");
+        //    }
+        //    else
+        //    {
+        //        return StatusCode((int)HttpStatusCode.InternalServerError);
+        //    }
+        //}
+
 
         private bool ForumExists(int id)
         {

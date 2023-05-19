@@ -19,7 +19,7 @@ namespace Disc_Cord.Pages.Admin.ForumAdmin
             _context = context;
         }
 
-        public IList<Forum> Forum { get;set; } = default!;
+        public IList<Forum> Forum { get; set; } = default!;
 
         public async Task OnGetAsync()
         {
@@ -28,5 +28,13 @@ namespace Disc_Cord.Pages.Admin.ForumAdmin
                 Forum = await _context.Forum.ToListAsync();
             }
         }
+
+
+
+        ////-------------------- API to get all FORUM -------------------------//
+        //public async Task OnGetAsync()
+        //{
+        //    Forum = await DataManager.DataManager.GetAllForums();
+        //}
     }
 }

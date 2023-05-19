@@ -19,7 +19,7 @@ namespace Disc_Cord.Pages.Admin.ForumAdmin
             _context = context;
         }
 
-      public Forum Forum { get; set; } = default!; 
+      public Forum Forum { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -33,11 +33,30 @@ namespace Disc_Cord.Pages.Admin.ForumAdmin
             {
                 return NotFound();
             }
-            else 
+            else
             {
                 Forum = forum;
             }
             return Page();
         }
+
+
+        ////------------------- API CALL ----------------------//
+        //public async Task<IActionResult> OnGetAsync(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var forum = await DataManager.DataManager.GetForumById(id.Value);
+        //    if (forum == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    Forum = forum;
+        //    return Page();
+        //}
     }
 }

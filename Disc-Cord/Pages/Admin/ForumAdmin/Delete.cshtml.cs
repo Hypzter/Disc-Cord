@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Disc_Cord.Data;
 using Disc_Cord.Models;
+using System.Net;
 
 namespace Disc_Cord.Pages.Admin.ForumAdmin
 {
@@ -35,12 +36,33 @@ namespace Disc_Cord.Pages.Admin.ForumAdmin
             {
                 return NotFound();
             }
-            else 
+            else
             {
                 Forum = forum;
             }
             return Page();
         }
+
+
+        ////------------------- API CALL ----------------------//
+        //public async Task<IActionResult> OnGetAsync(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var forum = await DataManager.DataManager.GetForumById(id.Value);
+        //    if (forum == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    Forum = forum;
+        //    return Page();
+        //}
+
+
 
         public async Task<IActionResult> OnPostAsync(int? id)
         {
@@ -59,5 +81,28 @@ namespace Disc_Cord.Pages.Admin.ForumAdmin
 
             return RedirectToPage("./Index");
         }
+
+
+        ////------------------- API CALL ----------------------//
+        //public async Task<IActionResult> OnPostAsync(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    DataManager.DataManager dataManager = new();
+        //    bool deleteResult = await dataManager.DeleteForum(id.Value);
+        //    if (deleteResult)
+        //    {
+        //        return RedirectToPage("./Index");
+        //    }
+        //    else
+        //    {
+        //        return StatusCode((int)HttpStatusCode.InternalServerError);
+        //    }
+        //}
+
+
     }
 }
