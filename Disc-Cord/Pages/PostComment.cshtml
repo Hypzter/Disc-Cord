@@ -182,7 +182,7 @@
 {
     @foreach (var comment in Model.Post.Comments)
     {
-        <div class="card mt-4 border-2">
+        <div class="card mt-4 border-2" id="@comment.Id">
             <div class="card-header bg-secondary pe-0 py-1 text-light">
                 <div class="m-1">
                     @comment.Date.ToString()<span class="float-end me-2">
@@ -287,6 +287,10 @@
 
                     <button name="delete-@comment.Id" class="btn btn-outline-danger p-1 me-2" data-bs-toggle="modal" data-bs-target="#delete-@comment.Id">Ta bort kommentar</button>
 
+                    @if (@comment.Reported == true)
+                    {
+                        <span class="me-2"><strong>Under granskning</strong></span>
+                    }
                     <!-- Modal -->
                     <div class="modal fade" id="delete-@comment.Id" tabindex="-1" aria-labelledby="deleteLabel-@comment.Id" aria-hidden="true">
                         <div class="modal-dialog">

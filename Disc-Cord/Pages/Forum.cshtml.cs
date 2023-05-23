@@ -36,66 +36,6 @@ namespace Disc_Cord.Pages
 
         [BindProperty(SupportsGet = true)]
         public string? SearchString { get; set; }
-
-
-        //public async Task OnGetAsync()
-        //{
-        //    Forums = await _context.Forum.Include(x => x.SubForums).ThenInclude(x => x.NewPosts).ThenInclude(x => x.Comments).ToListAsync();
-
-
-        //    IQueryable<string> search = from m in _context.Subforum
-        //                                orderby m.Name
-        //                                select m.Name;
-
-        //    var topics = from m in _context.Subforum
-        //                 select m;
-
-        //    var posts = from m in _context.NewPost
-        //                select m;
-
-        //    if (!string.IsNullOrEmpty(SearchString))
-        //    {
-        //        topics = topics.Where(t => t.NewPosts.Any(np => np.Header.Contains(SearchString)));
-        //    }
-
-        //    if (!string.IsNullOrEmpty(ChooseableTopics))
-        //    {
-        //        topics = topics.Where(x => x.Name == ChooseableTopics);
-        //    }
-        //    //Topics = new SelectList(await search.Distinct().ToListAsync());
-        //    Topics = new SelectList(await topics.Select(t => t.Name).Distinct().ToListAsync());
-        //    Subforums = await topics.ToListAsync();
-
-
-        //}
-        //public async Task OnGetAsync()
-        //{
-        //    Forums = await _context.Forum.Include(x => x.SubForums).ThenInclude(x => x.NewPosts).ThenInclude(x => x.Comments).ToListAsync();
-
-        //    IQueryable<string> search = from m in _context.Subforum
-        //                                orderby m.Name
-        //                                select m.Name;
-
-        //    var topics = from m in _context.Subforum
-        //                 select m;
-
-        //    var posts = from m in _context.NewPost
-        //                select m;
-
-        //    if (!string.IsNullOrEmpty(SearchString))
-        //    {
-        //        topics = topics.Where(t => t.NewPosts.Any(np => np.Header.Contains(SearchString)));
-        //        search = search.Where(s => s.Contains(SearchString));
-        //    }
-
-        //    if (!string.IsNullOrEmpty(ChooseableTopics))
-        //    {
-        //        topics = topics.Where(x => x.Name == ChooseableTopics);
-        //    }
-
-        //    Topics = new SelectList(await search.Distinct().ToListAsync());
-        //    Subforums = await topics.ToListAsync();
-        //}
         public async Task OnGetAsync()
         {
             Forums = await _context.Forum.Include(x => x.SubForums).ThenInclude(x => x.NewPosts).ThenInclude(x => x.Comments).ToListAsync();

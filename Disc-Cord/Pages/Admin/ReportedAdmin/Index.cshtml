@@ -1,0 +1,59 @@
+﻿@page
+@inject UserManager<Models.ApplicationUser> UserManager;
+@model Disc_Cord.Pages.Admin.ReportedAdmin.IndexModel
+@{
+
+}
+
+<h1>Rapporterade Trådar</h1>
+@foreach (var report in @Model.Reported)
+{
+    foreach (var newP in Model.NewPosts)
+    {
+        if (newP.Id == report.PostId)
+        {
+            foreach (var u in UserManager.Users)
+            {
+                if (u.Id == newP.UserId)
+                {
+                    <div class="mb-1">
+                        <p class="m-0 p-0 fw-bolder">@report.Category.</p>
+                        <p class="m-0 p-0"><span class="fw-bold">Anledning: </span>@report.Text</p>
+                        <p class="m-0 p-0"><span class="fw-bold">Användare: </span>@u.Alias</p>
+                        <p class="m-0 p-0"><span class="fw-bold">Postens Id: </span>@report.PostId</p>
+                        <p class="m-0 p-0"><span class="fw-bold">Rubrik: </span>@newP.Header</p>
+                        <p class="m-0 p-0"><span class="fw-bold">Textinnehåll: </span>@newP.Text</p>
+                    </div>
+                    <a href="/PostComment?id=@report.PostId" class="bg-danger text-white p-1">Till inlägget</a>
+                    <hr />
+                }
+            }
+        }
+    }
+}
+
+<h1>Rapporterade Inlägg</h1>
+@foreach (var report in @Model.Reported)
+{
+    foreach (var com in Model.Comments)
+    {
+        if (com.Id == report.CommentId)
+        {
+            foreach (var u in UserManager.Users)
+            {
+                if (u.Id == com.UserId)
+                {
+                    <div class="mb-1">
+                        <p class="m-0 p-0 fw-bolder">@report.Category.</p>
+                        <p class="m-0 p-0"><span class="fw-bold">Anledning: </span>@report.Text</p>
+                        <p class="m-0 p-0"><span class="fw-bold">Användare: </span>@u.Alias</p>
+                        <p class="m-0 p-0"><span class="fw-bold">Postens Id: </span>@report.CommentId</p>
+                        <p class="m-0 p-0"><span class="fw-bold">Textinnehåll: </span>@com.Text</p>
+                    </div>
+                    <a href="/PostComment?id=@com.NewPostId#@report.CommentId" class="bg-danger text-white p-1">Till kommentaren</a>
+                    <hr />
+                }
+            }
+        }
+    }
+}
