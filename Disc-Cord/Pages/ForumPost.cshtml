@@ -1,7 +1,7 @@
 ﻿@page
 @model Disc_Cord.Pages.ForumPostModel
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<Models.ApplicationUser> SignInManager
+@inject UserManager<Models.ApplicationUser> UserManager
 @{
     var user = await UserManager.GetUserAsync(User);
     var datenow = DateTime.Now;

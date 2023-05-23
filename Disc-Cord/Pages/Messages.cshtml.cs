@@ -11,14 +11,14 @@ namespace Disc_Cord.Pages
 	{
 		private readonly ApplicationDbContext _context;
 
-		private readonly UserManager<IdentityUser> _userManager;
-		public MessagesModel(ApplicationDbContext context, UserManager<IdentityUser> userManager)
+		private readonly UserManager<Models.ApplicationUser> _userManager;
+		public MessagesModel(ApplicationDbContext context, UserManager<Models.ApplicationUser> userManager)
 		{
 			_context = context;
 			_userManager = userManager;
 		}
 		public List<Models.Message> Messages { get; set; }
-		public List<IdentityUser> Users { get; set; }
+		public List<Models.ApplicationUser> Users { get; set; }
 		[BindProperty]
 		public Models.Message NewMessage { get; set; }
 		public async Task<IActionResult> OnGetAsync()
