@@ -12,10 +12,12 @@ namespace Disc_Cord.Pages
     public class PostCommentModel : PageModel
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public PostCommentModel(ApplicationDbContext context)
+        public PostCommentModel(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public Models.NewPost Post { get; set; }
@@ -48,12 +50,19 @@ namespace Disc_Cord.Pages
 
         [BindProperty]
         public string EditPostText { get; set; }
+        public bool IsAdmin { get; set; }
 
 
         private static int _id;
         public async Task<IActionResult> OnGetAsync(int id, string userid, int postid, int commentid, int deletepostid, int deletecommentid, bool deletebool)
         {
-            if (id != 0)
+			var currentUser = await _userManager.GetUserAsync(User);
+			if (currentUser != null)
+			{
+				IsAdmin = await _userManager.IsInRoleAsync(currentUser, "Admin");
+			}
+
+			if (id != 0)
             {
                 _id = id;
             }

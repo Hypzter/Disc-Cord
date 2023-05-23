@@ -63,7 +63,7 @@
         </div>
     </div>
     <div class="card-footer bg-light text-end p-1">
-        @if (user != null && user.Id == Model.Post.UserId)
+        @if (user != null && user.Id == Model.Post.UserId || Model.IsAdmin)
         {
             Model.EditPostText = Model.Post.Text;
 
@@ -236,7 +236,7 @@
                 </div>
             </div>
             <div class="card-footer bg-light text-end p-1">
-                @if (user != null && user.Id == comment.UserId)
+                @if (user != null && user.Id == comment.UserId || Model.IsAdmin)
                 {
 
                     <button name="editComment-@comment.Id" class="btn btn-outline-primary p-1 me-2" data-bs-toggle="modal" data-bs-target="#editComment-@comment.Id">Ändra</button>
