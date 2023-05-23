@@ -21,20 +21,20 @@ namespace Disc_Cord.Pages.Admin.ForumAdmin
 
         public IList<Forum> Forum { get; set; } = default!;
 
-        public async Task OnGetAsync()
-        {
-            if (_context.Forum != null)
-            {
-                Forum = await _context.Forum.ToListAsync();
-            }
-        }
-
-
-
-        ////-------------------- API to get all FORUM -------------------------//
         //public async Task OnGetAsync()
         //{
-        //    Forum = await DataManager.DataManager.GetAllForums();
+        //    if (_context.Forum != null)
+        //    {
+        //        Forum = await _context.Forum.ToListAsync();
+        //    }
         //}
+
+
+
+        //-------------------- API to get all FORUM -------------------------//
+        public async Task OnGetAsync()
+        {
+            Forum = await DataManager.DataManager.GetAllForums();
+        }
     }
 }

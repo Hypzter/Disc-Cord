@@ -21,42 +21,42 @@ namespace Disc_Cord.Pages.Admin.ForumAdmin
 
       public Forum Forum { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int? id)
-        {
-            if (id == null || _context.Forum == null)
-            {
-                return NotFound();
-            }
-
-            var forum = await _context.Forum.FirstOrDefaultAsync(m => m.Id == id);
-            if (forum == null)
-            {
-                return NotFound();
-            }
-            else
-            {
-                Forum = forum;
-            }
-            return Page();
-        }
-
-
-        ////------------------- API CALL ----------------------//
         //public async Task<IActionResult> OnGetAsync(int? id)
         //{
-        //    if (id == null)
+        //    if (id == null || _context.Forum == null)
         //    {
         //        return NotFound();
         //    }
 
-        //    var forum = await DataManager.DataManager.GetForumById(id.Value);
+        //    var forum = await _context.Forum.FirstOrDefaultAsync(m => m.Id == id);
         //    if (forum == null)
         //    {
         //        return NotFound();
         //    }
-
-        //    Forum = forum;
+        //    else
+        //    {
+        //        Forum = forum;
+        //    }
         //    return Page();
         //}
+
+
+        //------------------- API CALL ----------------------//
+        public async Task<IActionResult> OnGetAsync(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var forum = await DataManager.DataManager.GetForumById(id.Value);
+            if (forum == null)
+            {
+                return NotFound();
+            }
+
+            Forum = forum;
+            return Page();
+        }
     }
 }

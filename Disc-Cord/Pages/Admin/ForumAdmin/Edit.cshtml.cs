@@ -27,75 +27,44 @@ namespace Disc_Cord.Pages.Admin.ForumAdmin
         [BindProperty]
         public Forum Forum { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int? id)
-        {
-            if (id == null || _context.Forum == null)
-            {
-                return NotFound();
-            }
-
-            var forum = await _context.Forum.FirstOrDefaultAsync(m => m.Id == id);
-            if (forum == null)
-            {
-                return NotFound();
-            }
-            Forum = forum;
-            return Page();
-        }
-
-
-
-        ////------------------- API CALL ----------------------//
-
         //public async Task<IActionResult> OnGetAsync(int? id)
         //{
-        //    if (id == null)
+        //    if (id == null || _context.Forum == null)
         //    {
         //        return NotFound();
         //    }
 
-        //    var forum = await DataManager.DataManager.GetForumById(id.Value);
+        //    var forum = await _context.Forum.FirstOrDefaultAsync(m => m.Id == id);
         //    if (forum == null)
         //    {
         //        return NotFound();
         //    }
-
         //    Forum = forum;
         //    return Page();
         //}
 
 
 
-        public async Task<IActionResult> OnPostAsync()
+        //------------------- API CALL ----------------------//
+
+        public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (!ModelState.IsValid)
+            if (id == null)
             {
-                return Page();
+                return NotFound();
             }
 
-            _context.Attach(Forum).State = EntityState.Modified;
-
-            try
+            var forum = await DataManager.DataManager.GetForumById(id.Value);
+            if (forum == null)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ForumExists(Forum.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NotFound();
             }
 
-            return RedirectToPage("./Index");
+            Forum = forum;
+            return Page();
         }
 
 
-        ////------------------- API CALL ----------------------//
 
         //public async Task<IActionResult> OnPostAsync()
         //{
@@ -104,22 +73,53 @@ namespace Disc_Cord.Pages.Admin.ForumAdmin
         //        return Page();
         //    }
 
-        //    DataManager.DataManager dataManager = new();
-        //    bool updateResult = await dataManager.UpdateForum(Forum);
-        //    if (updateResult)
+        //    _context.Attach(Forum).State = EntityState.Modified;
+
+        //    try
         //    {
-        //        return RedirectToPage("./Index");
+        //        await _context.SaveChangesAsync();
         //    }
-        //    else
+        //    catch (DbUpdateConcurrencyException)
         //    {
-        //        return StatusCode((int)HttpStatusCode.InternalServerError);
+        //        if (!ForumExists(Forum.Id))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
         //    }
+
+        //    return RedirectToPage("./Index");
         //}
 
 
-        private bool ForumExists(int id)
+        //------------------- API CALL ----------------------//
+
+        public async Task<IActionResult> OnPostAsync()
         {
-          return (_context.Forum?.Any(e => e.Id == id)).GetValueOrDefault();
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+
+            DataManager.DataManager dataManager = new();
+            bool updateResult = await dataManager.UpdateForum(Forum);
+            if (updateResult)
+            {
+                return RedirectToPage("./Index");
+            }
+            else
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
         }
+
+
+        //private bool ForumExists(int id)
+        //{
+        //  return (_context.Forum?.Any(e => e.Id == id)).GetValueOrDefault();
+        //}
     }
 }

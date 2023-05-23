@@ -29,37 +29,37 @@ namespace Disc_Cord.Pages.Admin.ForumAdmin
         public Forum Forum { get; set; } = default!;
 
 
-        public async Task<IActionResult> OnPostAsync()
-        {
-            if (!ModelState.IsValid || _context.Forum == null || Forum == null)
-            {
-                return Page();
-            }
-
-            _context.Forum.Add(Forum);
-            await _context.SaveChangesAsync();
-
-            return RedirectToPage("./Index");
-        }
-
-        ////------------------- API CALL ----------------------//
         //public async Task<IActionResult> OnPostAsync()
         //{
-        //    if (!ModelState.IsValid || Forum == null)
+        //    if (!ModelState.IsValid || _context.Forum == null || Forum == null)
         //    {
         //        return Page();
         //    }
 
-        //    DataManager.DataManager dataManager = new();
-        //    bool createResult = await dataManager.CreateForum(Forum);
-        //    if (createResult)
-        //    {
-        //        return RedirectToPage("./Index");
-        //    }
-        //    else
-        //    {
-        //        return StatusCode((int)HttpStatusCode.InternalServerError);
-        //    }
+        //    _context.Forum.Add(Forum);
+        //    await _context.SaveChangesAsync();
+
+        //    return RedirectToPage("./Index");
         //}
+
+        //------------------- API CALL ----------------------//
+        public async Task<IActionResult> OnPostAsync()
+        {
+            if (!ModelState.IsValid || Forum == null)
+            {
+                return Page();
+            }
+
+            DataManager.DataManager dataManager = new();
+            bool createResult = await dataManager.CreateForum(Forum);
+            if (createResult)
+            {
+                return RedirectToPage("./Index");
+            }
+            else
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
     }
 }

@@ -23,85 +23,85 @@ namespace Disc_Cord.Pages.Admin.ForumAdmin
         [BindProperty]
       public Forum Forum { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int? id)
-        {
-            if (id == null || _context.Forum == null)
-            {
-                return NotFound();
-            }
-
-            var forum = await _context.Forum.FirstOrDefaultAsync(m => m.Id == id);
-
-            if (forum == null)
-            {
-                return NotFound();
-            }
-            else
-            {
-                Forum = forum;
-            }
-            return Page();
-        }
-
-
-        ////------------------- API CALL ----------------------//
         //public async Task<IActionResult> OnGetAsync(int? id)
         //{
-        //    if (id == null)
+        //    if (id == null || _context.Forum == null)
         //    {
         //        return NotFound();
         //    }
 
-        //    var forum = await DataManager.DataManager.GetForumById(id.Value);
+        //    var forum = await _context.Forum.FirstOrDefaultAsync(m => m.Id == id);
+
         //    if (forum == null)
         //    {
         //        return NotFound();
         //    }
-
-        //    Forum = forum;
+        //    else
+        //    {
+        //        Forum = forum;
+        //    }
         //    return Page();
         //}
 
 
-
-        public async Task<IActionResult> OnPostAsync(int? id)
+        //------------------- API CALL ----------------------//
+        public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.Forum == null)
+            if (id == null)
             {
                 return NotFound();
             }
-            var forum = await _context.Forum.FindAsync(id);
 
-            if (forum != null)
+            var forum = await DataManager.DataManager.GetForumById(id.Value);
+            if (forum == null)
             {
-                Forum = forum;
-                _context.Forum.Remove(Forum);
-                await _context.SaveChangesAsync();
+                return NotFound();
             }
 
-            return RedirectToPage("./Index");
+            Forum = forum;
+            return Page();
         }
 
 
-        ////------------------- API CALL ----------------------//
+
         //public async Task<IActionResult> OnPostAsync(int? id)
         //{
-        //    if (id == null)
+        //    if (id == null || _context.Forum == null)
         //    {
         //        return NotFound();
         //    }
+        //    var forum = await _context.Forum.FindAsync(id);
 
-        //    DataManager.DataManager dataManager = new();
-        //    bool deleteResult = await dataManager.DeleteForum(id.Value);
-        //    if (deleteResult)
+        //    if (forum != null)
         //    {
-        //        return RedirectToPage("./Index");
+        //        Forum = forum;
+        //        _context.Forum.Remove(Forum);
+        //        await _context.SaveChangesAsync();
         //    }
-        //    else
-        //    {
-        //        return StatusCode((int)HttpStatusCode.InternalServerError);
-        //    }
+
+        //    return RedirectToPage("./Index");
         //}
+
+
+        //------------------- API CALL ----------------------//
+        public async Task<IActionResult> OnPostAsync(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            DataManager.DataManager dataManager = new();
+            bool deleteResult = await dataManager.DeleteForum(id.Value);
+            if (deleteResult)
+            {
+                return RedirectToPage("./Index");
+            }
+            else
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
 
 
     }

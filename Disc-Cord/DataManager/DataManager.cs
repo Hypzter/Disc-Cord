@@ -30,7 +30,7 @@ namespace Disc_Cord.DataManager
         //----------------------------------- API CALL -------------------------------------------//
         // ----------------- HERE YOU NEED TO SET YOUR OWN LOCALHOST IN THE URI!
 
-        private static Uri BaseAddress = new Uri("https://localhost:44327/"); // Daniels
+        private static Uri BaseAddress = new Uri("https://apicrd.azurewebsites.net/"); // Daniels
         //private static Uri BaseAddress = new Uri("https://localhost:44327/");  // Robins
         //private static Uri BaseAddress = new Uri("https://localhost:44327/");  // Crippa
 
