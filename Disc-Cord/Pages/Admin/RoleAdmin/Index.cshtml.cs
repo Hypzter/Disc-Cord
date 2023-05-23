@@ -1,10 +1,13 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace Disc_Cord.Pages.Admin.RoleAdmin
 {
+    [Authorize(Roles = "Admin")]
     public class IndexModel : PageModel
     {
         public List<Models.ApplicationUser> Users { get; set; }
