@@ -21,7 +21,7 @@ namespace Disc_Cord.Pages.Admin.SubforumAdmin
 
         public IActionResult OnGet()
         {
-        ViewData["ForumId"] = new SelectList(_context.Forum, "Id", "Id");
+        ViewData["ForumId"] = new SelectList(_context.Forum, "Id", "Name");
             return Page();
         }
 

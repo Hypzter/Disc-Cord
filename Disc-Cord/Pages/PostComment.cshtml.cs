@@ -54,7 +54,8 @@ namespace Disc_Cord.Pages
 
 
         private static int _id;
-        public async Task<IActionResult> OnGetAsync(int id, string userid, int postid, int commentid, int deletepostid, int deletecommentid, bool deletebool)
+        public async Task<IActionResult> OnGetAsync(int id, string userid, int postid, int commentid,
+            int deletepostid, int deletecommentid, bool deletebool, int unflagpostid, int unflagcommentid)
         {
 			var currentUser = await _userManager.GetUserAsync(User);
 			if (currentUser != null)
@@ -163,10 +164,25 @@ namespace Disc_Cord.Pages
                 }
                 deletebool = false;
             }
+            
+            if (unflagpostid != 0)
+            {
+                var post = await _context.NewPost.Where(p => p.Id == unflagpostid).FirstOrDefaultAsync();
+                post.Reported = false;
+                var reportedPost = await _context.Reports.Where(r => r.PostId == unflagpostid).ToListAsync();
 
+                _context.Reports.RemoveRange(reportedPost);
+                await _context.SaveChangesAsync();
+            }
+            if (unflagcommentid != 0)
+            {
+                var comment = await _context.Comment.Where(p => p.Id == unflagcommentid).FirstOrDefaultAsync();
+                comment.Reported = false;
+                var reportedComment = await _context.Reports.Where(r => r.CommentId == unflagcommentid).ToListAsync();
 
-
-
+                _context.Reports.RemoveRange(reportedComment);
+                await _context.SaveChangesAsync();
+            }
 
             return Page();
         }

@@ -170,9 +170,16 @@
                 </div>
             </div>
         </div>
-        @if(Model.Post.Reported == true)
+        @if (Model.Post.Reported == true)
         {
-            <span class="me-2"><strong>Under granskning</strong></span>
+            if (User.IsInRole("Admin"))
+            {
+                <a asp-route-unflagpostid="@Model.Post.Id" ><span class="me-2"><strong>Under granskning</strong></span></a>
+            }
+            else
+            {
+                <span class="me-2"><strong>Under granskning</strong></span>
+            }
         }
 
     </div>
@@ -289,7 +296,14 @@
 
                     @if (@comment.Reported == true)
                     {
-                        <span class="me-2"><strong>Under granskning</strong></span>
+                        if (User.IsInRole("Admin"))
+                        {
+                            <a asp-route-unflagcommentid="@comment.Id"><span class="me-2"><strong>Under granskning</strong></span></a>
+                        }
+                        else
+                        {
+                            <span class="me-2"><strong>Under granskning</strong></span>
+                        }
                     }
                     <!-- Modal -->
                     <div class="modal fade" id="delete-@comment.Id" tabindex="-1" aria-labelledby="deleteLabel-@comment.Id" aria-hidden="true">
@@ -360,7 +374,7 @@
 
         <label asp-for="NewComment.Image" class="form-label mt-1">Lägg till bild</label>
         <input type="file" class="form-control" name="UploadedImage" />
-	
+
         <input type="submit" class="btn btn-success mt-1" asp-route-newcommentbool="true" value="Lägg till kommentar" />
 
     </form>
