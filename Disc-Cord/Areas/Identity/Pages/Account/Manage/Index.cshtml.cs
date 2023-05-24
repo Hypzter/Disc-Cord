@@ -67,6 +67,10 @@ namespace Disc_Cord.Areas.Identity.Pages.Account.Manage
 
             [Display(Name = "Add image")]
             public IFormFile ImageUrl { get; set; }
+
+
+            [Display(Name = "About me")]
+            public string AboutMe { get; set; }
         }
 
         private async Task LoadAsync(Models.ApplicationUser user)
@@ -132,7 +136,12 @@ namespace Disc_Cord.Areas.Identity.Pages.Account.Manage
             var userImage = await _context.ApplicationUsers.FirstOrDefaultAsync(x => x.Id == user.Id);
             userImage.ImageUrl = fileName;
 
-            _context.SaveChanges();
+            if (Input.AboutMe != null)
+            {
+                user.AboutMe = Input.AboutMe;
+            }
+
+            await _context.SaveChangesAsync();
 
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";

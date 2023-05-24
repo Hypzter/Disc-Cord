@@ -20,6 +20,9 @@ namespace Disc_Cord.Models
         [PersonalData]
         public string? ImageUrl { get; set; }
 
+        [PersonalData]
+        public string? AboutMe { get; set; }
+
 
     }
 }

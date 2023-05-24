@@ -27,11 +27,11 @@
                         <td>
                             <div class="row">
                             <a class="text-black col-4 text-decoration-none" asp-route-id="@posts.Id" asp-page="./PostComment">@posts.Header</a>
-                            @foreach (var m in Model.Users)
+                            @foreach (var u in Model.Users)
                             {
-                                @if (@m.Id == @posts.UserId && @m.Alias != null)
+                                @if (@u.Id == @posts.UserId && @u.Alias != null)
                                 {
-                                        <p class="text-black col-8 text-end text-decoration-none pb-0 mb-0">@m.Alias - <span class="fw-lighter">@posts.Date.ToString("dd/MM/yy HH:mm")</span></p>
+                                        <p class="text-black col-8 text-end text-decoration-none pb-0 mb-0"><a asp-page="./UserPage" asp-route-userid="@u.Id">@u.Alias</a> - <span class="fw-lighter">@posts.Date.ToString("dd/MM/yy HH:mm")</span></p>
                                     }
                             }
                             </div>

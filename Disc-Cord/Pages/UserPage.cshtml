@@ -1,0 +1,28 @@
+﻿@page
+@inject UserManager<Models.ApplicationUser> UserManager;
+@inject SignInManager<Models.ApplicationUser> SignInManager;
+@model Disc_Cord.Pages.UserPageModel
+@{
+    var user = await UserManager.GetUserAsync(User);
+}
+
+<p>@Model.User.Alias</p>
+<br />
+<img src="~/img/@Model.User.ImageUrl" width="300px" />
+<br />
+<p>@Model.User.AboutMe</p>
+
+<br />
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <form method="post">
+
+        <input asp-for="Message.SenderId" type="hidden" value="@user.Id" />
+        <input asp-for="Message.ReceiverId" type="hidden" value="@Model.User.Id" />
+        <textarea asp-for="Message.Text" class="form-control" cols="40" rows="5"></textarea>
+        <br>
+        <input type="submit" name="addTask" value="Skicka" class="btn btn-primary" />
+
+    </form>
+}
