@@ -1,10 +1,14 @@
 using Disc_Cord.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace Disc_Cord.Pages.Admin.ReportedAdmin
 {
+    [Authorize(Roles = "Admin")]
+
     public class IndexModel : PageModel
     {
         private readonly ApplicationDbContext _context;

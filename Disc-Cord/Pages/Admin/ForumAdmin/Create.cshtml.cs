@@ -8,9 +8,13 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Disc_Cord.Data;
 using Disc_Cord.Models;
 using System.Net;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace Disc_Cord.Pages.Admin.ForumAdmin
 {
+    [Authorize(Roles = "Admin")]
+
     public class CreateModel : PageModel
     {
         private readonly Disc_Cord.Data.ApplicationDbContext _context;

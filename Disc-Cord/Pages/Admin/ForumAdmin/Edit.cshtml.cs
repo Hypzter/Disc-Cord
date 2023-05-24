@@ -12,9 +12,13 @@ using Microsoft.AspNetCore.Http;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System.Net;
 using System.Reflection.Metadata;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace Disc_Cord.Pages.Admin.ForumAdmin
 {
+    [Authorize(Roles = "Admin")]
+
     public class EditModel : PageModel
     {
         private readonly Disc_Cord.Data.ApplicationDbContext _context;

@@ -13,11 +13,13 @@ namespace Disc_Cord.Pages
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IConfiguration Configuration;
 
-        public PostCommentModel(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public PostCommentModel(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IConfiguration configuration)
         {
             _context = context;
             _userManager = userManager;
+            Configuration = configuration;
         }
 
         public Models.NewPost Post { get; set; }
@@ -54,8 +56,13 @@ namespace Disc_Cord.Pages
 
 
         private static int _id;
+
+
+        public PaginatedList<Models.Comment> Comments { get; set; }
+
+
         public async Task<IActionResult> OnGetAsync(int id, string userid, int postid, int commentid,
-            int deletepostid, int deletecommentid, bool deletebool, int unflagpostid, int unflagcommentid)
+            int deletepostid, int deletecommentid, bool deletebool, int unflagpostid, int unflagcommentid, int? pageIndex)
         {
 			var currentUser = await _userManager.GetUserAsync(User);
 			if (currentUser != null)
@@ -67,6 +74,13 @@ namespace Disc_Cord.Pages
             {
                 _id = id;
             }
+
+            var pageSize = Configuration.GetValue("PageSize", 10);
+            Comments = await PaginatedList<Models.Comment>.CreateAsync(
+                _context.Comment.Where(x => x.NewPostId == _id)
+                , pageIndex ?? 1, pageSize);
+
+
 
             Post = await _context.NewPost.Include(x => x.Comments).FirstOrDefaultAsync(x => x.Id == _id);
             AllUsers = await _context.ApplicationUsers.ToListAsync();
