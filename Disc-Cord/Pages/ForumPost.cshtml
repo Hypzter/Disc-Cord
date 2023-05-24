@@ -9,7 +9,6 @@
 @using Microsoft.AspNetCore.Mvc.RazorPages
 @using Microsoft.AspNetCore.Mvc.Rendering
 
-
 <div class="card border-2">
     <div class="card-header bg-warning text-black">
         Trådar
@@ -71,10 +70,10 @@
         }
     </ul>
 </div>
-
+<button onclick="window.history.back()" class="btn btn-secondary">Tillbaka</button>
 @if (SignInManager.IsSignedIn(User))
 {
-    <button name="newpost" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newpost">Skapa ny post</button>
+    <button name="newpost" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#newpost">Skapa ny post</button>
 
     <!-- Modal -->
     <div class="modal fade" id="newpost" tabindex="-1" aria-labelledby="newpostLabel" aria-hidden="true">
