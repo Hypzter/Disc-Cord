@@ -9,6 +9,8 @@ using Disc_Cord.Data;
 using Disc_Cord.Models;
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
+using System.Data;
+
 
 namespace Disc_Cord.Pages.Admin.ForumAdmin
 {

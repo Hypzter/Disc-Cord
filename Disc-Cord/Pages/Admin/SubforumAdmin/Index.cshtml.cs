@@ -7,9 +7,13 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Disc_Cord.Data;
 using Disc_Cord.Models;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace Disc_Cord.Pages.Admin.SubforumAdmin
 {
+    [Authorize(Roles = "Admin")]
+
     public class IndexModel : PageModel
     {
         private readonly Disc_Cord.Data.ApplicationDbContext _context;

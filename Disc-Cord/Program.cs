@@ -17,10 +17,19 @@ namespace Disc_Cord
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("HasToBeAdmin",
+                    policy => policy.RequireRole("Admin"));
+            });
+
             builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-            builder.Services.AddRazorPages();
+            builder.Services.AddRazorPages(options =>
+            {
+                options.Conventions.AuthorizeFolder("/Admin", "HasToBeAdmin");
+            });
 
             var app = builder.Build();
 

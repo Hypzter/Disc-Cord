@@ -187,7 +187,7 @@
 
 @if (Model.Post.Text != null)
 {
-    @foreach (var comment in Model.Post.Comments)
+    @foreach (var comment in Model.Comments)
     {
         <div class="card mt-4 border-2" id="@comment.Id">
             <div class="card-header bg-secondary pe-0 py-1 text-light">
@@ -360,6 +360,42 @@
 }
 
 <br />
+
+
+
+<!-- Pagination -->
+@{
+    var prevDisabled = !Model.Comments.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Comments.HasNextPage ? "disabled" : "";
+}
+
+<div>
+    <ul class="pagination">
+        @if (Model.Comments.HasPreviousPage)
+        {
+            <li class="page-item">
+                <a class="page-link bg-light text-black" asp-page="./PostComment" asp-route-pageIndex="@(Model.Comments.PageIndex - 1)">Previous</a>
+            </li>
+        }
+        @for (int i = 1; i <= Model.Comments.TotalPages; i++)
+        {
+            <li class="page-item @(Model.Comments.PageIndex == i ? "active" : "")">
+                <a class="page-link bg-light text-black" asp-page="./PostComment" asp-route-pageIndex="@i">@i</a>
+            </li>
+        }
+        @if (Model.Comments.HasNextPage)
+        {
+            <li class="page-item">
+                <a class="page-link bg-light text-black" asp-page="./PostComment" asp-route-pageIndex="@(Model.Comments.PageIndex + 1)">Next</a>
+            </li>
+        }
+    </ul>
+</div>
+
+
+
+
+
 
 @if (SignInManager.IsSignedIn(User))
 {
