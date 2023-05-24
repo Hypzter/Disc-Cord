@@ -413,7 +413,7 @@
         <label asp-for="NewComment.Image" class="form-label mt-1">Lägg till bild</label>
         <input type="file" class="form-control" name="UploadedImage" />
 
-        <button onclick="window.history.back()" class="btn btn-secondary mt-1">Tillbaka</button>
+        <button type="button" onclick="window.history.back()" class="btn btn-secondary mt-1">Tillbaka</button>
         <input type="submit" class="btn btn-warning mt-1" asp-route-newcommentbool="true" value="Lägg till kommentar" />
 
     </form>

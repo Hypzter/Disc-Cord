@@ -38,7 +38,7 @@ namespace Disc_Cord.Pages
                 _id = id;
             }
 
-            Subforum = await _context.Subforum.Include(x => x.NewPosts).FirstOrDefaultAsync(x => x.Id == _id);
+            Subforum = await _context.Subforum.Include(x => x.NewPosts).ThenInclude(x => x.Comments).FirstOrDefaultAsync(x => x.Id == _id);
             Users = await _context.ApplicationUsers.ToListAsync();
 
             var pageSize = Configuration.GetValue("PageSize", 10);
