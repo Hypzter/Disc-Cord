@@ -1,18 +1,22 @@
 using Disc_Cord.Data;
 using Disc_Cord.Helper;
+using Disc_Cord.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Disc_Cord.Pages
 {
     public class ForumPostModel : PageModel
     {
         private readonly ApplicationDbContext _context;
+        private readonly IConfiguration Configuration;
 
-        public ForumPostModel(ApplicationDbContext context)
+        public ForumPostModel(ApplicationDbContext context, IConfiguration configuration)
         {
             _context = context;
+            Configuration = configuration;
         }
 
         public List<Models.ApplicationUser> Users { get; set; }
@@ -24,10 +28,23 @@ namespace Disc_Cord.Pages
 		[BindProperty]
 		public IFormFile UploadedImage { get; set; }
 
-		public async Task OnGetAsync(int id)
+        public PaginatedList<Models.NewPost> NewPosts { get; set; }
+
+        private static int _id;
+        public async Task OnGetAsync(int id, int? pageIndex)
         {
-            Subforum = await _context.Subforum.Include(x => x.NewPosts).FirstOrDefaultAsync(x => x.Id == id);
+            if (id != 0)
+            {
+                _id = id;
+            }
+
+            Subforum = await _context.Subforum.Include(x => x.NewPosts).FirstOrDefaultAsync(x => x.Id == _id);
             Users = await _context.ApplicationUsers.ToListAsync();
+
+            var pageSize = Configuration.GetValue("PageSize", 10);
+            NewPosts = await PaginatedList<Models.NewPost>.CreateAsync(
+                _context.NewPost.OrderByDescending(x => x.Date).Where(x => x.SubForumId == _id)
+                ,pageIndex ?? 1, pageSize);
         }
         public async Task<IActionResult> OnPostAsync()
         {
