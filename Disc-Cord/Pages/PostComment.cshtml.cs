@@ -188,6 +188,8 @@ namespace Disc_Cord.Pages
                     await _context.SaveChangesAsync();
                 }
                 deletebool = false;
+                var redirectUrl = ("/PostComment?id=" + _id);
+                return Redirect(redirectUrl);
             }
             
             if (unflagpostid != 0)
