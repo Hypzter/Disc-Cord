@@ -1,69 +1,83 @@
 ﻿@page
 @model ForumModel
 @{
-    ViewData["Title"] = "Startsida";
+	ViewData["Title"] = "Startsida";
+
 }
 
 <form>
-    <p>
-        <select asp-for="@Model.ChooseableTopics" asp-items="@Model.Subforums.Select(s => new SelectListItem { Value = s.Name, Text = s.Name })">
-            <option value="">All</option>
-        </select>
-        Topics: <input type="text" asp-for="@Model.SearchString" />
-        <input type="submit" value="Filter" />
-    </p>
+	<p>
+		<select asp-for="@Model.ChooseableTopics" asp-items="@Model.Subforums.Select(s => new SelectListItem { Value = s.Name, Text = s.Name })">
+			<option value="">All</option>
+		</select>
+		Topics: <input type="text" asp-for="@Model.SearchString" />
+		<input type="submit" value="Filter" />
+	</p>
 </form>
 
 @if (Model.SearchString != null)
 {
-    @foreach (var item in Model.Subforums)
-    {
-        @if (string.IsNullOrEmpty(Model.SearchString) || (item.NewPosts != null && item.NewPosts.Any(np => np.Header != null && np.Header.IndexOf(Model.SearchString, StringComparison.OrdinalIgnoreCase) >= 0) && (string.IsNullOrEmpty(Model.ChooseableTopics) || item.Name == Model.ChooseableTopics)))
-        {
-            <div class="card border-2 mb-4">
-                <div class="card-header bg-warning text-black fs-4 fw-bold">
-                    @Html.DisplayFor(modelItem => item.Name)
-                </div>
-                <table class="table table-striped">
-                    @foreach (var post in item.NewPosts.Where(np => np.Header != null && np.Header.IndexOf(Model.SearchString, StringComparison.OrdinalIgnoreCase) >= 0))
-                    {
-                        <tr>
-                            <td>
-                                <div><a asp-page="./PostComment" asp-route-id="@post.Id" class="text-black col-4 text-decoration-none">@Html.DisplayFor(modelPost => post.Header)</a></div>
-                            </td>
-                        </tr>
-                    }
-                </table>
-            </div>
-        }
-    }
+	@foreach (var item in Model.Subforums)
+	{
+		@if (string.IsNullOrEmpty(Model.SearchString) || (item.NewPosts != null && item.NewPosts.Any(np => np.Header != null && np.Header.IndexOf(Model.SearchString, StringComparison.OrdinalIgnoreCase) >= 0) && (string.IsNullOrEmpty(Model.ChooseableTopics) || item.Name == Model.ChooseableTopics)))
+		{
+			<div class="card border-2 mb-4">
+				<div class="card-header bg-warning text-black fs-4 fw-bold">
+					@Html.DisplayFor(modelItem => item.Name)
+				</div>
+				<table class="table table-striped">
+					@foreach (var post in item.NewPosts.Where(np => np.Header != null && np.Header.IndexOf(Model.SearchString, StringComparison.OrdinalIgnoreCase) >= 0))
+					{
+						<tr>
+							<td>
+								<div><a asp-page="./PostComment" asp-route-id="@post.Id" class="text-black col-4 text-decoration-none">@Html.DisplayFor(modelPost => post.Header)</a></div>
+							</td>
+							<td>
+								<p class="fw-lighter">@item.NewPosts.Count</p>
+							</td>
+						</tr>
+					}
+				</table>
+			</div>
+		}
+	}
 }
 
 else
 {
-    foreach (var forum in @Model.Forums)
-    {
-        <div class="card border-2 mb-4">
-            <div class="card-header bg-warning text-black fs-4 fw-bold">
-                @forum.Name
-            </div>
-            <div class="m-0 p-0 text-start">
-                <table class="table table-striped">
-                    <tbody>
-                        @foreach (var subforum in @forum.SubForums)
-                        {
-                            <tr>
-                                <td>
-                                    <div class="row">
-                                        <a class="text-black col-4 text-decoration-none" asp-route-id="@subforum.Id" asp-page="./ForumPost">@subforum.Name</a>
+	foreach (var forum in @Model.Forums)
+	{
+		<div class="card border-2 mb-4">
+			<div class="card-header bg-warning text-black fs-4 fw-bold">
+				@forum.Name
+			</div>
+			<div class="m-0 p-0 text-start">
+				<table class="table table-striped">
+					<thead class="bg-black text-white">
+						<tr>
+							<th>Ämne</th>
+							@if(forum.SubForums.Count != 0)
+							{
+								<th>Antal poster</th>
 
-                                    </div>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    }
+							}
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (var subforum in @forum.SubForums)
+						{
+							<tr>
+								<td class="col-8">
+									<a class="text-black text-decoration-none" asp-route-id="@subforum.Id" asp-page="./ForumPost">@subforum.Name</a>
+								</td>
+								<td>
+									<p class="fw-lighter">@subforum.NewPosts.Count</p>
+								</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	}
 }
