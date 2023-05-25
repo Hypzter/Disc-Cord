@@ -47,4 +47,7 @@ button.accept-policy {
   line-height: 10px;
 }
 
+.navbar {
+    background-image: url('/img/private/navbar.jpg');
+}
 
