@@ -15,7 +15,7 @@ namespace Disc_Cord.Helper
 
         public static string CensorText(string text)
         {
-            string[] badWords = new string[] { "fan", "jävla", "skit" };
+            string[] badWords = new string[] { "jävla", "jävel" };
 
             string censoredText = text;
             foreach (string word in badWords)
