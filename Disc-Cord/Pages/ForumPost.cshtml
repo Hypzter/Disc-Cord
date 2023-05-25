@@ -3,133 +3,130 @@
 @inject SignInManager<Models.ApplicationUser> SignInManager
 @inject UserManager<Models.ApplicationUser> UserManager
 @{
-	string[] headlines = new string[] { "Ämne", "Kommentarer", "Skapare", "Skapat" };
-	var user = await UserManager.GetUserAsync(User);
-	var datenow = DateTime.Now;
+    string[] headlines = new string[] { "Ämne", "Kommentarer", "Skapare", "Skapat" };
+    var user = await UserManager.GetUserAsync(User);
+    var datenow = DateTime.Now;
 }
 @using Microsoft.AspNetCore.Mvc.RazorPages
 @using Microsoft.AspNetCore.Mvc.Rendering
 
 <div class="card border-2">
-	<div class="card-header bg-warning text-black fs-4 fw-bold">
-		Trådar
-	</div>
-	<div class="m-0 p-0 text-start">
-		<table class="table table-striped">
-			<thead class="bg-black text-white">
-				<tr>
+    <div class="card-header bg-warning text-black fs-4 fw-bold">
+        @Model.Subforum.Name
+    </div>
+    <div class="m-0 p-0 text-start">
+        <table class="table table-striped">
+            <thead class="bg-black text-white">
+                <tr>
 
-					@foreach (var h in headlines)
-					{
-						<th>@h</th>
-					}
-				</tr>
-			</thead>
-			<tbody>
-				@foreach (var posts in Model.NewPosts)
-				{
-					<tr>
-						<td>
-							<div class="row">
-								<a class="text-black col-4 text-decoration-none" asp-route-id="@posts.Id" asp-page="./PostComment">@posts.Header</a>
-								@foreach (var u in Model.Users)
-								{
-									@if (@u.Id == @posts.UserId && @u.Alias != null)
-									{
-									<td>
-										<p class="fw-lighter">@posts.Comments.Count</p>
-									</td>
-									<td>
-										<p class="text-black col-8 text-decoration-none pb-0 mb-0"><a asp-page="./UserPage" asp-route-userid="@u.Id">@u.Alias</a></p>
-									</td>
-									<td>
-										<p class="fw-lighter">@posts.Date.ToString("dd/MM/yy HH:mm")</p>
-									</td>
-									}
-
-								}
-							</div>
-						</td>
-					</tr>
-				}
-			</tbody>
-		</table>
-	</div>
+                    @foreach (var h in headlines)
+                    {
+                        <th>@h</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var posts in Model.NewPosts)
+                {
+                    <tr>
+                        <td>
+                            <a class="text-black col-10 text-decoration-none" asp-route-id="@posts.Id" asp-page="./PostComment">@posts.Header</a>
+                        </td>
+                        @foreach (var u in Model.Users)
+                        {
+                            @if (@u.Id == @posts.UserId && @u.Alias != null)
+                            {
+                                <td>
+                                    <p class="fw-lighter">@posts.Comments.Count</p>
+                                </td>
+                                <td>
+                                    <p class="text-black text-decoration-none pb-0 mb-0"><a asp-page="./UserPage" asp-route-userid="@u.Id">@u.Alias</a></p>
+                                </td>
+                                <td>
+                                    <p class="fw-lighter">@posts.Date.ToString("dd/MM/yy HH:mm")</p>
+                                </td>
+                            }
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
 <br />
 
 @{
-	var prevDisabled = !Model.NewPosts.HasPreviousPage ? "disabled" : "";
-	var nextDisabled = !Model.NewPosts.HasNextPage ? "disabled" : "";
+    var prevDisabled = !Model.NewPosts.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.NewPosts.HasNextPage ? "disabled" : "";
 }
 
 <div>
-	<ul class="pagination">
-		@if (Model.NewPosts.HasPreviousPage)
-		{
-			<li class="page-item">
-				<a class="page-link bg-light text-black" asp-page="./ForumPost" asp-route-pageIndex="@(Model.NewPosts.PageIndex - 1)">Previous</a>
-			</li>
-		}
-		@for (int i = 1; i <= Model.NewPosts.TotalPages; i++)
-		{
-			<li class="page-item @(Model.NewPosts.PageIndex == i ? "active" : "")">
-				<a class="page-link bg-light text-black" asp-page="./ForumPost" asp-route-pageIndex="@i">@i</a>
-			</li>
-		}
-		@if (Model.NewPosts.HasNextPage)
-		{
-			<li class="page-item">
-				<a class="page-link bg-light text-black" asp-page="./ForumPost" asp-route-pageIndex="@(Model.NewPosts.PageIndex + 1)">Next</a>
-			</li>
-		}
-	</ul>
+    <ul class="pagination">
+        @if (Model.NewPosts.HasPreviousPage)
+        {
+            <li class="page-item">
+                <a class="page-link bg-light text-black" asp-page="./ForumPost" asp-route-pageIndex="@(Model.NewPosts.PageIndex - 1)">Previous</a>
+            </li>
+        }
+        @for (int i = 1; i <= Model.NewPosts.TotalPages; i++)
+        {
+            <li class="page-item @(Model.NewPosts.PageIndex == i ? "active" : "")">
+                <a class="page-link bg-light text-black" asp-page="./ForumPost" asp-route-pageIndex="@i">@i</a>
+            </li>
+        }
+        @if (Model.NewPosts.HasNextPage)
+        {
+            <li class="page-item">
+                <a class="page-link bg-light text-black" asp-page="./ForumPost" asp-route-pageIndex="@(Model.NewPosts.PageIndex + 1)">Next</a>
+            </li>
+        }
+    </ul>
 </div>
 <button onclick="window.history.back()" class="btn btn-secondary">Tillbaka</button>
 @if (SignInManager.IsSignedIn(User))
 {
-	<button name="newpost" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#newpost">Skapa ny post</button>
+    <button name="newpost" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#newpost">Skapa ny post</button>
 
-	<!-- Modal -->
-	<div class="modal fade" id="newpost" tabindex="-1" aria-labelledby="newpostLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h1 class="modal-title fs-5" id="newpostLabel">Ny tråd</h1>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				</div>
-				<div class="modal-body">
-					<form method="post" enctype="multipart/form-data">
-						<input asp-for="NewPost.UserId" type="hidden" value="@user.Id" />
-						<input asp-for="NewPost.Date" type="hidden" value="@datenow" />
-						<input asp-for="NewPost.SubForumId" type="hidden" value="@Model.Subforum.Id" />
-						<input asp-for="UploadedImage" type="hidden" value="bild" />
+    <!-- Modal -->
+    <div class="modal fade" id="newpost" tabindex="-1" aria-labelledby="newpostLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="newpostLabel">Ny tråd</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" enctype="multipart/form-data">
+                        <input asp-for="NewPost.UserId" type="hidden" value="@user.Id" />
+                        <input asp-for="NewPost.Date" type="hidden" value="@datenow" />
+                        <input asp-for="NewPost.SubForumId" type="hidden" value="@Model.Subforum.Id" />
+                        <input asp-for="UploadedImage" type="hidden" value="bild" />
 
-						<div class="mb-3">
-							<label for="header" class="col-form-label">
-								Rubrik:
-							</label>
-							<input class="form-control" id="header" asp-for="NewPost.Header" />
-						</div>
+                        <div class="mb-3">
+                            <label for="header" class="col-form-label">
+                                Rubrik:
+                            </label>
+                            <input class="form-control" id="header" asp-for="NewPost.Header" />
+                        </div>
 
-						<div class="mb-3">
-							<label for="text" class="col-form-label">
-								Text:
-							</label>
-							<textarea asp-for="NewPost.Text" class="form-control" cols="40" rows="10" id="text"></textarea>
+                        <div class="mb-3">
+                            <label for="text" class="col-form-label">
+                                Text:
+                            </label>
+                            <textarea asp-for="NewPost.Text" class="form-control" cols="40" rows="10" id="text"></textarea>
 
-						</div>
-						<div class="mb-3">
-							<label asp-for="NewPost.Image" class="form-label"></label>
-							<input type="file" class="form-control" name="UploadedImage" />
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-							<button type="submit" class="btn btn-primary">Skapa post</button>
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="NewPost.Image" class="form-label"></label>
+                            <input type="file" class="form-control" name="UploadedImage" />
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Skapa post</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 }
