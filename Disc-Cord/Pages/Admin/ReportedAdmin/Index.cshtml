@@ -50,7 +50,16 @@
                         <p class="m-0 p-0"><span class="fw-bold">Postens Id: </span>@report.CommentId</p>
                         <p class="m-0 p-0"><span class="fw-bold">Textinnehåll: </span>@com.Text</p>
                     </div>
-                    <a href="/PostComment?id=@com.NewPostId#@report.CommentId" class="bg-danger text-white p-1">Till kommentaren</a>
+                    {
+                        Model.CommentPageNumber = 1;
+                        var list = Model.Comments.Where(x => x.NewPostId == com.NewPostId).ToList();
+                        var index = list.IndexOf(com);
+                        for (int i = 0; i < index; i += Helper.Variables.PageSize)
+                        {
+                            Model.CommentPageNumber++;
+                        }
+                    }
+                    <a href="/PostComment?pageIndex=@Model.CommentPageNumber&id=@com.NewPostId#@report.CommentId" class="bg-danger text-white p-1">Till kommentaren</a>
                     <hr />
                 }
             }

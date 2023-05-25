@@ -21,6 +21,8 @@ namespace Disc_Cord.Pages.Admin.ReportedAdmin
         public List<Models.Comment> Comments { get; set; }
         public List<Models.NewPost> NewPosts { get; set; }
 
+        public int CommentPageNumber { get; set; }
+
         public async Task<IActionResult> OnGetAsync()
         {
             Reported = await _context.Reports.ToListAsync();

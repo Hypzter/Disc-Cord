@@ -3,7 +3,7 @@
 @inject SignInManager<Models.ApplicationUser> SignInManager
 @inject UserManager<Models.ApplicationUser> UserManager
 @{
-	string[] headers = new string[] { "Ämne", "Kommentarer", "Skapare", "Skapat" };
+	string[] headlines = new string[] { "Ämne", "Kommentarer", "Skapare", "Skapat" };
 	var user = await UserManager.GetUserAsync(User);
 	var datenow = DateTime.Now;
 }
@@ -11,7 +11,7 @@
 @using Microsoft.AspNetCore.Mvc.Rendering
 
 <div class="card border-2">
-	<div class="card-header bg-warning text-black">
+	<div class="card-header bg-warning text-black fs-4 fw-bold">
 		Trådar
 	</div>
 	<div class="m-0 p-0 text-start">
@@ -19,9 +19,9 @@
 			<thead class="bg-black text-white">
 				<tr>
 
-					@foreach (var header in headers)
+					@foreach (var h in headlines)
 					{
-						<th>@header</th>
+						<th>@h</th>
 					}
 				</tr>
 			</thead>
@@ -48,13 +48,13 @@
 									}
 
 								}
-		</div>
-		</td>
-		</tr>
+							</div>
+						</td>
+					</tr>
 				}
-	</tbody>
-	</table>
-</div>
+			</tbody>
+		</table>
+	</div>
 </div>
 <br />
 

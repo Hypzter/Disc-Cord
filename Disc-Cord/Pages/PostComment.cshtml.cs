@@ -128,6 +128,17 @@ namespace Disc_Cord.Pages
                 NewComment.LikeCounter = numberOfLikes.Count;
                 await _context.SaveChangesAsync();
 
+                int commentPageNumber = 0;
+                var list = _context.Comment.Where(x => x.NewPostId == _id).ToList();
+                var comment = list.Where(x => x.Id == commentid).FirstOrDefault();
+                var index = list.IndexOf(comment);
+                for (int i = 0; i < index; i += Helper.Variables.PageSize)
+                {
+                    commentPageNumber++;
+                }
+                var redirectUrl = ("/PostComment?pageIndex=" + commentPageNumber + "&id=" + comment.NewPostId + "#" + comment.Id).ToString();
+                return Redirect(redirectUrl);
+
             }
             if (deletepostid != 0 && deletebool == true)
             {
@@ -216,6 +227,17 @@ namespace Disc_Cord.Pages
                 _context.Comment.FirstOrDefault(x => x.Id == reportcommentid).Reported = true;
                 _context.Reports.Add(Report);
                 await _context.SaveChangesAsync();
+
+                int commentPageNumber = 0;
+                var list = _context.Comment.Where(x => x.NewPostId == _id).ToList();
+                var comment = list.Where(x => x.Id == reportcommentid).FirstOrDefault();
+                var index = list.IndexOf(comment);
+                for (int i = 0; i < index; i += Helper.Variables.PageSize)
+                {
+                    commentPageNumber++;
+                }
+                var redirectUrl = ("/PostComment?pageIndex=" + commentPageNumber + "&id=" + comment.NewPostId + "#" + comment.Id).ToString();
+                return Redirect(redirectUrl);
             }
 
             if (editcommentid != 0 && editbool == true)
@@ -230,6 +252,17 @@ namespace Disc_Cord.Pages
                 }
                 editbool = false;
 
+                int commentPageNumber = 0;
+                var list = _context.Comment.Where(x => x.NewPostId == _id).ToList();
+                //var comment = list.Where(x => x.Id == NewComment.Id).FirstOrDefault();
+                var index = list.IndexOf(editComment);
+                for (int i = 0; i <= index; i += Helper.Variables.PageSize)
+                {
+                    commentPageNumber++;
+                }
+                var redirectUrl = ("/PostComment?pageIndex=" + commentPageNumber + "&id=" + _id + "#" + editComment.Id).ToString();
+                return Redirect(redirectUrl);
+
             }
 
             if (editpostid != 0 && editbool == true)
@@ -243,6 +276,8 @@ namespace Disc_Cord.Pages
                     await _context.SaveChangesAsync();
                 }
                 editbool = false;
+
+
             }
 
 
@@ -267,9 +302,20 @@ namespace Disc_Cord.Pages
                 }
                 NewComment.Text = Helper.HelperMethods.CensorText(NewComment.Text);
                 _context.Add(NewComment);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
 
                 newcommentbool = false;
+
+                int commentPageNumber = 0;
+                var list = _context.Comment.Where(x => x.NewPostId == _id).ToList();
+                var comment = list.Where(x => x.Id == NewComment.Id).FirstOrDefault();
+                var index = list.IndexOf(comment);
+                for (int i = 0; i < index; i += Helper.Variables.PageSize)
+                {
+                    commentPageNumber++;
+                }
+                var redirectUrl = ("/PostComment?pageIndex=" + commentPageNumber + "&id=" + comment.NewPostId + "#" + comment.Id).ToString();
+                return Redirect(redirectUrl);
             }
 
             string url = "./PostComment?id=" + _id.ToString();
