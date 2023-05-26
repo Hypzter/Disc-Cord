@@ -31,50 +31,27 @@
                     </label>
                 </div>
                 <div>
-                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Logga in</button>
+                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-warning">Logga in</button>
                 </div>
                 <div>
                     <p>
-                        <a id="forgot-password" asp-page="./ForgotPassword">Glömt ditt lösenord?</a>
+                        <a id="forgot-password" class="text-decoration-none" asp-page="./ForgotPassword">Glömt ditt lösenord?</a>
                     </p>
                     <p>
-                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Registrera en ny användare</a>
+                        <a asp-page="./Register" class="text-decoration-none" asp-route-returnUrl="@Model.ReturnUrl">Registrera en ny användare</a>
                     </p>
                     <p>
-                        <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Skicka bekräftelsemail på nytt</a>
+                        <a id="resend-confirmation" class="text-decoration-none" asp-page="./ResendEmailConfirmation">Skicka bekräftelsemail på nytt</a>
                     </p>
                 </div>
             </form>
         </section>
     </div>
-    <div class="col-md-6 col-md-offset-2">
+    <div class="col-md-6 col-md-offset">
         <section>
-            <h3>Use another service to log in.</h3>
-            <hr />
-            @{
-                if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                {
-                    <div>
-                        <p>
-                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
-                            about setting up this ASP.NET application to support logging in via external services</a>.
-                        </p>
-                    </div>
-                }
-                else
-                {
-                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                        <div>
-                            <p>
-                                @foreach (var provider in Model.ExternalLogins!)
-                                {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                                }
-                            </p>
-                        </div>
-                    </form>
-                }
-            }
+            <h3 class="fw-bold text-center">Disc<span class="text-warning">Connected</span></h3>
+            <img src="~/img/private/login.png" class="w-100" style="max-width: 800px; border: double; border-width: thick;  border-radius: 5%" />
+              
         </section>
     </div>
 </div>
