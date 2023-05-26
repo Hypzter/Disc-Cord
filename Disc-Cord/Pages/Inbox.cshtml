@@ -5,6 +5,7 @@
 @inject UserManager<Models.ApplicationUser> UserManager
 @{
 	var user = await UserManager.GetUserAsync(User);
+    string[] headlines = new string[] { "Meddelande", "Skickat av", "Skickat" };
 
 }
 @if (SignInManager.IsSignedIn(User))
@@ -20,11 +21,20 @@
             <div class="m-0 p-0 text-start">
                 <table class="table table-striped">
                     <tbody>
+                    <thead class="bg-black text-white">
+                        <tr>
+
+                                @foreach (var h in headlines)
+                                {
+                                <th>@h</th>
+                                }
+                        </tr>
+                    </thead>
                         @foreach (var message in Model.Messages)
                         {
                             <tr>
                                 <td>
-                                    <a class="text-black col-10 text-decoration-none" asp-route-id="@message.Id" asp-page="./PostComment">@message.Text.LimitLength(15)</a>
+                                    <a class="text-black col-10 text-decoration-none" asp-route-messageid="@message.Id" asp-page="./InboxMessage">@message.Text.LimitLength(30)</a>
                                 </td>
                                 @foreach (var u in Model.Users)
                                 {
@@ -64,3 +74,4 @@
 		}*@
 	}
 }
+<button type="button" onclick="window.history.back()" class="btn btn-secondary mt-2">Tillbaka</button>

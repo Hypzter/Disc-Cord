@@ -11,7 +11,7 @@
 	@if (Model.Messages != null)
 	{
 
-		<a class="btn btn-success mb-2" asp-route-userid="@user.Id" asp-page="./Inbox">Inbox @unRead.Count</a>
+		<a class="btn btn-success mb-2" asp-route-userid="@user.Id" asp-page="./Inbox">Inbox <span class="fw-bold">@unRead.Count</span></a>
 
 	}
 	<hr />
