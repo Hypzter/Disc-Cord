@@ -7,9 +7,15 @@
 }
 
 <div class="card">
-	<div class="card-header">
-		<a class="text-warning fw-bold text-decoration-none pb-0 mb-0" asp-page="./UserPage" asp-route-userid="@sender.Id">@sender.Alias</a>
-		<p>@Model.Message.Timestamp.ToString()</p>
+	<div class="card-header d-flex justify-content-between">
+		<div>
+			<a class="text-warning fw-bold text-decoration-none pb-0 mb-0" asp-page="./UserPage" asp-route-userid="@sender.Id">@sender.Alias</a>
+			<p>@Model.Message.Timestamp.ToString()</p>
+		</div>
+		<div class="mt-2 me-2">
+			<a type="submit" class="btn btn-danger" asp-route-deletemessageid="@Model.Message.Id">Ta bort</a>
+		</div>
+
 	</div>
 	<div class="card-body">
 		<p class="card-text">@Model.Message.Text</p>

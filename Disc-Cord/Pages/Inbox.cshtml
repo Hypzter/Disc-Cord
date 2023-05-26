@@ -5,7 +5,7 @@
 @inject UserManager<Models.ApplicationUser> UserManager
 @{
 	var user = await UserManager.GetUserAsync(User);
-	string[] headlines = new string[] { "Meddelande", "Skickat av", "Skickat" };
+	string[] headlines = new string[] { "Meddelande", "Skickat av", "Skickat", "" };
 
 }
 @if (SignInManager.IsSignedIn(User))
@@ -59,6 +59,10 @@
 										</td>
 									}
 								}
+								<td>
+									<a type="submit" class="btn btn-danger" asp-route-deletemessageid="@message.Id">Ta bort</a>
+
+								</td>
 							</tr>
 						}
 					</tbody>
