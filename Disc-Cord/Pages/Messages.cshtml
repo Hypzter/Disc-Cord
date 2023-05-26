@@ -11,20 +11,18 @@
 	@if (Model.Messages != null)
 	{
 
-		<a class="btn btn-success mb-2" asp-route-userid="@user.Id" asp-page="./Inbox">Inbox <span class="fw-bold">@unRead.Count</span></a>
+		<a class="btn btn-success mb-2" asp-route-userid="@user.Id" asp-page="./Inbox">Inbox @Model.Messages.Count <span class="fw-bold">(@unRead.Count)</span></a>
 
 	}
 	<hr />
+	<h3>Skicka nytt meddelande</h3>
 
 	<form method="post">
-
 		<input asp-for="NewMessage.SenderId" type="hidden" value="@user.Id" />
-
-		<label asp-for="NewMessage.ReceiverId"></label>
-		<select asp-for="NewMessage.ReceiverId" asp-items="@(new SelectList(Model.Users, "Id", "UserName"))"></select>
 		<textarea asp-for="NewMessage.Text" class="form-control" cols="40" rows="5"></textarea>
+		<label for="NewMessage_ReceiverId">Mottagare: </label>
+		<select class="mt-2 mb-2" asp-for="NewMessage.ReceiverId" asp-items="@(new SelectList(Model.Users, "Id", "Alias"))"></select>
 		<br>
 		<input type="submit" name="addTask" value="Skicka" class="btn btn-primary" />
-
 	</form>
 }

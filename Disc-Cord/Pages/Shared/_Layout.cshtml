@@ -18,7 +18,7 @@
 	else
 	{
 		var unread = messages.Where(x => x.IsRead == false).ToList();
-		newMessages = unread.Count.ToString();
+		newMessages = "(" + unread.Count + ")";
 	}
 
 }
