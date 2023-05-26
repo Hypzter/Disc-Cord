@@ -58,7 +58,7 @@ else
 							<th>Ämne</th>
 							@if(forum.SubForums.Count != 0)
 							{
-								<th>Antal poster</th>
+								<th class="text-end">Antal poster</th>
 
 							}
 						</tr>
@@ -71,7 +71,7 @@ else
 									<a class="text-black text-decoration-none" asp-route-id="@subforum.Id" asp-page="./ForumPost">@subforum.Name</a>
 								</td>
 								<td>
-									<p class="fw-lighter">@subforum.NewPosts.Count</p>
+									<p class="fw-lighter text-end me-5">@subforum.NewPosts.Count</p>
 								</td>
 							</tr>
 						}

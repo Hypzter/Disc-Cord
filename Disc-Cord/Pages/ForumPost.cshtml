@@ -19,11 +19,8 @@
         <table class="table table-striped m-0 p-0">
             <thead class="bg-black text-white">
                 <tr>
-
-                    @foreach (var h in headlines)
-                    {
-                        <th>@h</th>
-                    }
+                    <th>Ämne</th>
+                    <th class="text-end">Kommentarer</th>
                 </tr>
             </thead>
             <tbody>
@@ -31,20 +28,27 @@
                 {
                     <tr>
                         <td>
-                            <a class="text-black col-10 text-decoration-none" asp-route-id="@posts.Id" asp-page="./PostComment">@posts.Header</a>
+                            <a class="text-black text-decoration-none mb-1" asp-route-id="@posts.Id" asp-page="./PostComment">@posts.Header</a>
+                            @foreach (var u in Model.Users)
+                            {
+                                @if (@u.Id == @posts.UserId && @u.Alias != null)
+                                {
+                                    <div class="row">
+                                        <p class="mb-0">
+                                            <a class="text-warning fw-bold text-decoration-none pb-0 mb-0" asp-page="./UserPage" asp-route-userid="@u.Id">@u.Alias</a>
+                                            <span class="fw-lighter ms-1">@posts.Date.ToString("dd/MM/yy")</span>
+                                        </p>
+                                    </div>
+                                }
+
+                            }
                         </td>
                         @foreach (var u in Model.Users)
                         {
                             @if (@u.Id == @posts.UserId && @u.Alias != null)
                             {
                                 <td>
-                                    <p class="fw-lighter">@posts.Comments.Count</p>
-                                </td>
-                                <td>
-                                    <p class="text-black text-decoration-none pb-0 mb-0"><a asp-page="./UserPage" asp-route-userid="@u.Id">@u.Alias</a></p>
-                                </td>
-                                <td>
-                                    <p class="fw-lighter">@posts.Date.ToString("dd/MM/yy HH:mm")</p>
+                                    <p class="fw-lighter text-end me-2">@posts.Comments.Count</p>
                                 </td>
                             }
                         }
