@@ -6,37 +6,45 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Disc_Cord.Pages
 {
-    public class InboxMessageModel : PageModel
-    {
-        private readonly ApplicationDbContext _context;
+	public class InboxMessageModel : PageModel
+	{
+		private readonly ApplicationDbContext _context;
 		private readonly UserManager<Models.ApplicationUser> _userManager;
-        public InboxMessageModel(ApplicationDbContext context, UserManager<Models.ApplicationUser> userManager)
-        {
-            _context = context;            
+		public InboxMessageModel(ApplicationDbContext context, UserManager<Models.ApplicationUser> userManager)
+		{
+			_context = context;
 			_userManager = userManager;
-        }
-        public Models.Message Message { get; set; }
-        [BindProperty]
+		}
+		public Models.Message Message { get; set; }
+		[BindProperty]
 		public Models.Message NewMessage { get; set; }
-        private static int _messageid;
+		public Models.ApplicationUser User { get; set; }
+
+		private static int _messageid;
+		private static string _userid;
+
 		public async Task<IActionResult> OnGetAsync(int messageid, int deletemessageid)
-        {
-            if(messageid != 0)
-            {
-                _messageid = messageid;
-            }
-            Message = await _context.Messages.FirstOrDefaultAsync(x => x.Id == _messageid);
-            if(!Message.IsRead) Message.IsRead = true;
-            await _context.SaveChangesAsync();
+		{
+			if (User != null)
+			{
+				_userid = User.Id;
+			}
+			if (messageid != 0)
+			{
+				_messageid = messageid;
+			}
+			Message = await _context.Messages.FirstOrDefaultAsync(x => x.Id == _messageid);
+			User = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == Message.ReceiverId);
+			if (!Message.IsRead) Message.IsRead = true;
+			await _context.SaveChangesAsync();
 
 			if (deletemessageid != 0)
 			{
 				var deleteMessage = await _context.Messages.FindAsync(deletemessageid);
-				var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == Message.ReceiverId);
 
 				_context.Messages.Remove(deleteMessage);
 				await _context.SaveChangesAsync();
-				var redirectUrl = "/Inbox?userid=" + user.Id;
+				var redirectUrl = "/Inbox?userid=" + _userid;
 				return Redirect(redirectUrl);
 			}
 			return Page();
@@ -44,10 +52,16 @@ namespace Disc_Cord.Pages
 
 		public async Task<IActionResult> OnPostAsync()
 		{
-			_context.Messages.Add(NewMessage);
-			_context.SaveChanges();
-			return RedirectToPage("./InboxMessage");
+			if (NewMessage.Text != null)
+			{
+				await _context.Messages.AddAsync(NewMessage);
+				await _context.SaveChangesAsync();
 
+				var redirectUrl = "/Inbox?userid=" + _userid;
+				return Redirect(redirectUrl);
+			}
+			var url = "/InboxMessage?messageid=" + _messageid;
+			return Redirect(url);
 		}
 	}
 }

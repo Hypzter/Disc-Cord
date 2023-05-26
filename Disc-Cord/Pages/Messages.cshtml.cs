@@ -20,7 +20,7 @@ namespace Disc_Cord.Pages
 			_userManager = userManager;
 		}
 		public List<Models.Message> Messages { get; set; }
-		public List<Models.ApplicationUser> Users { get; set; }
+        public List<Models.ApplicationUser> Users { get; set; }
 		[BindProperty]
 		public Models.Message NewMessage { get; set; }
 		public async Task<IActionResult> OnGetAsync()
@@ -47,13 +47,14 @@ namespace Disc_Cord.Pages
 		public async Task<IActionResult> OnPostAsync()
 		{
 
-			NewMessage.Timestamp = DateTime.Now;
-			NewMessage.IsRead = false;
+			if (NewMessage.Text != null)
+			{
+				await _context.Messages.AddAsync(NewMessage);
+				await _context.SaveChangesAsync();
 
-
-			_context.Messages.Add(NewMessage);
-			_context.SaveChanges();
+			}
 			return RedirectToPage("./Messages");
+
 
 		}
 	}

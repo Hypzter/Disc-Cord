@@ -55,6 +55,9 @@
 
         <input asp-for="Message.SenderId" type="hidden" value="@user.Id" />
         <input asp-for="Message.ReceiverId" type="hidden" value="@Model.User.Id" />
+		<input asp-for="Message.Timestamp" type="hidden" value="@DateTime.Now" />
+		<input asp-for="Message.IsRead" type="hidden" value="false"/>
+
         <textarea asp-for="Message.Text" class="form-control" cols="40" rows="5"></textarea>
         <br>
         <input type="submit" name="addTask" value="Skicka" class="btn btn-primary" />

@@ -17,24 +17,22 @@
 		</div>
 
 	</div>
-	<div class="card-body">
-		<p class="card-text">@Model.Message.Text</p>
+	<div class="card-body" style="white-space: pre-wrap">
+		<p class="card-text" style="margin-top: 0">@Model.Message.Text</p>
 	</div>
 </div>
 <br />
 <h5>Skicka meddelande tillbaka</h5>
 <form method="post">
+    <input asp-for="NewMessage.SenderId" type="hidden" value="@user.Id" />
+    <input asp-for="NewMessage.ReceiverId" type="hidden" value="@sender.Id" />
+    <input asp-for="NewMessage.IsRead" type="hidden" value="false" />
+    <input asp-for="NewMessage.Timestamp" type="hidden" value="@DateTime.Now" />
 
-	<input asp-for="NewMessage.SenderId" type="hidden" value="@user.Id" />
-	<input asp-for="NewMessage.ReceiverId" type="hidden" value="@sender.Id" />
-	<input asp-for="NewMessage.IsRead" type="hidden" value="false" />
-	<input asp-for="NewMessage.Timestamp" type="hidden" value="@DateTime.Now" />
+	<textarea id="NewMessageText" class="form-control" cols="40" rows="5" name="NewMessage.Text" onblur="this.placeholder = '@Model.Message.Text'">&#13;&#13;----------------------------------&#13;&#13;@Model.Message.Text</textarea>
 
-	<textarea asp-for="NewMessage.Text" class="form-control" cols="40" rows="5"></textarea>
-	<br>
-	@*<button type="button" onclick="window.history.back()" class="btn btn-secondary">Tillbaka</button>*@
-	<a asp-page="./Inbox" asp-route-userid="@user.Id" class="btn btn-secondary">Tillbaka</a>
-	<input type="submit" name="addTask" value="Skicka" class="btn btn-primary" />
-
+    <br>
+    <a asp-page="./Inbox" asp-route-userid="@user.Id" class="btn btn-secondary">Tillbaka</a>
+    <input type="submit" name="addTask" value="Skicka" class="btn btn-primary" />
 </form>
 
