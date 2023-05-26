@@ -4,29 +4,17 @@
 @inject UserManager<Models.ApplicationUser> UserManager
 @{
 	var user = await UserManager.GetUserAsync(User);
-
+	var unRead = Model.Messages.Where(x => x.IsRead == false).ToList();
 }
 @if (SignInManager.IsSignedIn(User))
 {
-
 	@if (Model.Messages != null)
 	{
-		@foreach (var m in Model.Messages)
-		{
-			@foreach (var u in Model.Users)
-			{
-				@if (u.Id == m.SenderId)
-				{
-					<p>@u.UserName har skickat: </p>
 
-				}
+		<a class="btn btn-success mb-2" asp-route-userid="@user.Id" asp-page="./Inbox">Inbox @unRead.Count</a>
 
-			}
-			<p>@m.Text</p>
-			<p>den @m.Timestamp.ToString()</p>
-
-		}
 	}
+	<hr />
 
 	<form method="post">
 

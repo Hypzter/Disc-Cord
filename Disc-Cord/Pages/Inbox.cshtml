@@ -1,0 +1,66 @@
+﻿@page
+@using Extensions
+@model Disc_Cord.Pages.InboxModel
+@inject SignInManager<Models.ApplicationUser> SignInManager
+@inject UserManager<Models.ApplicationUser> UserManager
+@{
+	var user = await UserManager.GetUserAsync(User);
+
+}
+@if (SignInManager.IsSignedIn(User))
+{
+
+	@if (Model.Messages != null)
+	{
+
+        <div class="card border-2">
+            <div class="card-header bg-warning text-black fs-4 fw-bold">
+                Inbox
+            </div>
+            <div class="m-0 p-0 text-start">
+                <table class="table table-striped">
+                    <tbody>
+                        @foreach (var message in Model.Messages)
+                        {
+                            <tr>
+                                <td>
+                                    <a class="text-black col-10 text-decoration-none" asp-route-id="@message.Id" asp-page="./PostComment">@message.Text.LimitLength(15)</a>
+                                </td>
+                                @foreach (var u in Model.Users)
+                                {
+                                    @if (@u.Id == message.SenderId && @u.Alias != null)
+                                    {
+
+                                        <td>
+                                            <p class="text-black text-decoration-none pb-0 mb-0"><a asp-page="./UserPage" asp-route-userid="@u.Id">@u.Alias</a></p>
+                                        </td>
+                                        <td>
+                                            <p class="fw-lighter">@message.Timestamp.ToString("dd/MM/yy HH:mm")</p>
+                                        </td>
+                                    }
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+@*		@foreach (var m in Model.Messages)
+		{
+			@foreach (var u in Model.Users)
+			{
+				@if (u.Id == m.SenderId)
+				{
+					<p>@u.UserName har skickat: </p>
+
+				}
+
+			}
+			<p>@m.Text</p>
+			<p>den @m.Timestamp.ToString()</p>
+
+		}*@
+	}
+}

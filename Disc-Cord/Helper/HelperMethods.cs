@@ -25,5 +25,6 @@ namespace Disc_Cord.Helper
             }
             return censoredText;
         }
+
     }
 }

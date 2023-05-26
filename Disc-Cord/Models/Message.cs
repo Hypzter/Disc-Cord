@@ -9,5 +9,6 @@ namespace Disc_Cord.Models
 		public string ReceiverId { get; set; }
 		public string Text { get; set; }
 		public DateTime Timestamp { get; set; }
-	}
+        public bool IsRead { get; set; }
+    }
 }

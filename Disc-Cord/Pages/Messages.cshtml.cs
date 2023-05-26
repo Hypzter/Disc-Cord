@@ -48,6 +48,7 @@ namespace Disc_Cord.Pages
 		{
 
 			NewMessage.Timestamp = DateTime.Now;
+			NewMessage.IsRead = false;
 
 
 			_context.Messages.Add(NewMessage);
