@@ -10,7 +10,7 @@
 		<select asp-for="@Model.ChooseableTopics" asp-items="@Model.Subforums.Select(s => new SelectListItem { Value = s.Name, Text = s.Name })">
 			<option value="">All</option>
 		</select>
-		Topics: <input type="text" asp-for="@Model.SearchString" />
+		<input type="text" asp-for="@Model.SearchString" placeholder="Sök..." />
 		<input type="submit" value="Filter" />
 	</p>
 </form>
