@@ -1,8 +1,34 @@
 ﻿@page
 @model Disc_Cord.Pages.InboxMessageModel
+@inject UserManager<Models.ApplicationUser> UserManager;
 @{
+	var sender = UserManager.Users.FirstOrDefault(x => x.Id == Model.Message.SenderId);
+	var user = await UserManager.GetUserAsync(User);
 }
 
-<p>@Model.Message.Text</p>
+<div class="card">
+	<div class="card-header">
+		<a class="text-warning fw-bold text-decoration-none pb-0 mb-0" asp-page="./UserPage" asp-route-userid="@sender.Id">@sender.Alias</a>
+		<p>@Model.Message.Timestamp.ToString()</p>
+	</div>
+	<div class="card-body">
+		<p class="card-text">@Model.Message.Text</p>
+	</div>
+</div>
+<br />
+<h5>Skicka meddelande tillbaka</h5>
+<form method="post">
 
-<button type="button" onclick="window.history.back()" class="btn btn-secondary mt-2">Tillbaka</button>
+	<input asp-for="NewMessage.SenderId" type="hidden" value="@user.Id" />
+	<input asp-for="NewMessage.ReceiverId" type="hidden" value="@sender.Id" />
+	<input asp-for="NewMessage.IsRead" type="hidden" value="false" />
+	<input asp-for="NewMessage.Timestamp" type="hidden" value="@DateTime.Now" />
+
+	<textarea asp-for="NewMessage.Text" class="form-control" cols="40" rows="5"></textarea>
+	<br>
+	@*<button type="button" onclick="window.history.back()" class="btn btn-secondary">Tillbaka</button>*@
+	<a asp-page="./Inbox" asp-route-userid="@user.Id" class="btn btn-secondary">Tillbaka</a>
+	<input type="submit" name="addTask" value="Skicka" class="btn btn-primary" />
+
+</form>
+

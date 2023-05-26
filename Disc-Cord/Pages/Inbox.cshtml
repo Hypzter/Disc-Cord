@@ -5,7 +5,7 @@
 @inject UserManager<Models.ApplicationUser> UserManager
 @{
 	var user = await UserManager.GetUserAsync(User);
-    string[] headlines = new string[] { "Meddelande", "Skickat av", "Skickat" };
+	string[] headlines = new string[] { "Meddelande", "Skickat av", "Skickat" };
 
 }
 @if (SignInManager.IsSignedIn(User))
@@ -14,64 +14,57 @@
 	@if (Model.Messages != null)
 	{
 
-        <div class="card border-2">
-            <div class="card-header bg-warning text-black fs-4 fw-bold">
-                Inbox
-            </div>
-            <div class="m-0 p-0 text-start">
-                <table class="table table-striped m-0 p-0">
-                    <thead class="bg-black text-white">
-                        <tr>
+		<div class="card border-2">
+			<div class="card-header bg-warning text-black fs-4 fw-bold">
+				Inbox
+			</div>
+			<div class="m-0 p-0 text-start">
+				<table class="table table-striped m-0 p-0">
+					<thead class="bg-black text-white">
+						<tr>
 
-                                @foreach (var h in headlines)
-                                {
-                                <th>@h</th>
-                                }
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var message in Model.Messages)
-                        {
-                            <tr>
-                                <td>
-                                    <a class="text-black col-10 text-decoration-none" asp-route-messageid="@message.Id" asp-page="./InboxMessage">@message.Text.LimitLength(30)</a>
-                                </td>
-                                @foreach (var u in Model.Users)
-                                {
-                                    @if (@u.Id == message.SenderId && @u.Alias != null)
-                                    {
+							@foreach (var h in headlines)
+							{
+								<th>@h</th>
+							}
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (var message in Model.Messages)
+						{
+							<tr>
+								<td>
+									@if (message.IsRead)
+									{
+										<a class="text-black col-10 text-decoration-none" asp-route-messageid="@message.Id" asp-page="./InboxMessage">@message.Text.LimitLength(30)</a>
 
-                                        <td>
-                                            <p class="text-black text-decoration-none pb-0 mb-0"><a asp-page="./UserPage" asp-route-userid="@u.Id">@u.Alias</a></p>
-                                        </td>
-                                        <td>
-                                            <p class="fw-lighter">@message.Timestamp.ToString("dd/MM/yy HH:mm")</p>
-                                        </td>
-                                    }
-                                }
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
+									}
+									else
+									{
+										<a class="text-black col-10 text-decoration-none fw-bold" asp-route-messageid="@message.Id" asp-page="./InboxMessage">@message.Text.LimitLength(30)</a>
 
+									}
+								</td>
+								@foreach (var u in Model.Users)
+								{
+									@if (@u.Id == message.SenderId && @u.Alias != null)
+									{
 
-@*		@foreach (var m in Model.Messages)
-		{
-			@foreach (var u in Model.Users)
-			{
-				@if (u.Id == m.SenderId)
-				{
-					<p>@u.UserName har skickat: </p>
+										<td>
 
-				}
-
-			}
-			<p>@m.Text</p>
-			<p>den @m.Timestamp.ToString()</p>
-
-		}*@
+											<p class="text-black text-decoration-none pb-0 mb-0"><a asp-page="./UserPage" asp-route-userid="@u.Id">@u.Alias</a></p>
+										</td>
+										<td>
+											<p class="fw-lighter">@message.Timestamp.ToString("dd/MM/yy HH:mm")</p>
+										</td>
+									}
+								}
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
 	}
 }
-<button type="button" onclick="window.history.back()" class="btn btn-secondary mt-2">Tillbaka</button>
+<a asp-page="./Messages" class="btn btn-secondary mt-2">Tillbaka</a>

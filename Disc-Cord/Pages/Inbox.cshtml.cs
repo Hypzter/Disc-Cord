@@ -20,10 +20,13 @@ namespace Disc_Cord.Pages
         }
         public List<Models.Message> Messages { get; set; }
         public List<Models.ApplicationUser> Users { get; set; }
-
+        private string _userid;
         public async Task<IActionResult> OnGetAsync(string userid)
         {
-
+            if (userid != null)
+            {
+                _userid = userid;
+            }
             //var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             //var user = await _userManager.FindByIdAsync(userId);
             Users = await _userManager.Users.ToListAsync();
@@ -31,7 +34,7 @@ namespace Disc_Cord.Pages
             if (_context.Messages != null)
             {
                 var messages = await _context.Messages
-                    .Where(m => m.ReceiverId == userid)
+                    .Where(m => m.ReceiverId == _userid)
                     .OrderByDescending(m => m.Timestamp)
                     .ToListAsync();
 

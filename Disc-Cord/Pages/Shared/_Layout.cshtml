@@ -1,6 +1,7 @@
 ﻿@inject SignInManager<Models.ApplicationUser> SignInManager
 @inject UserManager<Models.ApplicationUser> UserManager
 @inject RoleManager<IdentityRole> RoleManager
+@inject ApplicationDbContext Context
 @{
 	var currentUser = await UserManager.GetUserAsync(User);
 	bool isAdmin = false;
@@ -8,7 +9,17 @@
 	{
 		isAdmin = await UserManager.IsInRoleAsync(currentUser, "Admin");
 	}
-
+	var messages = Context.Messages.Where(x => x.ReceiverId == currentUser.Id).ToList();
+	int newMessages;
+	if (messages == null)
+	{
+		newMessages = 0;
+	}
+	else
+	{
+		var unread = messages.Where(x => x.IsRead == false).ToList();
+		newMessages = unread.Count;
+	}
 
 }
 
@@ -33,7 +44,7 @@
 						aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 				</button>
-				<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between" >
+				<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
 					<ul class="navbar-nav flex-grow-1">
 						<li class="nav-item">
 							<a class="nav-link text-dark" asp-area="" asp-page="/Index">Start</a>
@@ -48,7 +59,7 @@
 						{
 
 							<li class="nav-item">
-								<a class="nav-link text-dark" asp-area="" asp-page="/Messages">Meddelanden</a>
+								<a class="nav-link text-dark" asp-area="" asp-page="/Messages">Meddelanden <strong>@newMessages</strong></a>
 							</li>
 						}
 
@@ -59,15 +70,15 @@
 								<a class="nav-link text-dark" asp-area="" asp-page="/Admin/Index">ADMIN</a>
 							</li>
 
-		@*					<li class="nav-item">
-								<a class="nav-link text-dark" asp-area="" asp-page="/Admin/ForumAdmin/Index">ADMINForum</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link text-dark" asp-area="" asp-page="/Admin/SubforumAdmin/Index">ADMINSubforum</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link text-dark" asp-area="" asp-page="/Admin/RoleAdmin/Index">ADMINRoller</a>
-							</li>*@
+							@*					<li class="nav-item">
+						<a class="nav-link text-dark" asp-area="" asp-page="/Admin/ForumAdmin/Index">ADMINForum</a>
+						</li>
+						<li class="nav-item">
+						<a class="nav-link text-dark" asp-area="" asp-page="/Admin/SubforumAdmin/Index">ADMINSubforum</a>
+						</li>
+						<li class="nav-item">
+						<a class="nav-link text-dark" asp-area="" asp-page="/Admin/RoleAdmin/Index">ADMINRoller</a>
+						</li>*@
 
 						}
 					</ul>
@@ -81,14 +92,14 @@
 			@RenderBody()
 		</main>
 	</div>
-	
-@*	<footer class="border-top footer text-muted">
-		<div class="container">
-			&copy; 2023 - DiscConnected - <a asp-area="" asp-page="/Privacy">Privacy</a>
-		</div>
+
+	@*	<footer class="border-top footer text-muted">
+	<div class="container">
+	&copy; 2023 - DiscConnected - <a asp-area="" asp-page="/Privacy">Privacy</a>
+	</div>
 	</footer>
-	
-*@
+
+	*@
 
 	<script src="~/lib/jquery/dist/jquery.min.js"></script>
 	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

@@ -13,9 +13,26 @@ namespace Disc_Cord.Pages
             _context = context;            
         }
         public Models.Message Message { get; set; }
-        public async Task OnGet(int messageid)
+        [BindProperty]
+		public Models.Message NewMessage { get; set; }
+        private static int _messageid;
+		public async Task OnGet(int messageid)
         {
-            Message = await _context.Messages.FirstOrDefaultAsync(x => x.Id  == messageid);
+            if(messageid != 0)
+            {
+                _messageid = messageid;
+            }
+            Message = await _context.Messages.FirstOrDefaultAsync(x => x.Id == _messageid);
+            if(!Message.IsRead) Message.IsRead = true;
+            await _context.SaveChangesAsync();
         }
-    }
+
+		public async Task<IActionResult> OnPostAsync()
+		{
+			_context.Messages.Add(NewMessage);
+			_context.SaveChanges();
+			return RedirectToPage("./InboxMessage");
+
+		}
+	}
 }
