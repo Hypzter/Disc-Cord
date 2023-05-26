@@ -22,6 +22,8 @@ namespace Disc_Cord.Pages
         
         public Models.ApplicationUser User { get; set; }
 
+        public List<Models.NewPost> Posts { get; set; }
+
         [BindProperty]
         public Models.Message Message { get; set; }
 
@@ -34,6 +36,10 @@ namespace Disc_Cord.Pages
                 _userId = userid;
             }
             User = await _userManager.Users.Where(u => u.Id == _userId).FirstOrDefaultAsync();
+
+            Posts = await _context.NewPost.Where(p => p.UserId == User.Id).Take(5).ToListAsync();
+            Posts.OrderBy(p => p.Date);
+            
 
         }
         public async Task<IActionResult> OnPostAsync()

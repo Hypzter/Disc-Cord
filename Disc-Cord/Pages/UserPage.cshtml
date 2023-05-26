@@ -6,12 +6,47 @@
     var user = await UserManager.GetUserAsync(User);
 }
 
-<p>@Model.User.Alias</p>
-<br />
-<img src="~/img/@Model.User.ImageUrl" width="300px" />
-<br />
-<p>@Model.User.AboutMe</p>
-
+<div class="row">
+    <div class="col-4">
+        <p>@Model.User.Alias</p>
+        <br />
+        <img src="~/img/@Model.User.ImageUrl" width="300px" />
+        <br />
+        <p>@Model.User.AboutMe</p>
+    </div>
+    @*<div class="col-4 offset-2">
+        @foreach (var post in Model.Posts)
+        {
+            <p>@post.Header</p>
+        }
+    </div>*@
+	<div class="col-7 offset-1">
+	<div class="card border-2 mb-4">
+		<div class="card-header bg-warning text-black fs-4 fw-bold">
+			5 senaste inläggen av @Model.User.Alias
+		</div>
+		<div class="m-0 p-0 text-start">
+			<table class="table table-striped m-0 p-0">
+				<thead class="bg-black text-white">
+					<tr>
+						<th>Ämne</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var posts in Model.Posts)
+					{
+						<tr>
+							<td class="col-8">
+								<a class="text-black text-decoration-none" asp-route-id="@posts.Id" asp-page="./PostComment">@posts.Header</a>
+							</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>
+		</div>
+	</div>
+</div>
 <br />
 
 @if (SignInManager.IsSignedIn(User))
