@@ -35,24 +35,21 @@
     </div>
     <div class="card-body row m-1">
         <div class="card col-md-3 bg-light h-25">
-            <div class="card-body text-center">
-                <img src="~/img/@Model.MyUser.ImageUrl" width="60" />
-                @if (Model.MyUser.Alias == null)
-                {
-                    <p>@Model.Post.UserId</p>
+            <div class="card-body text-center d-flex flex-sm-row flex-md-column">
+                <div>
+                    <img src="~/img/@Model.MyUser.ImageUrl" width="60" />
+                </div>
 
-                }
-                else
-                {
-                    <p>@Model.MyUser.Alias</p>
+                <div>
+                    <a class="text-warning fw-bold text-decoration-none pb-0 mb-0" asp-page="./UserPage" asp-route-userid="@Model.MyUser.Id">@Model.MyUser.Alias</a>
+                    <p>Medlem sedan - </p>
+                </div>
 
-                }
-                <p>@Model.MyUser.Email</p>
             </div>
         </div>
-        <div class="card col-md-8 ms-3 border-0">
+        <div class="card col-md-8 ms-md-1 border-0">
             <div class="card-body pt-0">
-                <h4 class="mt-0">@Model.Post.Header</h4>
+                <h4 class="mt-2">@Model.Post.Header</h4>
                 <p class="card-text">@Model.Post.Text</p>
 
                 @if (@Model.Post.Image != null && @Model.Post.Image != "")
@@ -174,7 +171,7 @@
         {
             if (User.IsInRole("Admin"))
             {
-                <a asp-route-unflagpostid="@Model.Post.Id" ><span class="me-2"><strong>Under granskning</strong></span></a>
+                <a asp-route-unflagpostid="@Model.Post.Id"><span class="me-2"><strong>Under granskning</strong></span></a>
             }
             else
             {
@@ -211,23 +208,19 @@
             </div>
             <div class="card-body row m-1">
                 <div class="card col-md-3 bg-light h-25">
-                    <div class="card-body text-center">
+                    <div class="card-body text-center d-flex flex-sm-row flex-md-column">
                         @{
                             var commentator = @Model.AllUsers.Where(x => x.Id == comment.UserId).SingleOrDefault();
                             var image = commentator.ImageUrl;
                         }
-                        <img src="~/img/@image" width="60" />
-                        @if (commentator.Alias == null)
-                        {
-                            <p>@comment.UserId</p>
+                        <div>
+                            <img src="~/img/@image" width="60" />
+                        </div>
 
-                        }
-                        else
-                        {
-                            <p>@commentator.Alias</p>
-
-                        }
-                        <p>@commentator.Email</p>
+                        <div>
+                            <a class="text-warning fw-bold text-decoration-none pb-0 mb-0" asp-page="./UserPage" asp-route-userid="@commentator.Id">@commentator.Alias</a>
+                            <p>Medlem sedan -</p>
+                        </div>
                     </div>
                 </div>
 
