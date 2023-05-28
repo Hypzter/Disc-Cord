@@ -49,12 +49,19 @@ namespace Disc_Cord.Pages
             var posts = await _context.NewPost.Where(p => p.UserId == User.Id).Take(5).ToListAsync();
             var comments = await _context.Comment.Where(c => c.UserId == User.Id).Take(5).ToListAsync();
 
+            await RefreshActivities();
+        }
+
+        private async Task RefreshActivities()
+        {
+            var posts = await _context.NewPost.Where(p => p.UserId == User.Id).ToListAsync();
+            var comments = await _context.Comment.Where(c => c.UserId == User.Id).ToListAsync();
+
             Activities = new List<object>();
             Activities.AddRange(posts.Select(p => new { Date = p.Date, Text = p.Header, Id = p.Id, PostOrComment = p.Header }));
             Activities.AddRange(comments.Select(c => new { Date = c.Date, Text = c.Text, Id = c.NewPostId }));
-            Activities = Activities.OrderByDescending(item => ((DateTime)item.GetType().GetProperty("Date").GetValue(item, null))).ToList();
+            Activities = Activities.OrderByDescending(item => ((DateTime)item.GetType().GetProperty("Date").GetValue(item, null))).Take(10).ToList();
         }
-
         private DateTime GetDateFromItem(object item)
         {
             if (item is (DateTime date, _, _))

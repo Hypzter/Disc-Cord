@@ -43,12 +43,8 @@
                                             truncatedText = text?.Length > 20 ? (text.Substring(0, Math.Min(20, text.Length)) + "...") : text;
                                         }
 
-
                                         var id = item.GetType().GetProperty("Id")?.GetValue(item);
                                         var postOrComment = item.GetType().GetProperty("PostOrComment")?.GetValue(item);
-
-
-
 
                                         <tr>
                                             <td>
@@ -65,10 +61,6 @@
                                         </tr>
 
                                     }
-                                    @*@foreach (var post in Model.Activities)
-                                    {
-
-                                    }*@
                                 </tbody>
                             </table>
                         </div>
