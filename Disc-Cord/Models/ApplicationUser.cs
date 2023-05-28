@@ -23,6 +23,9 @@ namespace Disc_Cord.Models
         [PersonalData]
         public string? AboutMe { get; set; }
 
+        [PersonalData]
+        public DateTime DateJoined { get; set; }
+
 
     }
 }
