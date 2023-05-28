@@ -1,6 +1,7 @@
 ﻿@page
 @inject SignInManager<Models.ApplicationUser> SignInManager
 @inject UserManager<Models.ApplicationUser> UserManager
+@inject ApplicationDbContext Context
 @{
     var user = await UserManager.GetUserAsync(User);
     var datenow = DateTime.Now;
@@ -19,7 +20,16 @@
             @Model.Post.Date.ToString()<span class="float-end me-2">
                 @if (SignInManager.IsSignedIn(User))
                 {
-                    <a asp-route-userid="@user.Id" asp-route-postid="@Model.Post.Id"><i class="bi bi-disc text-black text-end me-2"></i></a>
+                    if (Context.NewPostLike.FirstOrDefault(x => x.UserId == user.Id) != null)
+                    {
+                        
+                        <a type="button" asp-route-userid="@user.Id" asp-route-postid="@Model.Post.Id" class="btn btn-danger">Unlike <i class="bi bi-disc text-black text-end me-2"></i></a>
+                    }
+                    else
+                    {
+                        <a type="button" asp-route-userid="@user.Id" asp-route-postid="@Model.Post.Id" class="btn btn-success">Like <i class="bi bi-disc text-black text-end me-2"></i></a>
+
+                    }
 
                     @Model.Post.LikeCounter
 
@@ -191,6 +201,7 @@
                 <div class="m-1">
                     @comment.Date.ToString()<span class="float-end me-2">
                         @if (SignInManager.IsSignedIn(User))
+
                         {
                             <a asp-route-userid="@user.Id" asp-route-commentid="@comment.Id"><i class="bi bi-disc text-black text-end me-2"></i></a>
 

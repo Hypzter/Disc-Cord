@@ -9,16 +9,21 @@
 	{
 		isAdmin = await UserManager.IsInRoleAsync(currentUser, "Admin");
 	}
-	var messages = Context.Messages.Where(x => x.ReceiverId == currentUser.Id).ToList();
-	string newMessages;
-	if (messages.Count == 0 || messages == null)
+	string newMessages = string.Empty;
+	if (SignInManager.IsSignedIn(User))
 	{
-		newMessages = string.Empty;
-	}
-	else
-	{
-		var unread = messages.Where(x => x.IsRead == false).ToList();
-		newMessages = "(" + unread.Count + ")";
+
+
+		var messages = Context.Messages.Where(x => x.ReceiverId == currentUser.Id).ToList();
+		if (messages.Count == 0 || messages == null)
+		{
+			newMessages = string.Empty;
+		}
+		else
+		{
+			var unread = messages.Where(x => x.IsRead == false).ToList();
+			newMessages = "(" + unread.Count + ")";
+		}
 	}
 
 }

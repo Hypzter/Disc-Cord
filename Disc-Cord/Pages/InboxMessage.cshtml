@@ -6,6 +6,8 @@
 	var user = await UserManager.GetUserAsync(User);
 }
 
+<a asp-page="./Inbox" asp-route-userid="@user.Id" class="btn btn-secondary mb-2">Tillbaka</a>
+
 <div class="card">
 	<div class="card-header d-flex justify-content-between">
 		<div>
@@ -13,6 +15,8 @@
 			<p>@Model.Message.Timestamp.ToString()</p>
 		</div>
 		<div class="mt-2 me-2">
+			<a name="returnMessage" class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#returnMessage">Svara</a>
+
 			<a type="submit" class="btn btn-danger" asp-route-deletemessageid="@Model.Message.Id">Ta bort</a>
 		</div>
 
@@ -21,18 +25,33 @@
 		<p class="card-text" style="margin-top: 0">@Model.Message.Text</p>
 	</div>
 </div>
-<br />
-<h5>Skicka meddelande tillbaka</h5>
-<form method="post">
-    <input asp-for="NewMessage.SenderId" type="hidden" value="@user.Id" />
-    <input asp-for="NewMessage.ReceiverId" type="hidden" value="@sender.Id" />
-    <input asp-for="NewMessage.IsRead" type="hidden" value="false" />
-    <input asp-for="NewMessage.Timestamp" type="hidden" value="@DateTime.Now" />
 
-	<textarea id="NewMessageText" class="form-control" cols="40" rows="5" name="NewMessage.Text" onblur="this.placeholder = '@Model.Message.Text'">&#13;&#13;----------------------------------&#13;&#13;@Model.Message.Text</textarea>
 
-    <br>
-    <a asp-page="./Inbox" asp-route-userid="@user.Id" class="btn btn-secondary">Tillbaka</a>
-    <input type="submit" name="addTask" value="Skicka" class="btn btn-primary" />
-</form>
 
+<!-- Detta är för att få upp modalen när man vill svara på ett meddelande -->
+<div class="modal fade" id="returnMessage" tabindex="-1" aria-labelledby="returnMessageLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h1 class="modal-title fs-5" id="returnMessageLabel">Ändra post</h1>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body text-start">
+				<form method="post">
+					<input asp-for="NewMessage.SenderId" type="hidden" value="@user.Id" />
+					<input asp-for="NewMessage.ReceiverId" type="hidden" value="@sender.Id" />
+					<input asp-for="NewMessage.IsRead" type="hidden" value="false" />
+
+					<textarea id="NewMessageText" class="form-control" cols="40" rows="5" name="NewMessage.Text" onblur="this.placeholder = '@Model.Message.Text'">&#13;&#13;----------------------------------&#13;Från: @sender.Alias&#13;Skickat: @Model.Message.Timestamp&#13;&#13;@Model.Message.Text</textarea>
+
+					<br>
+					<div class="modal-footer">
+						<input type="button" class="btn btn-secondary" data-bs-dismiss="modal" value="Avbryt" />
+
+						<input type="submit" name="addTask" value="Skicka" class="btn btn-primary" />
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

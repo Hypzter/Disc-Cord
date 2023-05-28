@@ -336,7 +336,14 @@ namespace Disc_Cord.Pages
                 _context.Add(NewCommentLike);
                 await _context.SaveChangesAsync();
             }
-            var numberOfLikes = _context.CommentLike.Where(p => p.CommentId == commentid).ToList();
+			else
+			{
+				var likeToRemove = await _context.CommentLike.Where(l => l.UserId == userid).FirstOrDefaultAsync();
+				_context.CommentLike.Remove(likeToRemove);
+				await _context.SaveChangesAsync();
+
+			}
+			var numberOfLikes = _context.CommentLike.Where(p => p.CommentId == commentid).ToList();
             NewComment.LikeCounter = numberOfLikes.Count;
             await _context.SaveChangesAsync();
 
@@ -366,7 +373,14 @@ namespace Disc_Cord.Pages
                 _context.Add(NewPostLike);
                 await _context.SaveChangesAsync();
             }
-            var numberOfLikes = _context.NewPostLike.Where(p => p.NewPostId == postid).ToList();
+            else
+            {
+                var likeToRemove = await _context.NewPostLike.Where(l => l.UserId == userid).FirstOrDefaultAsync();
+                _context.NewPostLike.Remove(likeToRemove);
+				await _context.SaveChangesAsync();
+
+			}
+			var numberOfLikes = _context.NewPostLike.Where(p => p.NewPostId == postid).ToList();
             Post.LikeCounter = numberOfLikes.Count;
             await _context.SaveChangesAsync();
         }

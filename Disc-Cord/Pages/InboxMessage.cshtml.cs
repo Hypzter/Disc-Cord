@@ -1,4 +1,5 @@
 using Disc_Cord.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -6,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Disc_Cord.Pages
 {
+	[Authorize]
+
 	public class InboxMessageModel : PageModel
 	{
 		private readonly ApplicationDbContext _context;
@@ -52,8 +55,12 @@ namespace Disc_Cord.Pages
 
 		public async Task<IActionResult> OnPostAsync()
 		{
+			var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == NewMessage.SenderId);
+
 			if (NewMessage.Text != null)
 			{
+				NewMessage.Timestamp = DateTime.Now;
+				//NewMessage.Text = "Från: " + user.Alias + "\n" + "Skickat: " + NewMessage.Timestamp.ToString() + "\n\n" + NewMessage.Text;
 				await _context.Messages.AddAsync(NewMessage);
 				await _context.SaveChangesAsync();
 

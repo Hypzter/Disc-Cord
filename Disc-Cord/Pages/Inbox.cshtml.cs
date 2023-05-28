@@ -1,14 +1,18 @@
 using Disc_Cord.Data;
 using Disc_Cord.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 using System.Security.Claims;
 
 namespace Disc_Cord.Pages
 {
-    public class InboxModel : PageModel
+	[Authorize]
+
+	public class InboxModel : PageModel
     {
         private readonly ApplicationDbContext _context;
 
