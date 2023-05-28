@@ -54,12 +54,20 @@
                         Model.CommentPageNumber = 1;
                         var list = Model.Comments.Where(x => x.NewPostId == com.NewPostId).ToList();
                         var index = list.IndexOf(com);
-                        for (int i = 0; i < index; i += Helper.Variables.PageSize)
+                        for (int i = 1; i < index; i += Helper.Variables.PageSize)
                         {
                             Model.CommentPageNumber++;
                         }
                     }
-                    <a href="/PostComment?pageIndex=@Model.CommentPageNumber&id=@com.NewPostId#@report.CommentId" class="bg-danger text-white p-1">Till kommentaren</a>
+                    if (Model.CommentPageNumber == 1)
+                    {
+                        <a href="/PostComment?id=@com.NewPostId#@report.CommentId" class="bg-danger text-white p-1">Till kommentaren</a>
+                    }
+                    else
+                    {
+                        <a href="/PostComment?pageIndex=@Model.CommentPageNumber&id=@com.NewPostId#@report.CommentId" class="bg-danger text-white p-1">Till kommentaren</a>
+
+                    }
                     <hr />
                 }
             }

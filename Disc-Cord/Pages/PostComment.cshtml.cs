@@ -125,7 +125,43 @@ namespace Disc_Cord.Pages
         {
             if (reportpostid != 0 || reportcommentid != 0)
             {
-                await ReportAsync(reportpostid, reportcommentid);
+                if (reportpostid != 0)
+                {
+                    Report.PostId = reportpostid;
+                    _context.NewPost.FirstOrDefault(x => x.Id == reportpostid).Reported = true;
+                    _context.Reports.Add(Report);
+                    await _context.SaveChangesAsync();
+                }
+                if (reportcommentid != 0)
+                {
+                    Report.CommentId = reportcommentid;
+                    _context.Comment.FirstOrDefault(x => x.Id == reportcommentid).Reported = true;
+                    _context.Reports.Add(Report);
+                    await _context.SaveChangesAsync();
+
+                    var redirectUrl = string.Empty;
+                    int commentPageNumber = 0;
+                    var list = _context.Comment.Where(x => x.NewPostId == _id).ToList();
+                    var comment = list.Where(x => x.Id == reportcommentid).FirstOrDefault();
+                    var index = list.IndexOf(comment);
+                    for (int i = 0; i < index + 1; i += Helper.Variables.PageSize)
+                    {
+                        commentPageNumber++;
+                    }
+                    if (commentPageNumber == 1)
+                    {
+                        redirectUrl = ("/PostComment?id=" + comment.NewPostId + "#" + comment.Id).ToString();
+
+                    }
+                    else
+                    {
+                    redirectUrl = ("/PostComment?pageIndex=" + commentPageNumber + "&id=" + comment.NewPostId + "#" + comment.Id).ToString();
+                    }
+
+                    return Redirect(redirectUrl);
+
+
+                }
             }
 
             if (editcommentid != 0 && editbool == true)
