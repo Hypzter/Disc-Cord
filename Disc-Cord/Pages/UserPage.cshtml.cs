@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Extensions.Hosting;
+using System.Xml.Linq;
 
 namespace Disc_Cord.Pages
 {
@@ -23,26 +25,48 @@ namespace Disc_Cord.Pages
 		public Models.ApplicationUser User { get; set; }
 
 		public List<Models.NewPost> Posts { get; set; }
+        public List<Models.Comment> Comments { get; set; }
 
-		[BindProperty]
+        public List<Object> Activities { get; set; }
+
+
+        [BindProperty]
 		public Models.Message Message { get; set; }
 
 
 		private static string _userId;
-		public async Task OnGetAsync(string userid)
-		{
-			if (userid != null)
-			{
-				_userId = userid;
-			}
-			User = await _userManager.Users.Where(u => u.Id == _userId).FirstOrDefaultAsync();
-
-			Posts = await _context.NewPost.Where(p => p.UserId == User.Id).Take(5).ToListAsync();
-			Posts.OrderBy(p => p.Date);
 
 
-		}
-		public async Task<IActionResult> OnPostAsync()
+        public async Task OnGetAsync(string userid)
+        {
+            if (userid != null)
+            {
+                _userId = userid;
+            }
+
+            User = await _userManager.Users.Where(u => u.Id == _userId).FirstOrDefaultAsync();
+
+            var posts = await _context.NewPost.Where(p => p.UserId == User.Id).Take(5).ToListAsync();
+            var comments = await _context.Comment.Where(c => c.UserId == User.Id).Take(5).ToListAsync();
+
+            Activities = new List<object>();
+            Activities.AddRange(posts.Select(p => new { Date = p.Date, Text = p.Header, Id = p.Id, PostOrComment = p.Header }));
+            Activities.AddRange(comments.Select(c => new { Date = c.Date, Text = c.Text, Id = c.NewPostId }));
+            Activities = Activities.OrderByDescending(item => ((DateTime)item.GetType().GetProperty("Date").GetValue(item, null))).ToList();
+        }
+
+        private DateTime GetDateFromItem(object item)
+        {
+            if (item is (DateTime date, _, _))
+            {
+                return date;
+            }
+
+            throw new ArgumentException("Invalid item type.");
+        }
+
+
+        public async Task<IActionResult> OnPostAsync()
 		{
 
 
@@ -57,5 +81,5 @@ namespace Disc_Cord.Pages
 
 		}
 
-	}
+    }
 }
