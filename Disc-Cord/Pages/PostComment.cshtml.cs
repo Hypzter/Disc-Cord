@@ -336,14 +336,8 @@ namespace Disc_Cord.Pages
                 _context.Add(NewCommentLike);
                 await _context.SaveChangesAsync();
             }
-			else
-			{
-				var likeToRemove = await _context.CommentLike.Where(l => l.UserId == userid).FirstOrDefaultAsync();
-				_context.CommentLike.Remove(likeToRemove);
-				await _context.SaveChangesAsync();
 
-			}
-			var numberOfLikes = _context.CommentLike.Where(p => p.CommentId == commentid).ToList();
+            var numberOfLikes = _context.CommentLike.Where(p => p.CommentId == commentid).ToList();
             NewComment.LikeCounter = numberOfLikes.Count;
             await _context.SaveChangesAsync();
 
