@@ -51,10 +51,10 @@
                         <p class="m-0 p-0"><span class="fw-bold">Textinnehåll: </span>@com.Text</p>
                     </div>
                     {
-                        Model.CommentPageNumber = 1;
+                        Model.CommentPageNumber = 0;
                         var list = Model.Comments.Where(x => x.NewPostId == com.NewPostId).ToList();
                         var index = list.IndexOf(com);
-                        for (int i = 1; i < index; i += Helper.Variables.PageSize)
+                        for (int i = 0; i < index + 1; i += Helper.Variables.PageSize)
                         {
                             Model.CommentPageNumber++;
                         }

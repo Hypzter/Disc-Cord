@@ -402,6 +402,8 @@
 @if (!SignInManager.IsSignedIn(User))
 {
     <button onclick="window.history.back()" class="btn btn-secondary">Tillbaka</button>
+    <a asp-page="./ForumPost" class="btn btn-secondary">Tillbaka</a>
+
 }
 @if (SignInManager.IsSignedIn(User))
 {
@@ -417,7 +419,9 @@
         <label asp-for="NewComment.Image" class="form-label mt-1">Lägg till bild</label>
         <input type="file" class="form-control" name="UploadedImage" />
 
-        <button type="button" onclick="window.history.back()" class="btn btn-secondary mt-2">Tillbaka</button>
+        @*<button type="button" onclick="window.history.back()" class="btn btn-secondary mt-2">Tillbaka</button>*@
+        <a asp-page="./ForumPost" class="btn btn-secondary mt-2">Tillbaka</a>
+
         <input type="submit" class="btn btn-warning mt-2" asp-route-newcommentbool="true" value="Lägg till kommentar" />
 
     </form>
