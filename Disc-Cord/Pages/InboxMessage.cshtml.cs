@@ -59,6 +59,10 @@ namespace Disc_Cord.Pages
 
 			if (NewMessage.Text != null)
 			{
+				if (NewMessage.Headline == null)
+				{
+					NewMessage.Headline = "Ingen rubrik";
+				}
 				NewMessage.Timestamp = DateTime.Now;
 				await _context.Messages.AddAsync(NewMessage);
 				await _context.SaveChangesAsync();

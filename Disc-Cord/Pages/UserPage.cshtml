@@ -89,8 +89,10 @@
                         <input asp-for="Message.SenderId" type="hidden" value="@loggedInUser.Id" />
                         <input asp-for="Message.ReceiverId" type="hidden" value="@Model.User.Id" />
                         <input asp-for="Message.IsRead" type="hidden" value="false" />
+                        <input asp-for="Message.Headline" class="form-control mb-1" placeholder="Rubrik" />
 
-                        <textarea id="MessageText" class="form-control" cols="40" rows="5" name="Message.Text"></textarea>
+
+                        <textarea id="MessageText" class="form-control" cols="40" rows="5" name="Message.Text" placeholder="Skriv ditt meddelande"></textarea>
 
                         <br>
                         <div class="modal-footer">

@@ -41,6 +41,8 @@
 					<input asp-for="NewMessage.SenderId" type="hidden" value="@user.Id" />
 					<input asp-for="NewMessage.ReceiverId" type="hidden" value="@sender.Id" />
 					<input asp-for="NewMessage.IsRead" type="hidden" value="false" />
+					<input id="NewMessageHeadline" class="form-control mb-1" name="NewMessage.Headline" onblur="this.placeholder = '@Model.Message.Headline'" value="Sv: @Model.Message.Headline"/>
+
 
 					<textarea id="NewMessageText" class="form-control" cols="40" rows="5" name="NewMessage.Text" onblur="this.placeholder = '@Model.Message.Text'">&#13;&#13;----------------------------------&#13;Från: @sender.Alias&#13;Skickat: @Model.Message.Timestamp&#13;&#13;@Model.Message.Text</textarea>
 

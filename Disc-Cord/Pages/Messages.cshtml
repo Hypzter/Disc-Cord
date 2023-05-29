@@ -18,10 +18,10 @@
 	<h3>Skicka nytt meddelande</h3>
 
 	<form method="post">
-		<input asp-for="NewMessage.SenderId" type="hidden" value="@user.Id" />
-		<input asp-for="NewMessage.Timestamp" type="hidden" value="@DateTime.Now" />
+		<input asp-for="NewMessage.SenderId" type="hidden" value="@user.Id" />		
 		<input asp-for="NewMessage.IsRead" type="hidden" value="false" />
-		<textarea asp-for="NewMessage.Text" class="form-control" cols="40" rows="5"></textarea>
+		<input asp-for="NewMessage.Headline" class="form-control mb-1" placeholder="Rubrik" />
+		<textarea asp-for="NewMessage.Text" class="form-control" cols="40" rows="5" placeholder="Skriv ditt meddelande"></textarea>
 		<label for="NewMessage_ReceiverId">Mottagare: </label>
 		<select class="mt-2 mb-2" asp-for="NewMessage.ReceiverId" asp-items="@(new SelectList(Model.Users, "Id", "Alias"))"></select>
 		<br>

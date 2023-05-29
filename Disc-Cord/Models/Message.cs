@@ -10,5 +10,6 @@ namespace Disc_Cord.Models
 		public string Text { get; set; }
 		public DateTime Timestamp { get; set; }
         public bool IsRead { get; set; }
+		public string Headline { get; set; }
     }
 }
