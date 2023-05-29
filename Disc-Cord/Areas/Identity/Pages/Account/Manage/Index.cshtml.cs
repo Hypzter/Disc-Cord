@@ -3,6 +3,7 @@
 #nullable disable
 
 using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
@@ -35,6 +36,8 @@ namespace Disc_Cord.Areas.Identity.Pages.Account.Manage
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
+        /// 
+        [Display(Name = "Användarnamn")]
         public string Username { get; set; }
 
         /// <summary>
@@ -62,14 +65,14 @@ namespace Disc_Cord.Areas.Identity.Pages.Account.Manage
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Phone]
-            [Display(Name = "Phone number")]
+            [Display(Name = "Telefonnummer")]
             public string PhoneNumber { get; set; }
 
-            [Display(Name = "Add image")]
+            [Display(Name = "Lägg till bild")]
             public IFormFile ImageUrl { get; set; }
 
 
-            [Display(Name = "About me")]
+            [Display(Name = "Om mig")]
             public string AboutMe { get; set; }
         }
 
@@ -91,7 +94,7 @@ namespace Disc_Cord.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"Kunde inte ladda användare med ID '{_userManager.GetUserId(User)}'.");
             }
 
             await LoadAsync(user);
@@ -103,7 +106,7 @@ namespace Disc_Cord.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"Kunde inte ladda användare med ID '{_userManager.GetUserId(User)}'.");
             }
 
             if (!ModelState.IsValid)
@@ -118,7 +121,7 @@ namespace Disc_Cord.Areas.Identity.Pages.Account.Manage
                 var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
                 if (!setPhoneResult.Succeeded)
                 {
-                    StatusMessage = "Unexpected error when trying to set phone number.";
+                    StatusMessage = "Oväntat fel vid nytt telefonnummer.";
                     return RedirectToPage();
                 }
             }
@@ -144,7 +147,7 @@ namespace Disc_Cord.Areas.Identity.Pages.Account.Manage
             await _context.SaveChangesAsync();
 
             await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Your profile has been updated";
+            StatusMessage = "Din profil har blivit uppdaterad";
             return RedirectToPage();
         }
     }

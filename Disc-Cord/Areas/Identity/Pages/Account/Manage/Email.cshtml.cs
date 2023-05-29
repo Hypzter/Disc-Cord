@@ -69,7 +69,7 @@ namespace Disc_Cord.Areas.Identity.Pages.Account.Manage
             /// </summary>
             [Required]
             [EmailAddress]
-            [Display(Name = "New email")]
+            [Display(Name = "Ny email")]
             public string NewEmail { get; set; }
         }
 
