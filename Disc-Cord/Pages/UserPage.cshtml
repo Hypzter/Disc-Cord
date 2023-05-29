@@ -7,28 +7,36 @@
 }
 
 <div class="card mt-4 border-2">
-    <div class="card-header bg-secondary pe-0 py-1 text-light">
+    <div class="card-header bg-secondary py-1 text-light">
         @Model.User.Alias
     </div>
     <div class="m-1">
         <div class="card-body m-1">
             <div class="row">
-                <div class="col-md-6">
-                    <div class="card bg-light">
+                <div class="col-md-6 mb-3">
+                    <div class="card ms-1 bg-light">
                         <div class="card-body text-center">
                             <img src="~/img/@Model.User.ImageUrl" width="150px" />
                             <br />
-                            <br />
-                            <button name="newmessage" class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#newmessage">Skicka meddelande till @Model.User.Alias</button>
+                            @if(Model.IsAdmin)
+                            {
+                                <p class="fw-bold mb-0">Admin</p>
+                            }
+                            else
+                            {
+                                <p class="fw-bold mb-0">Medlem</p>
+                            }
+                            <p class="fw-lighter mt-0">Medlem sedan @Model.User.DateJoined.ToString("yy-MM-dd")</p>
+                            <button name="newmessage" class="btn btn-warning mt-0" data-bs-toggle="modal" data-bs-target="#newmessage">Skicka meddelande till @Model.User.Alias</button>
                             <p class="mt-3">@Model.User.AboutMe</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-6">
-                    <div class="card ms-3 border-0">
+                <div class="col-md-6 ms-0">
+                    <div class="card ms-0 border-0">
                         <div class="card-body pt-0">
-                            <table class="table table-striped m-0 p-0">
+                            <table class="table table-striped ms-0 p-0">
                                 <thead class="bg-black text-white">
                                     <tr>
                                         <th>Senaste aktivitet</th>
@@ -52,11 +60,11 @@
                                             <td>
                                                 @if (@postOrComment != null)
                                                 {
-                                                    <a class="text-black text-decoration-none text-start" asp-route-id="@id" asp-page="./PostComment">Skapade inlägget:  <span class="fw-light text">@text </span></a>
+                                                    <a class="text-black text-decoration-none text-start ms-0" asp-route-id="@id" asp-page="./PostComment">Skapade inlägget:  <span class="fw-light text">@text </span></a>
                                                 }
                                                 else
                                                 {
-                                                    <a class="text-black text-decoration-none text-start" asp-route-id="@id" asp-page="./PostComment">Kommenterade: <span class="fw-light text">@truncatedText </span></a>
+                                                    <a class="text-black text-decoration-none text-start ms-" asp-route-id="@id" asp-page="./PostComment">Kommenterade: <span class="fw-light text">@truncatedText </span></a>
                                                 }
                                                 <span class="text-end fw-lighter">@date</span>
                                             </td>

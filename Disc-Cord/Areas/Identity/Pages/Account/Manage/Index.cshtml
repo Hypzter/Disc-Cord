@@ -16,7 +16,7 @@
                 <label asp-for="Username" class="form-label"></label>
             </div>
             <div class="form-floating mb-3">
-                <input asp-for="Input.PhoneNumber" class="form-control" placeholder="Telefonnummer"/>
+                <input asp-for="Input.PhoneNumber" class="form-control" placeholder="Telefonnummer" />
                 <label asp-for="Input.PhoneNumber" class="form-label"></label>
                 <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
             </div>
@@ -25,10 +25,29 @@
                 <input type="file" class="form-control" name="Input.ImageUrl" />
             </div>
             <div class="mb-3">
-                @*<label asp-for="Input.AboutMe" class="form-label"></label>*@
-                <textarea asp-for="Input.AboutMe" class="form-control" cols="40" rows="10" id="text" placeholder="Skriv något om dig själv..."></textarea>
-            </div>
 
+                <textarea asp-for="Input.AboutMe" class="form-control" cols="40" rows="10" id="text" maxlength="400" placeholder="@Model.ApplicationUser.AboutMe"></textarea>
+                <span id="charCount">0/400</span>
+
+                <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                        var textarea = document.getElementById("text");
+                        var originalText = textarea.value;
+
+                        textarea.addEventListener("focus", function () {
+                            if (textarea.value === originalText) {
+                                textarea.value = "";
+                            }
+                        });
+
+                        textarea.addEventListener("blur", function () {
+                            if (textarea.value.trim() === "") {
+                                textarea.value = originalText;
+                            }
+                        });
+                    });
+                </script>
+            </div>
             <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Spara</button>
         </form>
     </div>
@@ -36,4 +55,19 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        function countCharacters() {
+            var textarea = document.getElementById('text');
+            var charCount = document.getElementById('charCount');
+
+            var currentLength = textarea.value.length;
+            var maxLength = parseInt(textarea.getAttribute('maxlength'));
+
+            charCount.innerHTML = currentLength + '/' + maxLength;
+        }
+
+        document.getElementById('text').addEventListener('input', countCharacters);
+    </script>
+
 }

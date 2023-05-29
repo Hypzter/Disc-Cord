@@ -76,6 +76,8 @@ namespace Disc_Cord.Areas.Identity.Pages.Account.Manage
             public string AboutMe { get; set; }
         }
 
+        public Models.ApplicationUser ApplicationUser { get; set; }
+
         private async Task LoadAsync(Models.ApplicationUser user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
@@ -92,6 +94,8 @@ namespace Disc_Cord.Areas.Identity.Pages.Account.Manage
         public async Task<IActionResult> OnGetAsync()
         {
             var user = await _userManager.GetUserAsync(User);
+            ApplicationUser = user;
+
             if (user == null)
             {
                 return NotFound($"Kunde inte ladda användare med ID '{_userManager.GetUserId(User)}'.");
@@ -135,9 +139,9 @@ namespace Disc_Cord.Areas.Identity.Pages.Account.Manage
                 {
                     await Input.ImageUrl.CopyToAsync(fileStream);
                 }
+                var userImage = await _context.ApplicationUsers.FirstOrDefaultAsync(x => x.Id == user.Id);
+                userImage.ImageUrl = fileName;
             }
-            var userImage = await _context.ApplicationUsers.FirstOrDefaultAsync(x => x.Id == user.Id);
-            userImage.ImageUrl = fileName;
 
             if (Input.AboutMe != null)
             {

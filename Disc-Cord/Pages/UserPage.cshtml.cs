@@ -33,6 +33,7 @@ namespace Disc_Cord.Pages
         [BindProperty]
 		public Models.Message Message { get; set; }
 
+        public bool IsAdmin { get; set; }
 
 		private static string _userId;
 
@@ -45,6 +46,7 @@ namespace Disc_Cord.Pages
             }
 
             User = await _userManager.Users.Where(u => u.Id == _userId).FirstOrDefaultAsync();
+            IsAdmin = await _userManager.IsInRoleAsync(User, "Admin");
 
             await RefreshActivities();
         }
@@ -59,15 +61,7 @@ namespace Disc_Cord.Pages
             Activities.AddRange(comments.Select(c => new { Date = c.Date, Text = c.Text, Id = c.NewPostId }));
             Activities = Activities.OrderByDescending(item => ((DateTime)item.GetType().GetProperty("Date").GetValue(item, null))).Take(10).ToList();
         }
-        private DateTime GetDateFromItem(object item)
-        {
-            if (item is (DateTime date, _, _))
-            {
-                return date;
-            }
 
-            throw new ArgumentException("Invalid item type.");
-        }
 
 
         public async Task<IActionResult> OnPostAsync()
