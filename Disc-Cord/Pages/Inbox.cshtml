@@ -38,12 +38,15 @@
 								<td>
 									@if (message.IsRead)
 									{
-										<a class="text-black col-10 text-decoration-none" asp-route-messageid="@message.Id" asp-page="./InboxMessage">@message.Headline</a>
+										<a class="text-black col-10 text-decoration-none fs-5" asp-route-messageid="@message.Id" asp-page="./InboxMessage">@message.Headline.LimitLength(30)</a>
+										<p>@message.Text.LimitLength(20)</p>
+
 
 									}
 									else
 									{
-										<a class="text-black col-10 text-decoration-none fw-bold" asp-route-messageid="@message.Id" asp-page="./InboxMessage">@message.Headline.LimitLength(30)</a>
+										<a class="text-black col-10 text-decoration-none fw-bold fs-5" asp-route-messageid="@message.Id" asp-page="./InboxMessage">@message.Headline.LimitLength(30)</a>
+										<p>@message.Text.LimitLength(20)</p>
 
 									}
 								</td>
