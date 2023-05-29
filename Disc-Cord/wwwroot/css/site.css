@@ -20,7 +20,3 @@ html {
 body {
   margin-bottom: 60px;
 }
-/* Öka specificiteten genom att lägga till en ID-selektor */
-#myDiv p {
-    margin-top: 0;
-}
