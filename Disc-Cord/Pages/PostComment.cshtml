@@ -20,14 +20,14 @@
             @Model.Post.Date.ToString()<span class="float-end me-2">
                 @if (SignInManager.IsSignedIn(User))
                 {
-                    if (Context.NewPostLike.FirstOrDefault(x => x.UserId == user.Id) != null)
+                    if (Context.NewPostLike.FirstOrDefault(x => x.UserId == user.Id) == null)
                     {
-                        
-                        <a type="button" asp-route-userid="@user.Id" asp-route-postid="@Model.Post.Id" class="btn btn-danger">Unlike <i class="bi bi-disc text-black text-end me-2"></i></a>
+                        <a type="button" asp-route-userid="@user.Id" asp-route-postid="@Model.Post.Id" class="btn btn-success">Like <i class="bi bi-disc text-black text-end me-2"></i></a>
+
                     }
                     else
                     {
-                        <a type="button" asp-route-userid="@user.Id" asp-route-postid="@Model.Post.Id" class="btn btn-success">Like <i class="bi bi-disc text-black text-end me-2"></i></a>
+                        <a type="button" asp-route-userid="@user.Id" asp-route-postid="@Model.Post.Id" class="btn btn-danger">Unlike <i class="bi bi-disc text-black text-end me-2"></i></a>
 
                     }
 
@@ -73,9 +73,6 @@
         @if (user != null && user.Id == Model.Post.UserId || Model.IsAdmin)
         {
             Model.EditPostText = Model.Post.Text;
-
-            @*           <textarea id="myTextarea" name="myTextarea" placeholder="Enter text here"></textarea>*@
-
 
 
             <button name="editPost" class="btn btn-outline-primary p-1 me-2" data-bs-toggle="modal" data-bs-target="#editPost">Ändra</button>
@@ -401,7 +398,6 @@
 
 @if (!SignInManager.IsSignedIn(User))
 {
-    <button onclick="window.history.back()" class="btn btn-secondary">Tillbaka</button>
     <a asp-page="./ForumPost" class="btn btn-secondary">Tillbaka</a>
 
 }
@@ -419,7 +415,6 @@
         <label asp-for="NewComment.Image" class="form-label mt-1">Lägg till bild</label>
         <input type="file" class="form-control" name="UploadedImage" />
 
-        @*<button type="button" onclick="window.history.back()" class="btn btn-secondary mt-2">Tillbaka</button>*@
         <a asp-page="./ForumPost" class="btn btn-secondary mt-2">Tillbaka</a>
 
         <input type="submit" class="btn btn-warning mt-2" asp-route-newcommentbool="true" value="Lägg till kommentar" />
