@@ -120,7 +120,6 @@ namespace Disc_Cord.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                //var user = CreateUser();
 
                 var user = new ApplicationUser
                 {
@@ -131,7 +130,6 @@ namespace Disc_Cord.Areas.Identity.Pages.Account
                     Alias = Input.Alias,
                     DateJoined = DateTime.Now,
                     ImageUrl = "private/PlaceHolderThrower.png"
-                    //ImageUrl = "img/logoown.png"
 
                 };
 
