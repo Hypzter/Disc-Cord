@@ -130,8 +130,8 @@ namespace Disc_Cord.Areas.Identity.Pages.Account
                     LastName = Input.LastName,
                     Alias = Input.Alias,
                     DateJoined = DateTime.Now,
-                    //ImageUrl = "img/private/PlaceHolderThrower.png"
-                    ImageUrl = "img/logoown.png"
+                    ImageUrl = "private/PlaceHolderThrower.png"
+                    //ImageUrl = "img/logoown.png"
 
                 };
 
