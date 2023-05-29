@@ -5,8 +5,7 @@
 @{
     var user = await UserManager.GetUserAsync(User);
     var datenow = DateTime.Now;
-
-
+    var listOfPostLikes = Context.NewPostLike.Where(x => x.NewPostId == Model.Post.Id).ToList();
 }
 
 @model Disc_Cord.Pages.PostCommentModel
@@ -20,19 +19,14 @@
             @Model.Post.Date.ToString()<span class="float-end me-2">
                 @if (SignInManager.IsSignedIn(User))
                 {
-                    if (Context.NewPostLike.FirstOrDefault(x => x.UserId == user.Id) == null)
+                    if (listOfPostLikes.FirstOrDefault(x => x.UserId == user.Id) == null)
                     {
-                        <a type="button" asp-route-userid="@user.Id" asp-route-postid="@Model.Post.Id" class="btn btn-success">Like <i class="bi bi-disc text-black text-end me-2"></i></a>
-
+                        <a type="button" asp-route-userid="@user.Id" asp-route-postid="@Model.Post.Id" class="btn btn-success">Like <i class="bi bi-disc text-black text-end me-2"></i><span class="text-white">@Model.Post.LikeCounter</span></a>
                     }
                     else
                     {
-                        <a type="button" asp-route-userid="@user.Id" asp-route-postid="@Model.Post.Id" class="btn btn-danger">Unlike <i class="bi bi-disc text-black text-end me-2"></i></a>
-
+                        <a type="button" asp-route-userid="@user.Id" asp-route-postid="@Model.Post.Id" class="btn btn-danger">Unlike <i class="bi bi-disc text-black text-end me-2"></i><span class="text-white">@Model.Post.LikeCounter</span></a>
                     }
-
-                    @Model.Post.LikeCounter
-
                 }
                 else
                 {
@@ -52,7 +46,7 @@
 
                 <div>
                     <a class="text-warning fw-bold text-decoration-none pb-0 mb-0" asp-page="./UserPage" asp-route-userid="@Model.MyUser.Id">@Model.MyUser.Alias</a>
-                    <p>Medlem sedan - </p>
+                    <p>Medlem sedan @Model.MyUser.DateJoined.ToString("yy-MM-dd")</p>
                 </div>
 
             </div>
@@ -193,17 +187,21 @@
 {
     @foreach (var comment in Model.Comments)
     {
+        var listOfCommentLikes = Context.CommentLike.Where(x => x.CommentId == comment.Id).ToList();
         <div class="card mt-4 border-2" id="@comment.Id">
             <div class="card-header bg-secondary pe-0 py-1 text-light">
                 <div class="m-1">
                     @comment.Date.ToString()<span class="float-end me-2">
                         @if (SignInManager.IsSignedIn(User))
-
                         {
-                            <a asp-route-userid="@user.Id" asp-route-commentid="@comment.Id"><i class="bi bi-disc text-black text-end me-2"></i></a>
-
-                            @comment.LikeCounter
-
+                            if (listOfCommentLikes.FirstOrDefault(x => x.UserId == user.Id) == null)
+                            {
+                                <a type="button" asp-route-userid="@user.Id" asp-route-commentid="@comment.Id" class="btn btn-success">Like <i class="bi bi-disc text-black text-end me-2"></i><span class="text-white">@comment.LikeCounter</span></a>
+                            }
+                            else
+                            {
+                                <a type="button" asp-route-userid="@user.Id" asp-route-commentid="@comment.Id" class="btn btn-danger">Unlike <i class="bi bi-disc text-black text-end me-2"></i><span class="text-white">@comment.LikeCounter</span></a>
+                            }
                         }
                         else
                         {
@@ -227,7 +225,7 @@
 
                         <div>
                             <a class="text-warning fw-bold text-decoration-none pb-0 mb-0" asp-page="./UserPage" asp-route-userid="@commentator.Id">@commentator.Alias</a>
-                            <p>Medlem sedan -</p>
+                            <p>Medlem sedan @commentator.DateJoined.ToString("yy-MM-dd")</p>
                         </div>
                     </div>
                 </div>

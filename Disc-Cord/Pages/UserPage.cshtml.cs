@@ -46,9 +46,6 @@ namespace Disc_Cord.Pages
 
             User = await _userManager.Users.Where(u => u.Id == _userId).FirstOrDefaultAsync();
 
-            var posts = await _context.NewPost.Where(p => p.UserId == User.Id).Take(5).ToListAsync();
-            var comments = await _context.Comment.Where(c => c.UserId == User.Id).Take(5).ToListAsync();
-
             await RefreshActivities();
         }
 
@@ -79,6 +76,7 @@ namespace Disc_Cord.Pages
 
 			if (Message.Text != null)
 			{
+                Message.Timestamp = DateTime.Now;
 				await _context.Messages.AddAsync(Message);
 				await _context.SaveChangesAsync();
 

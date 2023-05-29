@@ -42,9 +42,11 @@ namespace Disc_Cord.Pages
         [BindProperty]
         public Models.NewPostLike NewPostLike { get; set; }
 
+        //public List<Models.NewPostLike>  { get; set; }
 
         [BindProperty]
         public Models.CommentLike NewCommentLike { get; set; }
+
 
 
         public List<ApplicationUser> AllUsers { get; set; }
@@ -96,6 +98,7 @@ namespace Disc_Cord.Pages
             if (postid != 0)
             {
                 await AddPostLikesAsync(postid, userid);
+                return Page();
             }
 
             if (commentid != 0)
@@ -393,8 +396,14 @@ namespace Disc_Cord.Pages
                     CommentId = commentid,
                     UserId = userid
                 };
-                _context.Add(NewCommentLike);
+                await _context.AddAsync(NewCommentLike);
                 await _context.SaveChangesAsync();
+            }
+            else
+            {
+                _context.CommentLike.Remove(usercheck);
+                await _context.SaveChangesAsync();
+
             }
 
             var numberOfLikes = _context.CommentLike.Where(p => p.CommentId == commentid).ToList();
@@ -425,7 +434,7 @@ namespace Disc_Cord.Pages
 
         private async Task AddPostLikesAsync(int postid, string userid)
         {
-            var listOfLikes = _context.NewPostLike.Where(p => p.NewPostId == postid).ToList();
+            var listOfLikes = await _context.NewPostLike.Where(p => p.NewPostId == postid).ToListAsync();
             var usercheck = listOfLikes.FirstOrDefault(u => u.UserId == userid);
             if (usercheck == null)
             {
@@ -434,7 +443,7 @@ namespace Disc_Cord.Pages
                     NewPostId = postid,
                     UserId = userid
                 };
-                _context.Add(NewPostLike);
+                await _context.AddAsync(NewPostLike);
                 await _context.SaveChangesAsync();
             }
             else
@@ -444,7 +453,7 @@ namespace Disc_Cord.Pages
                 await _context.SaveChangesAsync();
 
             }
-            var numberOfLikes = _context.NewPostLike.Where(p => p.NewPostId == postid).ToList();
+            var numberOfLikes = await _context.NewPostLike.Where(p => p.NewPostId == postid).ToListAsync();
             Post.LikeCounter = numberOfLikes.Count;
             await _context.SaveChangesAsync();
         }

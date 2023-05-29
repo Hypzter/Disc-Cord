@@ -60,7 +60,6 @@ namespace Disc_Cord.Pages
 			if (NewMessage.Text != null)
 			{
 				NewMessage.Timestamp = DateTime.Now;
-				//NewMessage.Text = "Från: " + user.Alias + "\n" + "Skickat: " + NewMessage.Timestamp.ToString() + "\n\n" + NewMessage.Text;
 				await _context.Messages.AddAsync(NewMessage);
 				await _context.SaveChangesAsync();
 
