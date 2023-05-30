@@ -28,7 +28,7 @@
                 {
                     <tr>
                         <td>
-                            <a class="text-black text-decoration-none mb-1" asp-route-id="@posts.Id" asp-page="./PostComment">@posts.Header</a>
+                            <h6><a class="mb-1 text-dark" id="forumpostheader" asp-route-id="@posts.Id" asp-page="./PostComment">@posts.Header</a></h6>
                             @foreach (var u in Model.Users)
                             {
                                 @if (@u.Id == @posts.UserId && @u.Alias != null)
@@ -91,7 +91,7 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <button name="newpost" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#newpost">Skapa ny post</button>
+    <a name="newpost" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#newpost">Skapa ny post</a>
 
     <!-- Modal -->
     <div class="modal fade" id="newpost" tabindex="-1" aria-labelledby="newpostLabel" aria-hidden="true">
