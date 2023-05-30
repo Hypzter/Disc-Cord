@@ -32,21 +32,22 @@
                 <script>
                     document.addEventListener("DOMContentLoaded", function () {
                         var textarea = document.getElementById("text");
-                        var originalText = textarea.value;
+                        var originalText = textarea.getAttribute("placeholder"); 
 
                         textarea.addEventListener("focus", function () {
-                            if (textarea.value === originalText) {
-                                textarea.value = "";
+                            if (textarea.value === "") {
+                                textarea.value = originalText;
                             }
                         });
 
                         textarea.addEventListener("blur", function () {
-                            if (textarea.value.trim() === "") {
-                                textarea.value = originalText;
+                            if (textarea.value === originalText) {
+                                textarea.value = ""; 
                             }
                         });
                     });
                 </script>
+
             </div>
             <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Spara</button>
         </form>

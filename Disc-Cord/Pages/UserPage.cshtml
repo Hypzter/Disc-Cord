@@ -28,7 +28,7 @@
                             }
                             <p class="fw-lighter mt-0">Medlem sedan @Model.User.DateJoined.ToString("yy-MM-dd")</p>
                             <button name="newmessage" class="btn btn-warning mt-0" data-bs-toggle="modal" data-bs-target="#newmessage">Skicka meddelande till @Model.User.Alias</button>
-                            <p class="mt-3">@Model.User.AboutMe</p>
+                            <p class="mt-3" style="white-space: pre-wrap">@Model.User.AboutMe</p>
                         </div>
                     </div>
                 </div>
