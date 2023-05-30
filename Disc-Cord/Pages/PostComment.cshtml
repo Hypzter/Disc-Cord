@@ -46,6 +46,14 @@
 
                 <div>
                     <a class="text-warning fw-bold text-decoration-none pb-0 mb-0" asp-page="./UserPage" asp-route-userid="@Model.MyUser.Id">@Model.MyUser.Alias</a>
+                    @if(await UserManager.IsInRoleAsync(Model.MyUser, "Admin")){
+                    <p>Admin</p>
+
+                    }
+                    else {
+                    <p>Medlem</p>
+
+                    }
                     <p>Medlem sedan @Model.MyUser.DateJoined.ToString("yy-MM-dd")</p>
                 </div>
 
@@ -225,6 +233,16 @@
 
                         <div>
                             <a class="text-warning fw-bold text-decoration-none pb-0 mb-0" asp-page="./UserPage" asp-route-userid="@commentator.Id">@commentator.Alias</a>
+                            @if (await UserManager.IsInRoleAsync(commentator, "Admin"))
+                            {
+                                <p>Admin</p>
+
+                            }
+                            else
+                            {
+                                <p>Medlem</p>
+
+                            }
                             <p>Medlem sedan @commentator.DateJoined.ToString("yy-MM-dd")</p>
                         </div>
                     </div>
