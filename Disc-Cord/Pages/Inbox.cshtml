@@ -8,10 +8,39 @@
 	string[] headlines = new string[] { "Meddelande", "Skickat av", "Skickat", "" };
 
 }
-<a asp-page="./Messages" class="btn btn-secondary mb-2">Tillbaka</a>
 
 @if (SignInManager.IsSignedIn(User))
 {
+	<a name="sendNewMessage" class="btn btn-warning me-2 mb-2" data-bs-toggle="modal" data-bs-target="#sendNewMessage">Skicka nytt meddelande</a>
+
+
+	<div class="modal fade" id="sendNewMessage" tabindex="-1" aria-labelledby="sendNewMessageLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="sendNewMessageLabel">Skicka nytt meddelande</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body text-start">
+					<form method="post">
+						<input asp-for="NewMessage.SenderId" type="hidden" value="@user.Id" />
+						<input asp-for="NewMessage.IsRead" type="hidden" value="false" />
+						<input asp-for="NewMessage.Headline" class="form-control mb-1" placeholder="Rubrik" />
+						<textarea asp-for="NewMessage.Text" class="form-control" cols="40" rows="5" placeholder="Skriv ditt meddelande"></textarea>
+						<div class="modal-footer">
+						<label for="NewMessage_ReceiverId">Mottagare: </label>
+							<select class="mt-2 mb-2" asp-for="NewMessage.ReceiverId" asp-items="@(new SelectList(Model.Users, "Id", "Alias"))"><option value="">Välj en mottagare</option></select>
+							
+						<br>
+							<input type="button" class="btn btn-secondary" data-bs-dismiss="modal" value="Avbryt" />
+
+							<input type="submit" name="addTask" value="Skicka" class="btn btn-primary" />
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
 
 	@if (Model.Messages != null)
 	{

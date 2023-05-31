@@ -22,25 +22,23 @@ namespace Disc_Cord.Pages
             _context = context;
             _userManager = userManager;
         }
-        public List<Models.Message> Messages { get; set; }
+		[BindProperty]
+		public Models.Message NewMessage { get; set; }
+
+		public List<Models.Message> Messages { get; set; }
         public List<Models.ApplicationUser> Users { get; set; }
 
 
-        private static string _userid;
-        public async Task<IActionResult> OnGetAsync(string userid, int deletemessageid)
+        public async Task<IActionResult> OnGetAsync(int deletemessageid)
         {
-            if (userid != null)
-            {
-                _userid = userid;
-            }
-            //var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            //var user = await _userManager.FindByIdAsync(userId);
             Users = await _userManager.Users.ToListAsync();
+            var user = Users.FirstOrDefault(x => x.Email == User.Identity.Name);
+
 
             if (_context.Messages != null)
             {
                 var messages = await _context.Messages
-                    .Where(m => m.ReceiverId == _userid)
+                    .Where(m => m.ReceiverId == user.Id)
                     .OrderByDescending(m => m.Timestamp)
                     .ToListAsync();
 
@@ -48,21 +46,33 @@ namespace Disc_Cord.Pages
             }
             if(deletemessageid  != 0)
             {
-				var deleteMessage = await _context.Messages.FindAsync(deletemessageid);
-				var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == _userid);
-
-				_context.Messages.Remove(deleteMessage);
-				await _context.SaveChangesAsync();
-				var redirectUrl = "/Inbox?userid=" + _userid;
+                string redirectUrl = await DeleteMessageAsync(deletemessageid, user.Id);
 				return Redirect(redirectUrl);
 			}
-
-
 
             return Page();
         }
 
-		private async Task<IActionResult> DeleteMessageAsync(int deletemessageid, string userid)
+		public async Task<IActionResult> OnPostAsync()
+		{
+
+			if (NewMessage.Text != null && NewMessage.ReceiverId != null)
+			{
+				if (NewMessage.Headline == null)
+				{
+					NewMessage.Headline = "Ingen rubrik";
+				}
+				NewMessage.Timestamp = DateTime.Now;
+				await _context.Messages.AddAsync(NewMessage);
+				await _context.SaveChangesAsync();
+
+			}
+			return RedirectToPage("./Inbox");
+
+
+		}
+
+		private async Task<string> DeleteMessageAsync(int deletemessageid, string userid)
 		{
 			var deleteMessage = await _context.Messages.FindAsync(deletemessageid);
             var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == userid);
@@ -70,7 +80,7 @@ namespace Disc_Cord.Pages
 				_context.Messages.Remove(deleteMessage);
 				await _context.SaveChangesAsync();
 			var redirectUrl = "/Inbox?userid=" + user.Id;
-			return Redirect(redirectUrl);
+			return redirectUrl;
 		}
 	}
 }
