@@ -1,0 +1,26 @@
+﻿@using Microsoft.AspNetCore.Http.Features
+@{
+    var consentFeatureFlag = Context.Features.Get<ITrackingConsentFeature>();
+    var showBannerFlag = !consentFeatureFlag?.CanTrack ?? false;
+    var cookieStr = consentFeatureFlag?.CreateConsentCookie();
+}
+
+@if (showBannerFlag)
+{
+    <div class="bg-light p-3 mb-3" style="border: solid;" id="cookieConsentdiv">
+        <h4 class="display">DiscConnected's Cookiepolicy</h4>
+        <p>Vi använder cookies på denna sida. För att läsa vår policy följ länken. <a class="text-black fw-bold" asp-page="/CookiePolicy">COOKIE POLICY</a>. </p>
+        <button class="btn-warning" type="button" data-cookie-string="@cookieStr">
+            <span aria-hidden="true">Godkänn</span>
+        </button>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#cookieConsentdiv button[data-cookie-string]").bind("click", function () {
+                document.cookie = $("#cookieConsentdiv button").attr("data-cookie-string");
+                $("#cookieConsentdiv").hide();
+            });
+        });
+    </script>
+}

@@ -39,6 +39,7 @@
 	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 	<link rel="stylesheet" href="~/Disc_Cord.styles.css" asp-append-version="true" />
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
 	<header>
@@ -72,19 +73,8 @@
 						{
 
 							<li class="nav-item">
-								<a class="nav-link text-dark" asp-area="" asp-page="/Admin/Index">ADMINa</a>
+								<a class="nav-link text-dark" asp-area="" asp-page="/Admin/Index">ADMIN</a>
 							</li>
-
-							@*					<li class="nav-item">
-						<a class="nav-link text-dark" asp-area="" asp-page="/Admin/ForumAdmin/Index">ADMINForum</a>
-						</li>
-						<li class="nav-item">
-						<a class="nav-link text-dark" asp-area="" asp-page="/Admin/SubforumAdmin/Index">ADMINSubforum</a>
-						</li>
-						<li class="nav-item">
-						<a class="nav-link text-dark" asp-area="" asp-page="/Admin/RoleAdmin/Index">ADMINRoller</a>
-						</li>*@
-
 						}
 					</ul>
 					<partial name="_LoginPartial" />
@@ -93,6 +83,7 @@
 		</nav>
 	</header>
 	<div class="container">
+		<partial name="_CookieConsentPartial" />
 		<main role="main" class="pb-3">
 			@RenderBody()
 		</main>
