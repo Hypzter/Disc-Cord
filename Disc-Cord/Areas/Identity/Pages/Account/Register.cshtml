@@ -13,20 +13,21 @@
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
             <div class="form-floating mb-3">
-                <input asp-for="Input.FirstName" class="form-control" autocomplete="FirstName" aria-required="true" placeholder="firstname" />
+                <input asp-for="Input.FirstName" class="form-control" autocomplete="FirstName" required placeholder="firstname" />
                 <label asp-for="Input.FirstName">Förnamn</label>
                 <span asp-validation-for="Input.FirstName" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
-                <input asp-for="Input.LastName" class="form-control" autocomplete="LastName" aria-required="true" placeholder="LastName" />
+                <input asp-for="Input.LastName" class="form-control" autocomplete="LastName" required placeholder="LastName" />
                 <label asp-for="Input.LastName">Efternamn</label>
                 <span asp-validation-for="Input.LastName" class="text-danger"></span>
             </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.Alias" class="form-control" autocomplete="Alias" aria-required="true" placeholder="Alias" />
+            <div class="form-floating mb-0">
+                <input asp-for="Input.Alias" class="form-control" autocomplete="Alias" required placeholder="Alias" />
                 <label asp-for="Input.Alias">Alias</label>
                 <span asp-validation-for="Input.Alias" class="text-danger"></span>
             </div>
+            <label id="aliasTaken" name="aliasTaken" class="text-danger mt-0"></label>
             <div class="form-floating mb-3">
                 <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
                 <label asp-for="Input.Email">Email</label>
@@ -56,4 +57,11 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Get the label element by its id
+        var aliasTakenLabel = document.getElementById('aliasTaken');
+
+        // Set its text content using the value from ViewData
+        aliasTakenLabel.textContent = '@ViewData["AliasTaken"]';
+    </script>
 }

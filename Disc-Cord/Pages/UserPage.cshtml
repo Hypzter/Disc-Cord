@@ -6,9 +6,13 @@
     var loggedInUser = await UserManager.GetUserAsync(User);
 }
 
+<form method="post" class="d-inline">
+    <input type="text" name="search" placeholder="Sök användare" class="rounded-0 border-1">
+    <button type="submit" class="btn-warning rounded-1">Sök</button>
+</form>
 <div class="card mt-4 border-2">
     <div class="card-header bg-secondary py-1 text-light">
-        @Model.User.Alias
+        <p class="text-start mb-0">@Model.User.Alias</p>
     </div>
     <div class="m-1">
         <div class="card-body m-1">
@@ -18,7 +22,7 @@
                         <div class="card-body text-center">
                             <img src="~/img/@Model.User.ImageUrl" width="150px" />
                             <br />
-                            @if(Model.IsAdmin)
+                            @if (Model.IsAdmin)
                             {
                                 <p class="fw-bold mb-0">Admin</p>
                             }

@@ -64,9 +64,14 @@ namespace Disc_Cord.Pages
 
 
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(string search)
 		{
-
+            var searchedUser = await _context.ApplicationUsers.Where(u => u.Alias == search).FirstOrDefaultAsync();
+            if (searchedUser != null) 
+            {
+                string urlSearchedUser = "./UserPage?userid=" + searchedUser.Id;
+                return Redirect(urlSearchedUser);
+            }
 
 			if (Message.Text != null)
 			{
