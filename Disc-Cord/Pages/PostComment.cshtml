@@ -391,7 +391,7 @@
         @if (Model.Comments.HasPreviousPage)
         {
             <li class="page-item">
-                <a class="page-link bg-light text-black" asp-page="./PostComment" asp-route-pageIndex="@(Model.Comments.PageIndex - 1)">Previous</a>
+                <a class="page-link bg-light text-black" asp-page="./PostComment" asp-route-pageIndex="@(Model.Comments.PageIndex - 1)">Förgående</a>
             </li>
         }
         @for (int i = 1; i <= Model.Comments.TotalPages; i++)
@@ -403,7 +403,7 @@
         @if (Model.Comments.HasNextPage)
         {
             <li class="page-item">
-                <a class="page-link bg-light text-black" asp-page="./PostComment" asp-route-pageIndex="@(Model.Comments.PageIndex + 1)">Next</a>
+                <a class="page-link bg-light text-black" asp-page="./PostComment" asp-route-pageIndex="@(Model.Comments.PageIndex + 1)">Nästa</a>
             </li>
         }
     </ul>

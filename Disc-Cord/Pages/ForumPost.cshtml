@@ -70,7 +70,7 @@
         @if (Model.NewPosts.HasPreviousPage)
         {
             <li class="page-item">
-                <a class="page-link bg-light text-black" asp-page="./ForumPost" asp-route-pageIndex="@(Model.NewPosts.PageIndex - 1)">Previous</a>
+                <a class="page-link bg-light text-black" asp-page="./ForumPost" asp-route-pageIndex="@(Model.NewPosts.PageIndex - 1)">Förgående</a>
             </li>
         }
         @for (int i = 1; i <= Model.NewPosts.TotalPages; i++)
@@ -82,7 +82,7 @@
         @if (Model.NewPosts.HasNextPage)
         {
             <li class="page-item">
-                <a class="page-link bg-light text-black" asp-page="./ForumPost" asp-route-pageIndex="@(Model.NewPosts.PageIndex + 1)">Next</a>
+                <a class="page-link bg-light text-black" asp-page="./ForumPost" asp-route-pageIndex="@(Model.NewPosts.PageIndex + 1)">Nästa</a>
             </li>
         }
     </ul>
