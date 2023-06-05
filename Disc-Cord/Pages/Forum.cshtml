@@ -1,83 +1,95 @@
 ﻿@page
 @model ForumModel
 @{
-	ViewData["Title"] = "Startsida";
+    ViewData["Title"] = "Startsida";
 
 }
 
 <form>
-	<p>
-		<select asp-for="@Model.ChooseableTopics" asp-items="@Model.Subforums.Select(s => new SelectListItem { Value = s.Name, Text = s.Name })">
-			<option value="">All</option>
-		</select>
-		<input type="text" asp-for="@Model.SearchString"  placeholder="Sök..." />
-		<input type="submit" value="Filter" class="btn-warning rounded-1" />
-	</p>
+    <p>
+        <select asp-for="@Model.ChooseableTopics" asp-items="@Model.Subforums.Select(s => new SelectListItem { Value = s.Name, Text = s.Name })">
+            <option value="">All</option>
+        </select>
+        <input type="text" asp-for="@Model.SearchString" placeholder="Sök..." />
+        <input type="submit" value="Sök" class="btn-warning rounded-1" />
+    </p>
 </form>
 
 @if (Model.SearchString != null)
 {
-	@foreach (var item in Model.Subforums)
-	{
-		@if (string.IsNullOrEmpty(Model.SearchString) || (item.NewPosts != null && item.NewPosts.Any(np => np.Header != null && np.Header.IndexOf(Model.SearchString, StringComparison.OrdinalIgnoreCase) >= 0) && (string.IsNullOrEmpty(Model.ChooseableTopics) || item.Name == Model.ChooseableTopics)))
-		{
-			<div class="card border-2 mb-4">
-				<div class="card-header bg-warning text-black fs-4 fw-bold">
-					@Html.DisplayFor(modelItem => item.Name)
-				</div>
-				<table class="table table-striped m-0 p-0">
-					@foreach (var post in item.NewPosts.Where(np => np.Header != null && np.Header.IndexOf(Model.SearchString, StringComparison.OrdinalIgnoreCase) >= 0))
-					{
-						<tr>
-							<td>
-								<div><a asp-page="./PostComment" asp-route-id="@post.Id" class="text-black col-4 text-decoration-none">@Html.DisplayFor(modelPost => post.Header)</a></div>
-							</td>
-							<td>
-								<p class="fw-lighter">@item.NewPosts.Count</p>
-							</td>
-						</tr>
-					}
-				</table>
-			</div>
-		}
-	}
+    @foreach (var item in Model.Subforums)
+    {
+        @if (string.IsNullOrEmpty(Model.SearchString) || (item.NewPosts != null && item.NewPosts.Any(np => np.Header != null && np.Header.IndexOf(Model.SearchString, StringComparison.OrdinalIgnoreCase) >= 0) && (string.IsNullOrEmpty(Model.ChooseableTopics) || item.Name == Model.ChooseableTopics)))
+        {
+            <div class="card border-2 mb-4">
+                <div class="card-header bg-warning text-black fs-4 fw-bold">
+                    @Html.DisplayFor(modelItem => item.Name)
+                </div>
+                <table class="table table-striped m-0 p-0">
+                    <thead class="bg-black text-white">
+                        <tr>
+                            <th>Ämne</th>
+                            @if (item.NewPosts.Count != 0)
+                            {
+                                <th class="text-end">Antal kommentarer</th>
+
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var post in item.NewPosts.Where(np => np.Header != null && np.Header.IndexOf(Model.SearchString, StringComparison.OrdinalIgnoreCase) >= 0))
+                        {
+                            <tr>
+                                <td>
+                                    <div><a asp-page="./PostComment" asp-route-id="@post.Id" class="text-black col-4 text-decoration-none">@Html.DisplayFor(modelPost => post.Header)</a></div>
+                                </td>
+                                <td>
+                                    <p class="fw-lighter text-end me-5">@item.NewPosts.Count</p>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    }
 }
 
 else
 {
-	foreach (var forum in @Model.Forums)
-	{
-		<div class="card border-2 mb-4">
-			<div class="card-header bg-warning text-black fs-4 fw-bold">
-				@forum.Name
-			</div>
-			<div class="m-0 p-0 text-start">
-				<table class="table table-striped m-0 p-0">
-					<thead class="bg-black text-white">
-						<tr>
-							<th>Ämne</th>
-							@if(forum.SubForums.Count != 0)
-							{
-								<th class="text-end">Antal poster</th>
+    foreach (var forum in @Model.Forums)
+    {
+        <div class="card border-2 mb-4">
+            <div class="card-header bg-warning text-black fs-4 fw-bold">
+                @forum.Name
+            </div>
+            <div class="m-0 p-0 text-start">
+                <table class="table table-striped m-0 p-0">
+                    <thead class="bg-black text-white">
+                        <tr>
+                            <th>Ämne</th>
+                            @if (forum.SubForums.Count != 0)
+                            {
+                                <th class="text-end">Antal poster</th>
 
-							}
-						</tr>
-					</thead>
-					<tbody>
-						@foreach (var subforum in @forum.SubForums)
-						{
-							<tr>
-								<td class="col-8">
-									<a class="text-dark" asp-route-id="@subforum.Id" asp-page="./ForumPost">@subforum.Name</a>
-								</td>
-								<td>
-									<p class="fw-lighter text-end me-5">@subforum.NewPosts.Count</p>
-								</td>
-							</tr>
-						}
-					</tbody>
-				</table>
-			</div>
-		</div>
-	}
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var subforum in @forum.SubForums)
+                        {
+                            <tr>
+                                <td class="col-8">
+                                    <a class="text-dark" asp-route-id="@subforum.Id" asp-page="./ForumPost">@subforum.Name</a>
+                                </td>
+                                <td>
+                                    <p class="fw-lighter text-end me-5">@subforum.NewPosts.Count</p>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
 }
