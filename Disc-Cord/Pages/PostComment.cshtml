@@ -3,9 +3,9 @@
 @inject UserManager<Models.ApplicationUser> UserManager
 @inject ApplicationDbContext Context
 @{
-    var user = await UserManager.GetUserAsync(User);
-    var datenow = DateTime.Now;
-    var listOfPostLikes = Context.NewPostLike.Where(x => x.NewPostId == Model.Post.Id).ToList();
+	var user = await UserManager.GetUserAsync(User);
+	var datenow = DateTime.Now;
+	var listOfPostLikes = Context.NewPostLike.Where(x => x.NewPostId == Model.Post.Id).ToList();
 }
 
 @model Disc_Cord.Pages.PostCommentModel
@@ -14,366 +14,379 @@
 
 
 <div class="card border-2">
-    <div class="card-header bg-warning py-1 pe-0 text-black">
-        <div class="m-1 text-start">
-            @Model.Post.Date.ToString()<span class="float-end me-2">
-                @if (SignInManager.IsSignedIn(User))
-                {
-                    if (listOfPostLikes.FirstOrDefault(x => x.UserId == user.Id) == null)
-                    {
-                        <a type="button" asp-route-userid="@user.Id" asp-route-postid="@Model.Post.Id" class="btn btn-success">Like <i class="bi bi-disc text-black text-end me-2"></i><span class="text-white">@Model.Post.LikeCounter</span></a>
-                    }
-                    else
-                    {
-                        <a type="button" asp-route-userid="@user.Id" asp-route-postid="@Model.Post.Id" class="btn btn-danger">Unlike <i class="bi bi-disc text-black text-end me-2"></i><span class="text-white">@Model.Post.LikeCounter</span></a>
-                    }
-                }
-                else
-                {
-                    <i class="bi bi-disc text-black text-end me-2"></i>
+	<div class="card-header bg-warning py-1 pe-0 text-black">
+		<div class="m-1 text-start">
+			@Model.Post.Date.ToString()<span class="float-end me-2">
+				@if (SignInManager.IsSignedIn(User))
+				{
+					if (listOfPostLikes.FirstOrDefault(x => x.UserId == user.Id) == null)
+					{
+						<a type="button" asp-route-userid="@user.Id" asp-route-postid="@Model.Post.Id" class="btn btn-success">Like <i class="bi bi-disc text-black text-end me-2"></i><span class="text-white">@Model.Post.LikeCounter</span></a>
+					}
+					else
+					{
+						<a type="button" asp-route-userid="@user.Id" asp-route-postid="@Model.Post.Id" class="btn btn-danger">Unlike <i class="bi bi-disc text-black text-end me-2"></i><span class="text-white">@Model.Post.LikeCounter</span></a>
+					}
+				}
+				else
+				{
+					<i class="bi bi-disc text-black text-end me-2"></i>
 
-                    @Model.Post.LikeCounter
-                }
-            </span>
-        </div>
-    </div>
-    <div class="card-body row m-1">
-        <div class="card col-md-3 bg-light h-25">
-            <div class="card-body text-center d-flex flex-sm-row flex-md-column">
-                <div>
-                    <img src="~/img/@Model.MyUser.ImageUrl" width="60" />
-                </div>
+					@Model.Post.LikeCounter
+				}
+			</span>
+		</div>
+	</div>
+	<div class="card-body row m-1">
+		<div class="card col-md-3 bg-light h-25">
+			<div class="card-body text-center d-flex flex-sm-row flex-md-column">
+				<div>
+					<img src="~/img/@Model.MyUser.ImageUrl" width="60" />
+				</div>
 
-                <div>
-                    <a class="text-warning fw-bold text-decoration-none pb-0 mb-0" asp-page="./UserPage" asp-route-userid="@Model.MyUser.Id">@Model.MyUser.Alias</a>
-                    @if(await UserManager.IsInRoleAsync(Model.MyUser, "Admin")){
-                    <p>Admin</p>
+				<div>
+					<a class="text-warning fw-bold text-decoration-none pb-0 mb-0" asp-page="./UserPage" asp-route-userid="@Model.MyUser.Id">@Model.MyUser.Alias</a>
+					@if (await UserManager.IsInRoleAsync(Model.MyUser, "Admin"))
+					{
+						<p>Admin</p>
 
-                    }
-                    else {
-                    <p>Medlem</p>
+					}
+					else
+					{
+						<p>Medlem</p>
 
-                    }
-                    <p>Medlem sedan @Model.MyUser.DateJoined.ToString("yy-MM-dd")</p>
-                </div>
+					}
+					<p>Medlem sedan @Model.MyUser.DateJoined.ToString("yy-MM-dd")</p>
+				</div>
 
-            </div>
-        </div>
-        <div class="card col-md-8 ms-md-1 border-0">
-            <div class="card-body pt-0">
-                <h4 class="mt-2">@Model.Post.Header</h4>
-                <p class="card-text">@Model.Post.Text</p>
+			</div>
+		</div>
+		<div class="card col-md-8 ms-md-1 border-0">
+			<div class="card-body pt-0">
+				<h4 class="mt-2">@Model.Post.Header</h4>
+				<p class="card-text">@Model.Post.Text</p>
 
-                @if (@Model.Post.Image != null && @Model.Post.Image != "")
-                {
-                    <img src="~/img/@Model.Post.Image" width="100">
-                }
-            </div>
-        </div>
-    </div>
-    <div class="card-footer bg-light text-end p-1">
-        @if (user != null && user.Id == Model.Post.UserId || Model.IsAdmin)
-        {
-            Model.EditPostText = Model.Post.Text;
+				@if (@Model.Post.Image != null && @Model.Post.Image != "")
+				{
+					<img src="~/img/@Model.Post.Image" width="100">
+				}
+			</div>
+		</div>
+	</div>
 
-
-            <button name="editPost" class="btn btn-outline-primary p-1 me-2" data-bs-toggle="modal" data-bs-target="#editPost">Ändra</button>
-
-            <!-- Detta är för att ändra i trådskaparens text -->
-            <div class="modal fade" id="editPost" tabindex="-1" aria-labelledby="editPostLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="editPostLabel">Ändra post</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body text-start">
-                            <form method="post">
-                                <script>
-                                    var textarea = document.getElementById("EditPostText");
-                                    var originalText = textarea.value;
-
-                                    textarea.addEventListener("focus", function () {
-                                        if (textarea.value === originalText) {
-                                            textarea.value = "";
-                                        }
-                                    });
-
-                                    textarea.addEventListener("blur", function () {
-                                        if (textarea.value === "") {
-                                            textarea.value = originalText;
-                                        }
-                                    });
-                                </script>
-                                <label asp-for="@Model.EditPostText" class="form-label">Din kommentar:</label>
-                                <textarea asp-for="@Model.EditPostText" id="myTextarea" name="EditPostText" class="form-control" cols="40" rows="5" placeholder="@Model.Post.Text"></textarea>
-
-                                <div class="modal-footer">
-                                    <input type="submit" asp-route-editbool="true" asp-route-editpostid="@Model.Post.Id" class="btn btn-success" data-bs-dismiss="modal" value="Ändra" />
-                                    <input type="button" class="btn btn-secondary" data-bs-dismiss="modal" value="Avbryt" />
-
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
+	@if (SignInManager.IsSignedIn(User))
+	{
+		<div class="card-footer bg-light text-end p-1">
+			@if (user != null && user.Id == Model.Post.UserId || Model.IsAdmin)
+			{
+				Model.EditPostText = Model.Post.Text;
 
 
+				<button name="editPost" class="btn btn-outline-primary p-1 me-2" data-bs-toggle="modal" data-bs-target="#editPost">Ändra</button>
+
+				<!-- Detta är för att ändra i trådskaparens text -->
+				<div class="modal fade" id="editPost" tabindex="-1" aria-labelledby="editPostLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h1 class="modal-title fs-5" id="editPostLabel">Ändra post</h1>
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+							</div>
+							<div class="modal-body text-start">
+								<form method="post">
+									<script>
+										var textarea = document.getElementById("EditPostText");
+										var originalText = textarea.value;
+
+										textarea.addEventListener("focus", function () {
+											if (textarea.value === originalText) {
+												textarea.value = "";
+											}
+										});
+
+										textarea.addEventListener("blur", function () {
+											if (textarea.value === "") {
+												textarea.value = originalText;
+											}
+										});
+									</script>
+									<label asp-for="@Model.EditPostText" class="form-label">Din kommentar:</label>
+									<textarea asp-for="@Model.EditPostText" id="myTextarea" name="EditPostText" class="form-control" cols="40" rows="5" placeholder="@Model.Post.Text"></textarea>
+
+									<div class="modal-footer">
+										<input type="submit" asp-route-editbool="true" asp-route-editpostid="@Model.Post.Id" class="btn btn-success" data-bs-dismiss="modal" value="Ändra" />
+										<input type="button" class="btn btn-secondary" data-bs-dismiss="modal" value="Avbryt" />
+
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
 
 
-            <button name="deletePost" class="btn btn-outline-danger p-1 me-2" data-bs-toggle="modal" data-bs-target="#deletePost">Ta bort post</button>
-
-            <!-- Modal -->
-            <div class="modal fade" id="deletePost" tabindex="-1" aria-labelledby="deletePostLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="deletePostLabel">Ta bort post</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body text-start">
-                            <p class="lead">Är du säker på att du vill ta bort posten?</p>
-                            <p class="lead"><strong>Alla eventuella kommentarer kommer att raderas.</strong></p>
-
-                            <div class="modal-footer">
-                                <a type="submit" class="btn btn-danger" asp-route-deletebool="true" asp-route-deletepostid="@Model.Post.Id">Ta bort</a>
-                                <input type="button" class="btn btn-secondary" data-bs-dismiss="modal" value="Avbryt" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
 
-        }
-        <a asp-route-id="@Model.Post.Id" data-bs-toggle="modal" data-bs-target="#report" name="report"><i class="bi bi-flag-fill text-warning me-2"></i></a>
+				<button name="deletePost" class="btn btn-outline-danger p-1 me-2" data-bs-toggle="modal" data-bs-target="#deletePost">Ta bort post</button>
 
-        <div class="modal fade" id="report" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="newpostLabel">Rapportera post</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body text-start">
-                        <form method="post">
-                            <label asp-for="@Model.Report.Category" class="control-label">Kategori</label>
-                            <select asp-for="@Model.Report.Category" class="control-label">
-                                <option value="Sexuellt innehåll">Sexuellt innehåll</option>
-                                <option value="Våldsamt innehåll">Våldsamt innehåll</option>
-                                <option value="Kränkande innehåll">Kränkande innehåll</option>
-                                <option value="Spam">Spam</option>
-                                <option value="Annat">Annat</option>
-                            </select>
-                            <textarea asp-for="@Model.Report.Text" class="form-control" cols="40" rows="5"></textarea>
-                            <div class="modal-footer">
-                                <input type="submit" class="btn btn-danger" asp-route-reportpostid="@Model.Post.Id" />
-                                <input type="button" class="btn btn-secondary" data-bs-dismiss="modal" value="Avbryt" />
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        @if (Model.Post.Reported == true)
-        {
-            if (User.IsInRole("Admin"))
-            {
-                <a asp-route-unflagpostid="@Model.Post.Id"><span class="me-2"><strong>Under granskning</strong></span></a>
-            }
-            else
-            {
-                <span class="me-2"><strong>Under granskning</strong></span>
-            }
-        }
+				<!-- Modal -->
+				<div class="modal fade" id="deletePost" tabindex="-1" aria-labelledby="deletePostLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h1 class="modal-title fs-5" id="deletePostLabel">Ta bort post</h1>
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+							</div>
+							<div class="modal-body text-start">
+								<p class="lead">Är du säker på att du vill ta bort posten?</p>
+								<p class="lead"><strong>Alla eventuella kommentarer kommer att raderas.</strong></p>
 
-    </div>
+								<div class="modal-footer">
+									<a type="submit" class="btn btn-danger" asp-route-deletebool="true" asp-route-deletepostid="@Model.Post.Id">Ta bort</a>
+									<input type="button" class="btn btn-secondary" data-bs-dismiss="modal" value="Avbryt" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+			}
+
+
+			<a asp-route-id="@Model.Post.Id" data-bs-toggle="modal" data-bs-target="#report" name="report"><i class="bi bi-flag-fill text-warning me-2"></i></a>
+
+			<div class="modal fade" id="report" tabindex="-1">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h1 class="modal-title fs-5" id="newpostLabel">Rapportera post</h1>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+						<div class="modal-body text-start">
+							<form method="post">
+								<label asp-for="@Model.Report.Category" class="control-label">Kategori</label>
+								<select asp-for="@Model.Report.Category" class="control-label">
+									<option value="Sexuellt innehåll">Sexuellt innehåll</option>
+									<option value="Våldsamt innehåll">Våldsamt innehåll</option>
+									<option value="Kränkande innehåll">Kränkande innehåll</option>
+									<option value="Spam">Spam</option>
+									<option value="Annat">Annat</option>
+								</select>
+								<textarea asp-for="@Model.Report.Text" class="form-control" cols="40" rows="5"></textarea>
+								<div class="modal-footer">
+									<input type="submit" class="btn btn-danger" asp-route-reportpostid="@Model.Post.Id" />
+									<input type="button" class="btn btn-secondary" data-bs-dismiss="modal" value="Avbryt" />
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			@if (Model.Post.Reported == true)
+			{
+				if (User.IsInRole("Admin"))
+				{
+					<a asp-route-unflagpostid="@Model.Post.Id"><span class="me-2"><strong>Under granskning</strong></span></a>
+				}
+				else
+				{
+					<span class="me-2"><strong>Under granskning</strong></span>
+				}
+			}
+
+		</div>
+	}
+
 </div>
 
 @if (Model.Post.Text != null)
 {
-    @foreach (var comment in Model.Comments)
-    {
-        var listOfCommentLikes = Context.CommentLike.Where(x => x.CommentId == comment.Id).ToList();
-        <div class="card mt-4 border-2" id="@comment.Id">
-            <div class="card-header bg-secondary pe-0 py-1 text-light">
-                <div class="m-1">
-                    @comment.Date.ToString()<span class="float-end me-2">
-                        @if (SignInManager.IsSignedIn(User))
-                        {
-                            if (listOfCommentLikes.FirstOrDefault(x => x.UserId == user.Id) == null)
-                            {
-                                <a type="button" asp-route-userid="@user.Id" asp-route-commentid="@comment.Id" class="btn btn-success">Like <i class="bi bi-disc text-black text-end me-2"></i><span class="text-white">@comment.LikeCounter</span></a>
-                            }
-                            else
-                            {
-                                <a type="button" asp-route-userid="@user.Id" asp-route-commentid="@comment.Id" class="btn btn-danger">Unlike <i class="bi bi-disc text-black text-end me-2"></i><span class="text-white">@comment.LikeCounter</span></a>
-                            }
-                        }
-                        else
-                        {
-                            <i class="bi bi-disc text-black text-end me-2"></i>
+	@foreach (var comment in Model.Comments)
+	{
+		var listOfCommentLikes = Context.CommentLike.Where(x => x.CommentId == comment.Id).ToList();
+		<div class="card mt-4 border-2" id="@comment.Id">
+			<div class="card-header bg-secondary pe-0 py-1 text-light">
+				<div class="m-1">
+					@comment.Date.ToString()<span class="float-end me-2">
+						@if (SignInManager.IsSignedIn(User))
+						{
+							if (listOfCommentLikes.FirstOrDefault(x => x.UserId == user.Id) == null)
+							{
+								<a type="button" asp-route-userid="@user.Id" asp-route-commentid="@comment.Id" class="btn btn-success">Like <i class="bi bi-disc text-black text-end me-2"></i><span class="text-white">@comment.LikeCounter</span></a>
+							}
+							else
+							{
+								<a type="button" asp-route-userid="@user.Id" asp-route-commentid="@comment.Id" class="btn btn-danger">Unlike <i class="bi bi-disc text-black text-end me-2"></i><span class="text-white">@comment.LikeCounter</span></a>
+							}
+						}
+						else
+						{
+							<i class="bi bi-disc text-black text-end me-2"></i>
 
-                            @comment.LikeCounter
-                        }
-                    </span>
-                </div>
-            </div>
-            <div class="card-body row m-1">
-                <div class="card col-md-3 bg-light h-25">
-                    <div class="card-body text-center d-flex flex-sm-row flex-md-column">
-                        @{
-                            var commentator = @Model.AllUsers.Where(x => x.Id == comment.UserId).SingleOrDefault();
-                            var image = commentator.ImageUrl;
-                        }
-                        <div>
-                            <img src="~/img/@image" width="60" />
-                        </div>
+							@comment.LikeCounter
+						}
+					</span>
+				</div>
+			</div>
+			<div class="card-body row m-1">
+				<div class="card col-md-3 bg-light h-25">
+					<div class="card-body text-center d-flex flex-sm-row flex-md-column">
+						@{
+							var commentator = @Model.AllUsers.Where(x => x.Id == comment.UserId).SingleOrDefault();
+							var image = commentator.ImageUrl;
+						}
+						<div>
+							<img src="~/img/@image" width="60" />
+						</div>
 
-                        <div>
-                            <a class="text-warning fw-bold text-decoration-none pb-0 mb-0" asp-page="./UserPage" asp-route-userid="@commentator.Id">@commentator.Alias</a>
-                            @if (await UserManager.IsInRoleAsync(commentator, "Admin"))
-                            {
-                                <p>Admin</p>
+						<div>
+							<a class="text-warning fw-bold text-decoration-none pb-0 mb-0" asp-page="./UserPage" asp-route-userid="@commentator.Id">@commentator.Alias</a>
+							@if (await UserManager.IsInRoleAsync(commentator, "Admin"))
+							{
+								<p>Admin</p>
 
-                            }
-                            else
-                            {
-                                <p>Medlem</p>
+							}
+							else
+							{
+								<p>Medlem</p>
 
-                            }
-                            <p>Medlem sedan @commentator.DateJoined.ToString("yy-MM-dd")</p>
-                        </div>
-                    </div>
-                </div>
+							}
+							<p>Medlem sedan @commentator.DateJoined.ToString("yy-MM-dd")</p>
+						</div>
+					</div>
+				</div>
 
-                <div class="card col-md-8 ms-3 border-0">
-                    <div class="card-body pt-0">
-                        <p class="card-text">@comment.Text</p>
-                        @if (@comment.Image != null && @comment.Image != "")
-                        {
-                            <img src="~/img/@comment.Image" width="100">
-                        }
+				<div class="card col-md-8 ms-3 border-0">
+					<div class="card-body pt-0">
+						<p class="card-text">@comment.Text</p>
+						@if (@comment.Image != null && @comment.Image != "")
+						{
+							<img src="~/img/@comment.Image" width="100">
+						}
 
-                    </div>
-                </div>
-            </div>
-            <div class="card-footer bg-light text-end p-1">
-                @if (user != null && user.Id == comment.UserId || Model.IsAdmin)
-                {
+					</div>
+				</div>
+			</div>
+			@if (SignInManager.IsSignedIn(User))
+			{
+				<div class="card-footer bg-light text-end p-1">
+					@if (user != null && user.Id == comment.UserId || Model.IsAdmin)
+					{
 
-                    <button name="editComment-@comment.Id" class="btn btn-outline-primary p-1 me-2" data-bs-toggle="modal" data-bs-target="#editComment-@comment.Id">Ändra</button>
-                    <!-- Detta är för att ändra i kommentarens text -->
-                    Model.EditText = comment.Text;
+						<button name="editComment-@comment.Id" class="btn btn-outline-primary p-1 me-2" data-bs-toggle="modal" data-bs-target="#editComment-@comment.Id">Ändra</button>
+						<!-- Detta är för att ändra i kommentarens text -->
+						Model.EditText = comment.Text;
 
-                    <div class="modal fade" id="editComment-@comment.Id" tabindex="-1" aria-labelledby="editCommentLabel-@comment.Id" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="editCommentLabel-@comment.Id">Ändra kommentar</h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body text-start">
-                                    <form method="post">
-                                        <script>
-                                            var textareas = document.querySelectorAll("[id^='EditText-']");
+						<div class="modal fade" id="editComment-@comment.Id" tabindex="-1" aria-labelledby="editCommentLabel-@comment.Id" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h1 class="modal-title fs-5" id="editCommentLabel-@comment.Id">Ändra kommentar</h1>
+										<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+									</div>
+									<div class="modal-body text-start">
+										<form method="post">
+											<script>
+												var textareas = document.querySelectorAll("[id^='EditText-']");
 
-                                            textareas.forEach(function (textarea) {
-                                                var originalText = textarea.dataset.originalText;
+												textareas.forEach(function (textarea) {
+													var originalText = textarea.dataset.originalText;
 
-                                                textarea.addEventListener("focus", function () {
-                                                    if (textarea.value === originalText) {
-                                                        textarea.value = "";
-                                                    }
-                                                });
+													textarea.addEventListener("focus", function () {
+														if (textarea.value === originalText) {
+															textarea.value = "";
+														}
+													});
 
-                                                textarea.addEventListener("blur", function () {
-                                                    if (textarea.value === "") {
-                                                        textarea.value = originalText;
-                                                    }
-                                                });
-                                            });
-                                        </script>
+													textarea.addEventListener("blur", function () {
+														if (textarea.value === "") {
+															textarea.value = originalText;
+														}
+													});
+												});
+											</script>
 
-                                        <label asp-for="@Model.EditText" class="form-label">Din kommentar:</label>
-                                        <textarea asp-for="@Model.EditText" data-originalText="@comment.Text" id="EditText-@comment.Id" class="form-control" cols="40" rows="5" placeholder="@comment.Text"></textarea>
-                                        <div class="modal-footer">
-                                            <input type="submit" asp-route-editbool="true" asp-route-editcommentid="@comment.Id" class="btn btn-success" data-bs-dismiss="modal" value="Ändra" />
-                                            <input type="button" class="btn btn-secondary" data-bs-dismiss="modal" value="Avbryt" />
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <button name="delete-@comment.Id" class="btn btn-outline-danger p-1 me-2" data-bs-toggle="modal" data-bs-target="#delete-@comment.Id">Ta bort kommentar</button>
-
-                    @if (@comment.Reported == true)
-                    {
-                        if (User.IsInRole("Admin"))
-                        {
-                            <a asp-route-unflagcommentid="@comment.Id"><span class="me-2"><strong>Under granskning</strong></span></a>
-                        }
-                        else
-                        {
-                            <span class="me-2"><strong>Under granskning</strong></span>
-                        }
-                    }
-                    <!-- Modal -->
-                    <div class="modal fade" id="delete-@comment.Id" tabindex="-1" aria-labelledby="deleteLabel-@comment.Id" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="newpostLabel">Ta bort kommentar</h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body text-start">
-                                    <p class="lead">Är du säker på att du vill ta bort kommentaren?</p>
-                                    <div class="modal-footer">
-                                        <a type="submit" class="btn btn-danger" asp-route-deletebool="true" asp-route-deletecommentid="@comment.Id">Ta bort</a>
-                                        <input type="button" class="btn btn-secondary" data-bs-dismiss="modal" value="Avbryt" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+											<label asp-for="@Model.EditText" class="form-label">Din kommentar:</label>
+											<textarea asp-for="@Model.EditText" data-originalText="@comment.Text" id="EditText-@comment.Id" class="form-control" cols="40" rows="5" placeholder="@comment.Text"></textarea>
+											<div class="modal-footer">
+												<input type="submit" asp-route-editbool="true" asp-route-editcommentid="@comment.Id" class="btn btn-success" data-bs-dismiss="modal" value="Ändra" />
+												<input type="button" class="btn btn-secondary" data-bs-dismiss="modal" value="Avbryt" />
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
 
 
-                }
-                <a asp-route-id="comment-@comment.Id" data-bs-toggle="modal" data-bs-target="#reportcomment-@comment.Id" name="reportcomment"><i class="bi bi-flag-fill text-warning me-2"></i></a>
-                <div class="modal fade" id="reportcomment-@comment.Id" tabindex="-1">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="newpostLabel">Rapportera kommentar</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body text-start">
-                                <form method="post">
-                                    <label asp-for="@Model.Report.Category" class="control-label">Kategori</label>
-                                    <select asp-for="@Model.Report.Category" class="control-label">
-                                        <option value="Sexuellt innehåll">Sexuellt innehåll</option>
-                                        <option value="Våldsamt innehåll">Våldsamt innehåll</option>
-                                        <option value="Kränkande innehåll">Kränkande innehåll</option>
-                                        <option value="Spam">Spam</option>
-                                        <option value="Annat">Annat</option>
-                                    </select>
-                                    <textarea asp-for="@Model.Report.Text" class="form-control" cols="40" rows="5"></textarea>
-                                    <div class="modal-footer">
-                                        <input type="submit" class="btn btn-danger" asp-route-reportcommentid="@comment.Id" />
-                                        <input type="button" class="btn btn-secondary" data-bs-dismiss="modal" value="Avbryt" />
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    }
+						<button name="delete-@comment.Id" class="btn btn-outline-danger p-1 me-2" data-bs-toggle="modal" data-bs-target="#delete-@comment.Id">Ta bort kommentar</button>
+
+						@if (@comment.Reported == true)
+						{
+							if (User.IsInRole("Admin"))
+							{
+								<a asp-route-unflagcommentid="@comment.Id"><span class="me-2"><strong>Under granskning</strong></span></a>
+							}
+							else
+							{
+								<span class="me-2"><strong>Under granskning</strong></span>
+							}
+						}
+						<!-- Modal -->
+						<div class="modal fade" id="delete-@comment.Id" tabindex="-1" aria-labelledby="deleteLabel-@comment.Id" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h1 class="modal-title fs-5" id="newpostLabel">Ta bort kommentar</h1>
+										<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+									</div>
+									<div class="modal-body text-start">
+										<p class="lead">Är du säker på att du vill ta bort kommentaren?</p>
+										<div class="modal-footer">
+											<a type="submit" class="btn btn-danger" asp-route-deletebool="true" asp-route-deletecommentid="@comment.Id">Ta bort</a>
+											<input type="button" class="btn btn-secondary" data-bs-dismiss="modal" value="Avbryt" />
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+					}
+					<a asp-route-id="comment-@comment.Id" data-bs-toggle="modal" data-bs-target="#reportcomment-@comment.Id" name="reportcomment"><i class="bi bi-flag-fill text-warning me-2"></i></a>
+					<div class="modal fade" id="reportcomment-@comment.Id" tabindex="-1">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h1 class="modal-title fs-5" id="newpostLabel">Rapportera kommentar</h1>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+								</div>
+								<div class="modal-body text-start">
+									<form method="post">
+										<label asp-for="@Model.Report.Category" class="control-label">Kategori</label>
+										<select asp-for="@Model.Report.Category" class="control-label">
+											<option value="Sexuellt innehåll">Sexuellt innehåll</option>
+											<option value="Våldsamt innehåll">Våldsamt innehåll</option>
+											<option value="Kränkande innehåll">Kränkande innehåll</option>
+											<option value="Spam">Spam</option>
+											<option value="Annat">Annat</option>
+										</select>
+										<textarea asp-for="@Model.Report.Text" class="form-control" cols="40" rows="5"></textarea>
+										<div class="modal-footer">
+											<input type="submit" class="btn btn-danger" asp-route-reportcommentid="@comment.Id" />
+											<input type="button" class="btn btn-secondary" data-bs-dismiss="modal" value="Avbryt" />
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			}
+		</div>
+	}
 }
 
 <br />
@@ -382,31 +395,31 @@
 
 <!-- Pagination -->
 @{
-    var prevDisabled = !Model.Comments.HasPreviousPage ? "disabled" : "";
-    var nextDisabled = !Model.Comments.HasNextPage ? "disabled" : "";
+	var prevDisabled = !Model.Comments.HasPreviousPage ? "disabled" : "";
+	var nextDisabled = !Model.Comments.HasNextPage ? "disabled" : "";
 }
 
 <div>
-    <ul class="pagination">
-        @if (Model.Comments.HasPreviousPage)
-        {
-            <li class="page-item">
-                <a class="page-link bg-light text-black" asp-page="./PostComment" asp-route-pageIndex="@(Model.Comments.PageIndex - 1)">Förgående</a>
-            </li>
-        }
-        @for (int i = 1; i <= Model.Comments.TotalPages; i++)
-        {
-            <li class="page-item @(Model.Comments.PageIndex == i ? "active" : "")">
-                <a class="page-link bg-light text-black" asp-page="./PostComment" asp-route-pageIndex="@i">@i</a>
-            </li>
-        }
-        @if (Model.Comments.HasNextPage)
-        {
-            <li class="page-item">
-                <a class="page-link bg-light text-black" asp-page="./PostComment" asp-route-pageIndex="@(Model.Comments.PageIndex + 1)">Nästa</a>
-            </li>
-        }
-    </ul>
+	<ul class="pagination">
+		@if (Model.Comments.HasPreviousPage)
+		{
+			<li class="page-item">
+				<a class="page-link bg-light text-black" asp-page="./PostComment" asp-route-pageIndex="@(Model.Comments.PageIndex - 1)">Förgående</a>
+			</li>
+		}
+		@for (int i = 1; i <= Model.Comments.TotalPages; i++)
+		{
+			<li class="page-item @(Model.Comments.PageIndex == i ? "active" : "")">
+				<a class="page-link bg-light text-black" asp-page="./PostComment" asp-route-pageIndex="@i">@i</a>
+			</li>
+		}
+		@if (Model.Comments.HasNextPage)
+		{
+			<li class="page-item">
+				<a class="page-link bg-light text-black" asp-page="./PostComment" asp-route-pageIndex="@(Model.Comments.PageIndex + 1)">Nästa</a>
+			</li>
+		}
+	</ul>
 </div>
 
 
@@ -414,27 +427,27 @@
 
 @if (!SignInManager.IsSignedIn(User))
 {
-    <a asp-page="./ForumPost" class="btn btn-secondary">Tillbaka</a>
+	<a asp-page="./ForumPost" class="btn btn-secondary">Tillbaka</a>
 
 }
 @if (SignInManager.IsSignedIn(User))
 {
-    <form method="post" enctype="multipart/form-data">
-        <input asp-for="NewComment.UserId" type="hidden" value="@user.Id" />
-        <input asp-for="NewComment.Date" type="hidden" value="@datenow" />
-        <input asp-for="NewComment.NewPostId" type="hidden" value="@Model.Post.Id" />
+	<form method="post" enctype="multipart/form-data">
+		<input asp-for="NewComment.UserId" type="hidden" value="@user.Id" />
+		<input asp-for="NewComment.Date" type="hidden" value="@datenow" />
+		<input asp-for="NewComment.NewPostId" type="hidden" value="@Model.Post.Id" />
 
 
-        <label asp-for="NewComment.Text" class="form-label">Din kommentar:</label>
-        <textarea asp-for="NewComment.Text" class="form-control" cols="40" rows="5"></textarea>
+		<label asp-for="NewComment.Text" class="form-label">Din kommentar:</label>
+		<textarea asp-for="NewComment.Text" class="form-control" cols="40" rows="5"></textarea>
 
-        <label asp-for="NewComment.Image" class="form-label mt-1">Lägg till bild</label>
-        <input type="file" class="form-control" name="UploadedImage" />
+		<label asp-for="NewComment.Image" class="form-label mt-1">Lägg till bild</label>
+		<input type="file" class="form-control" name="UploadedImage" />
 
-        <a asp-page="./ForumPost" class="btn btn-secondary mt-2">Tillbaka</a>
+		<a asp-page="./ForumPost" class="btn btn-secondary mt-2">Tillbaka</a>
 
-        <input type="submit" class="btn btn-warning mt-2" asp-route-newcommentbool="true" value="Lägg till kommentar" />
+		<input type="submit" class="btn btn-warning mt-2" asp-route-newcommentbool="true" value="Lägg till kommentar" />
 
-    </form>
+	</form>
 
 }

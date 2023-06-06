@@ -3,118 +3,121 @@
 @inject SignInManager<Models.ApplicationUser> SignInManager;
 @model Disc_Cord.Pages.UserPageModel
 @{
-    var loggedInUser = await UserManager.GetUserAsync(User);
+	var loggedInUser = await UserManager.GetUserAsync(User);
 }
 
 <form method="post" class="d-inline">
-    <input type="text" name="search" placeholder="Sök användare" class="rounded-0 border-1">
-    <button type="submit" class="btn-warning rounded-1">Sök</button>
+	<input type="text" name="search" placeholder="Sök användare" class="rounded-0 border-1">
+	<button type="submit" class="btn-warning rounded-1">Sök</button>
 </form>
 <div class="card mt-4 border-2">
-    <div class="card-header bg-secondary py-1 text-light">
-        <p class="text-start mb-0">@Model.User.Alias</p>
-    </div>
-    <div class="m-1">
-        <div class="card-body m-1">
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <div class="card ms-1 bg-light">
-                        <div class="card-body text-center">
-                            <img src="~/img/@Model.User.ImageUrl" width="150px" />
-                            <br />
-                            @if (Model.IsAdmin)
-                            {
-                                <p class="fw-bold mb-0">Admin</p>
-                            }
-                            else
-                            {
-                                <p class="fw-bold mb-0">Medlem</p>
-                            }
-                            <p class="fw-lighter mt-0">Medlem sedan @Model.User.DateJoined.ToString("yy-MM-dd")</p>
-                            <button name="newmessage" class="btn btn-warning mt-0" data-bs-toggle="modal" data-bs-target="#newmessage">Skicka meddelande till @Model.User.Alias</button>
-                            <p class="mt-3" style="white-space: pre-wrap">@Model.User.AboutMe</p>
-                        </div>
-                    </div>
-                </div>
+	<div class="card-header bg-secondary py-1 text-light">
+		<p class="text-start mb-0">@Model.User.Alias</p>
+	</div>
+	<div class="m-1">
+		<div class="card-body m-1">
+			<div class="row">
+				<div class="col-md-6 mb-3">
+					<div class="card ms-1 bg-light">
+						<div class="card-body text-center">
+							<img src="~/img/@Model.User.ImageUrl" width="150px" />
+							<br />
+							@if (Model.IsAdmin)
+							{
+								<p class="fw-bold mb-0">Admin</p>
+							}
+							else
+							{
+								<p class="fw-bold mb-0">Medlem</p>
+							}
+							<p class="fw-lighter mt-0">Medlem sedan @Model.User.DateJoined.ToString("yy-MM-dd")</p>
+							@if (SignInManager.IsSignedIn(User) && Model.User != loggedInUser)
+							{
+								<button name="newmessage" class="btn btn-warning mt-0" data-bs-toggle="modal" data-bs-target="#newmessage">Skicka meddelande till @Model.User.Alias</button>
+							}
+							<p class="mt-3" style="white-space: pre-wrap">@Model.User.AboutMe</p>
+						</div>
+					</div>
+				</div>
 
-                <div class="col-md-6 ms-0">
-                    <div class="card ms-0 border-0">
-                        <div class="card-body pt-0">
-                            <table class="table table-striped ms-0 p-0">
-                                <thead class="bg-black text-white">
-                                    <tr>
-                                        <th>Senaste aktivitet</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model.Activities)
-                                    {
-                                        var date = item.GetType().GetProperty("Date")?.GetValue(item);
-                                        var text = item.GetType().GetProperty("Text")?.GetValue(item)?.ToString();
-                                        var truncatedText = "place";
-                                        if (text != null)
-                                        {
-                                            truncatedText = text?.Length > 20 ? (text.Substring(0, Math.Min(20, text.Length)) + "...") : text;
-                                        }
+				<div class="col-md-6 ms-0">
+					<div class="card ms-0 border-0">
+						<div class="card-body pt-0">
+							<table class="table table-striped ms-0 p-0">
+								<thead class="bg-black text-white">
+									<tr>
+										<th>Senaste aktivitet</th>
+									</tr>
+								</thead>
+								<tbody>
+									@foreach (var item in Model.Activities)
+									{
+										var date = item.GetType().GetProperty("Date")?.GetValue(item);
+										var text = item.GetType().GetProperty("Text")?.GetValue(item)?.ToString();
+										var truncatedText = "place";
+										if (text != null)
+										{
+											truncatedText = text?.Length > 20 ? (text.Substring(0, Math.Min(20, text.Length)) + "...") : text;
+										}
 
-                                        var id = item.GetType().GetProperty("Id")?.GetValue(item);
-                                        var postOrComment = item.GetType().GetProperty("PostOrComment")?.GetValue(item);
+										var id = item.GetType().GetProperty("Id")?.GetValue(item);
+										var postOrComment = item.GetType().GetProperty("PostOrComment")?.GetValue(item);
 
-                                        <tr>
-                                            <td>
-                                                @if (@postOrComment != null)
-                                                {
-                                                    <a class="text-black text-decoration-none text-start ms-0" asp-route-id="@id" asp-page="./PostComment">Skapade inlägget:  <span class="fw-light text">@text </span></a>
-                                                }
-                                                else
-                                                {
-                                                    <a class="text-black text-decoration-none text-start ms-" asp-route-id="@id" asp-page="./PostComment">Kommenterade: <span class="fw-light text">@truncatedText </span></a>
-                                                }
-                                                <span class="text-end fw-lighter">@date</span>
-                                            </td>
-                                        </tr>
+										<tr>
+											<td>
+												@if (@postOrComment != null)
+												{
+													<a class="text-black text-decoration-none text-start ms-0" asp-route-id="@id" asp-page="./PostComment">Skapade inlägget:  <span class="fw-light text">@text </span></a>
+												}
+												else
+												{
+													<a class="text-black text-decoration-none text-start ms-" asp-route-id="@id" asp-page="./PostComment">Kommenterade: <span class="fw-light text">@truncatedText </span></a>
+												}
+												<span class="text-end fw-lighter">@date</span>
+											</td>
+										</tr>
 
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+									}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <div class="modal fade" id="newmessage" tabindex="-1" aria-labelledby="newmessage" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="returnMessageLabel">Nytt meddelande</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-start">
-                    <form method="post">
-                        <input asp-for="Message.SenderId" type="hidden" value="@loggedInUser.Id" />
-                        <input asp-for="Message.ReceiverId" type="hidden" value="@Model.User.Id" />
-                        <input asp-for="Message.IsRead" type="hidden" value="false" />
-                        <input asp-for="Message.Headline" class="form-control mb-1" placeholder="Rubrik" />
+	<div class="modal fade" id="newmessage" tabindex="-1" aria-labelledby="newmessage" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="returnMessageLabel">Nytt meddelande</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body text-start">
+					<form method="post">
+						<input asp-for="Message.SenderId" type="hidden" value="@loggedInUser.Id" />
+						<input asp-for="Message.ReceiverId" type="hidden" value="@Model.User.Id" />
+						<input asp-for="Message.IsRead" type="hidden" value="false" />
+						<input asp-for="Message.Headline" class="form-control mb-1" placeholder="Rubrik" />
 
 
-                        <textarea id="MessageText" class="form-control" cols="40" rows="5" name="Message.Text" placeholder="Skriv ditt meddelande"></textarea>
+						<textarea id="MessageText" class="form-control" cols="40" rows="5" name="Message.Text" placeholder="Skriv ditt meddelande"></textarea>
 
-                        <br>
-                        <div class="modal-footer">
-                            <input type="button" class="btn btn-secondary" data-bs-dismiss="modal" value="Avbryt" />
+						<br>
+						<div class="modal-footer">
+							<input type="button" class="btn btn-secondary" data-bs-dismiss="modal" value="Avbryt" />
 
-                            <input type="submit" name="addTask" value="Skicka" class="btn btn-primary" />
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+							<input type="submit" name="addTask" value="Skicka" class="btn btn-primary" />
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
 }

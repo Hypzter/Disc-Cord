@@ -8,7 +8,7 @@
 <form>
     <p>
         <select asp-for="@Model.ChooseableTopics" asp-items="@Model.Subforums.Select(s => new SelectListItem { Value = s.Name, Text = s.Name })">
-            <option value="">All</option>
+            <option value="">Alla</option>
         </select>
         <input type="text" asp-for="@Model.SearchString" placeholder="Sök..." />
         <input type="submit" value="Sök" class="btn-warning rounded-1" />
