@@ -7,33 +7,15 @@ namespace Disc_Cord.DataManager
 {
     public class DataManager
     {
-        //private readonly ApplicationDbContext _context;
-        //public DataManager(ApplicationDbContext context)
-        //{
-        //    _context = context;
-        //}
 
         public DataManager()
         {
 
         }
 
-        //public List<Models.Forum> Forums { get; set; }
-
-        //public async Task<List<Models.Forum>> GetAllForumsAsync()
-        //{
-        //    Forums = await _context.Forum.ToListAsync();
-
-        //    return Forums;
-        //}
-
         //----------------------------------- API CALL -------------------------------------------//
-        // ----------------- HERE YOU NEED TO SET YOUR OWN LOCALHOST IN THE URI!
 
-        private static Uri BaseAddress = new Uri("https://apicrd.azurewebsites.net/"); // Daniels
-        //private static Uri BaseAddress = new Uri("https://localhost:44327/");  // Robins
-        //private static Uri BaseAddress = new Uri("https://localhost:44327/");  // Crippa
-
+        private static Uri BaseAddress = new Uri("https://apicrd.azurewebsites.net/"); 
 
 
         //---------------- GET ALL FORUMS
